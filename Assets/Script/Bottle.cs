@@ -49,15 +49,25 @@ public class Bottle : MonoBehaviour
 		}
     }
 
-    public void InitializeColors(WaterColor[] initialColors){
+	public void InitializeColors(WaterColor[] initialColors)
+	{
 		waterLayers.Clear();
-		for (int i = 0; i < initialColors.Length; i++) {
-            if (initialColors[i] != WaterColor.None) {
-                waterLayers.Push(initialColors[i]);
-            }
-        }
 
-    }
+		// BÁO CÁO: In ra Console xem chai này nhận được bao nhiêu màu từ LevelData
+		Debug.Log($"[Kiểm tra] Chai {gameObject.name} đang được nạp {initialColors.Length} lớp nước.");
+
+		for (int i = 0; i < initialColors.Length; i++)
+		{
+			if (initialColors[i] != WaterColor.None)
+			{
+				waterLayers.Push(initialColors[i]);
+				Debug.Log($"   -> Đã bơm màu: {initialColors[i]} vào ngăn xếp.");
+			}
+		}
+
+		// DÒNG LỆNH QUAN TRỌNG NHẤT: Gọi người bồi bàn đem nước ra hiển thị
+		UpdateBottleVisuals();
+	}
 
 	// Hàm cập nhật hình ảnh (Ánh xạ từ Stack sang SpriteRenderers)
 	public void UpdateBottleVisuals()

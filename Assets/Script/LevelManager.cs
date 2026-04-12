@@ -47,12 +47,19 @@ public class LevelManager : MonoBehaviour
 				float posY = startY - (row * spacingY);
 				Vector2 spawnPosition = new Vector2(posX, posY);
 
-				GameObject newBottle = Instantiate(bottlePrefab, spawnPosition, Quaternion.identity);
+				// 1. Kiểm tra xem Level này có xài Prefab chai riêng không, nếu không thì dùng chai mặc định
+				GameObject prefabToUse = levelData.customBottlePrefab != null ? levelData.customBottlePrefab : bottlePrefab;
 
-				// Nạp dữ liệu
+				// 2. Đẻ ra GameObject chai
+				GameObject newBottle = Instantiate(prefabToUse, spawnPosition, Quaternion.identity);
+
 				Bottle bottleScript = newBottle.GetComponent<Bottle>();
 				if (bottleScript != null)
 				{
+					// 3. TRUYỀN SỨC CHỨA TỪ LEVEL DATA VÀO CHAI
+					bottleScript.capacity = levelData.bottleCapacity;
+
+					// 4. Nạp màu
 					bottleScript.InitializeColors(levelData.bottleInLevel[bottleIndex].initialColors);
 				}
 
