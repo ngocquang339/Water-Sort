@@ -37,40 +37,38 @@ public class Bottle : MonoBehaviour
         return topColor;
     }
 
-    public void addNewColor(WaterColor color){
+    public bool addNewColor(WaterColor color){
         if(!isFull()){
             if(color == getTopColor() || isEmpty()){
 				waterLayers.Push(color);
 				Debug.Log($"Đã thêm màu {color} vào {gameObject.name}");
+				return true;
 			}
-        }
+			else{
+				return false;
+			}
+		}
         else{
 			Debug.LogWarning($"{gameObject.name} đã đầy, không thể thêm!");
+			return false;
 		}
     }
 
-	public void InitializeColors(WaterColor[] initialColors)
+	public void initializeColors(WaterColor[] initialColors)
 	{
 		waterLayers.Clear();
-
-		// BÁO CÁO: In ra Console xem chai này nhận được bao nhiêu màu từ LevelData
-		Debug.Log($"[Kiểm tra] Chai {gameObject.name} đang được nạp {initialColors.Length} lớp nước.");
 
 		for (int i = 0; i < initialColors.Length; i++)
 		{
 			if (initialColors[i] != WaterColor.None)
 			{
 				waterLayers.Push(initialColors[i]);
-				Debug.Log($"   -> Đã bơm màu: {initialColors[i]} vào ngăn xếp.");
 			}
 		}
-
-		// DÒNG LỆNH QUAN TRỌNG NHẤT: Gọi người bồi bàn đem nước ra hiển thị
-		UpdateBottleVisuals();
+		updateBottleVisuals();
 	}
 
-	// Hàm cập nhật hình ảnh (Ánh xạ từ Stack sang SpriteRenderers)
-	public void UpdateBottleVisuals()
+	public void updateBottleVisuals()
 	{
 		// Chuyển Stack thành mảng. Mặc định ToArray() của Stack sẽ lấy phần tử trên cùng làm index 0.
 		// Ta cần dùng Reverse() để đảo ngược lại: index 0 trở thành phần tử dưới đáy.

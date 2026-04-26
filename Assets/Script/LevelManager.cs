@@ -60,10 +60,10 @@ public class LevelManager : MonoBehaviour
 					bottleScript.capacity = levelData.bottleCapacity;
 
 					// 4. Nạp màu
-					bottleScript.InitializeColors(levelData.bottleInLevel[bottleIndex].initialColors);
+					bottleScript.initializeColors(levelData.bottleInLevel[bottleIndex].initialColors);
 				}
 
-				bottleIndex++; // Tăng chỉ mục để sang chai tiếp theo trong dữ liệu
+				bottleIndex++;
 			}
 		}
 	}
