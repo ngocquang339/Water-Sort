@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: 
   levelId: 1
+  bottleCapacity: 2
+  customBottlePrefab: {fileID: 8829921817319407611, guid: e71f65e9e61c222449ba03d12fa29c9f, type: 3}
   bottleInLevel:
   - initialColors: 0300000001000000
   - initialColors: 0200000001000000
-  - initialColors: 0200000004000000
-  - initialColors: 0300000004000000
+  - initialColors: 0200000003000000
+  - initialColors: 0000000000000000
