@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
 			Bottle clickBottle = getBottleFromClick();
 			if (clickBottle != null)
 			{
-
 				if (clickBottle == selectedBottle)
 				{
 
@@ -30,6 +29,7 @@ public class GameManager : MonoBehaviour
 				}
 				else if (selectedBottle == null)
 				{
+					if (clickBottle.getTopColor() == WaterColor.None) return;
 					clickBottle.transform.position += new Vector3(0f, liftOffset, 0f);
 					selectedBottle = clickBottle;
 				}

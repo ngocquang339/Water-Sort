@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 442627a230a192241aa3280b13200b68
+guid: 81660f7f51419b144b7bbc1903497830
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9159214688172730083
-    second: "t\u1EA3i xu\u1ED1ng (8)_0"
+      213: -1732684556788964179
+    second: TextDayUI_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "t\u1EA3i xu\u1ED1ng (8)_0"
+      name: TextDayUI_0
       rect:
         serializedVersion: 2
-        x: 82
-        y: 76
-        width: 335
-        height: 347
+        x: 50
+        y: 279
+        width: 400
+        height: 145
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3e663163b311c1f70800000000000000
-      internalID: 9159214688172730083
+      spriteID: da4e9c4639444f7e0800000000000000
+      internalID: -1732684556788964179
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "t\u1EA3i xu\u1ED1ng (8)_0": 9159214688172730083
+      TextDayUI_0: -1732684556788964179
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
