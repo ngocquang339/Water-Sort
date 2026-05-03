@@ -4,17 +4,37 @@ using UnityEngine.UI;
 public class DailyRewardUI : MonoBehaviour
 {
 	[Header("UI Elements")]
-	public GameObject popupPanel; // Cái bảng to chứa toàn bộ giao diện
-	public Button claimButton;    // Nút bấm "Nhận quà" to đùng ở dưới (nếu có)
+	public GameObject popupPanel;
 
 	[Header("Danh sách 7 ô ngày")]
-	// Bạn sẽ khóa Inspector lại, bôi đen cả 7 cái Slot ngoài Scene và kéo thả 1 phát vào đây
 	public DaySlotUI[] daySlots;
+
+	void Start()
+	{
+		// TỰ ĐỘNG NỐI DÂY SỰ KIỆN: 
+		// Duyệt qua cả 7 ô, nếu ô nào bị bấm, gọi hàm OnSlotClicked ở dưới
+		foreach (DaySlotUI slot in daySlots)
+		{
+			if (slot.slotButton != null)
+			{
+				slot.slotButton.onClick.AddListener(OnSlotClicked);
+			}
+		}
+	}
 
 	void OnEnable()
 	{
-		// Mỗi khi cái bảng Popup này được bật lên, nó sẽ tự động vẽ lại dữ liệu mới nhất
-		RefreshUI();
+		// Kiểm tra xem ông "Não" đã tỉnh dậy và khởi tạo xong Instance chưa
+		if (DailyRewardManager.Instance == null)
+		{
+			// Nếu chưa, hẹn 0.1 giây sau mới chạy hàm vẽ giao diện
+			Invoke("RefreshUI", 0.1f);
+		}
+		else
+		{
+			// Nếu Não đã sẵn sàng rồi thì vẽ luôn
+			RefreshUI();
+		}
 	}
 
 	public void RefreshUI()
@@ -23,30 +43,24 @@ public class DailyRewardUI : MonoBehaviour
 		DailyRewardManager manager = DailyRewardManager.Instance;
 		DailyRewardData data = manager.rewardData;
 
-		// 2. Dùng 1 vòng lặp for thần thánh để ra lệnh cho cả 7 ô tự vẽ
+		// 2. Dùng 1 vòng lặp for để ra lệnh cho cả 7 ô tự vẽ
 		for (int i = 0; i < daySlots.Length; i++)
 		{
 			// Nếu lỡ mảng UI dài hơn mảng Data thì dừng lại để tránh lỗi bục game
 			if (i >= data.rewards.Length) break;
 
-			// Hỏi ông Não xem ô số [i] này đang ở trạng thái gì (Khóa / Đang chờ nhận / Đã nhận)
+			// Hỏi ông Não xem ô số [i] này đang ở trạng thái gì
 			DaySlotState slotState = manager.GetStateForDay(i);
 
-			// Ra lệnh cho thằng thợ sơn (DaySlotUI) bắt đầu vẽ!
-			// Lưu ý: Ngày hiển thị là i + 1 (ví dụ i=0 thì là Day 1)
+			// Ra lệnh cho thằng thợ sơn (DaySlotUI) bắt đầu vẽ
 			daySlots[i].updateSlotUI(i + 1, data.rewards[i], slotState);
 		}
 
-		// 3. Xử lý cái nút Claim to (nếu bạn có)
-		if (claimButton != null)
-		{
-			bool canClaim = manager.CanClaimToday();
-			claimButton.interactable = canClaim; // Nút sáng lên nếu được nhận, tối đi nếu không được
-		}
+		// Đã xóa phần xử lý nút Claim cũ ở đây
 	}
 
-	// Gắn hàm này vào sự kiện OnClick() của cái nút Claim ngoài Unity
-	public void OnClickClaimButton()
+	// Hàm này sẽ tự động kích hoạt khi người chơi bấm vào BẤT KỲ ô quà nào có thể bấm
+	private void OnSlotClicked()
 	{
 		// Báo cho ông Não thực hiện thuật toán trao quà và lưu ngày tháng
 		DailyRewardManager.Instance.ClaimTodayReward();
