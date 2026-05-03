@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -63,5 +64,9 @@ public class GameManager : MonoBehaviour
 			a.updateBottleVisuals();
 			b.updateBottleVisuals();
 		}
+	}
+
+	public void startGame(){
+		SceneManager.LoadScene("MainPlayScene");
 	}
 }

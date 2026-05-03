@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using TMPro;
 public class DailyRewardManager : MonoBehaviour
 {
 	public static DailyRewardManager Instance { get; private set; }
@@ -88,29 +88,23 @@ public class DailyRewardManager : MonoBehaviour
 	// Hàm QUAN TRỌNG NHẤT: Thực hiện hành động trao quà khi nút được bấm
 	public void ClaimTodayReward()
 	{
-		if (!CanClaimToday())
-		{
-			Debug.LogWarning("Hôm nay bạn đã nhận quà rồi, đừng gian lận!");
-			return;
-		}
+		if (!CanClaimToday()) return;
 
-		// 1. Lấy thông tin gói quà hiện tại từ kho dữ liệu
 		RewardItem item = rewardData.rewards[currentStreak];
 
-		// 2. Trao thưởng (TODO: Sau này bạn gọi hàm cộng Vàng/Gem ở đây)
-		Debug.Log($"TING TING! Bạn vừa nhận được: {item.amount} {item.rewardType}");
-
-		// 3. Cập nhật lại lịch và đẩy sang ngày tiếp theo
-		lastClaimTime = DateTime.Now;
-		currentStreak++;
-
-		// Nếu nhận đủ 7 ngày, quay lại vạch xuất phát (Ngày 1)
-		if (currentStreak >= rewardData.rewards.Length)
+		// Gọi Ngân hàng trung ương để chuyển tiền
+		if (item.rewardType == "Coin") // (Dùng Enum như mình khuyên ở trước)
 		{
-			currentStreak = 0;
+			CurrencyManager.Instance.AddCoin(item.amount);
+		}
+		else
+		{
+			CurrencyManager.Instance.AddDiamond(item.amount);
 		}
 
-		// 4. Lưu chết vào máy để tắt game đi không bị mất
+		lastClaimTime = DateTime.Now;
+		currentStreak++;
+		if (currentStreak >= rewardData.rewards.Length) currentStreak = 0;
 		SaveData();
 	}
 
@@ -121,4 +115,5 @@ public class DailyRewardManager : MonoBehaviour
 		PlayerPrefs.SetString(TIME_KEY, lastClaimTime.ToString());
 		PlayerPrefs.Save(); // Ép hệ thống lưu ngay lập tức
 	}
+
 }
