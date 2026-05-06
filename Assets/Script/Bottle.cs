@@ -10,8 +10,9 @@ public class Bottle : MonoBehaviour
 	[Header("Logic Dữ liệu")]
 	public int capacity = 4;
     private Stack<WaterColor> waterLayers = new Stack<WaterColor>();
+	public Transform mouthPoint; // Kéo object MouthPoint vào đây trong Inspector
 
-    public bool isFull(){
+	public bool isFull(){
         return waterLayers.Count == capacity;
     }
 
