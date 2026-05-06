@@ -19,28 +19,23 @@ public class LevelManager : MonoBehaviour
 	{
 		int totalBottles = levelData.bottleInLevel.Length;
 
-		// 1. Tính tổng số hàng cần thiết
 		int numRows = Mathf.CeilToInt((float)totalBottles / maxBottlesPerRow);
 
 		int bottleIndex = 0; // Biến theo dõi xem đang khởi tạo đến chai thứ mấy trong Data
 		int remainingBottles = totalBottles; // Số chai còn lại chưa được xếp
 
-		// 2. Vòng lặp duyệt qua từng hàng
 		for (int row = 0; row < numRows; row++)
 		{
 			// THUẬT TOÁN CHIA ĐỀU: Lấy số chai còn lại chia cho số hàng còn lại
 			int rowsLeft = numRows - row;
-			// Mathf.CeilToInt giúp làm tròn lên (Ví dụ 7/2 = 3.5 -> Hàng đầu sẽ lấy 4 chai)
+			//Làm tròn số chai 
 			int bottlesInThisRow = Mathf.CeilToInt((float)remainingBottles / rowsLeft);
-
-			// Trừ đi số chai đã quyết định xếp vào hàng này
 			remainingBottles -= bottlesInThisRow;
 
-			// Tính tọa độ điểm bắt đầu của hàng để hàng được căn giữa màn hình
 			float startX = -(bottlesInThisRow - 1) * spacingX / 2f;
-			float startY = (numRows - 1) * spacingY / 2f; // Tính năng mới: Căn giữa cả cụm theo chiều dọc
+			float startY = (numRows - 1) * spacingY / 2f; //Căn giữa cả cụm theo chiều dọc
 
-			// 3. Vòng lặp vẽ từng chai trong hàng hiện tại
+			//Vòng lặp vẽ từng chai trong hàng hiện tại
 			for (int col = 0; col < bottlesInThisRow; col++)
 			{
 				float posX = startX + (col * spacingX);

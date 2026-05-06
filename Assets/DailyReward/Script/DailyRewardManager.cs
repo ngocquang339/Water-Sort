@@ -12,13 +12,11 @@ public class DailyRewardManager : MonoBehaviour
 	private int currentStreak = 0;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
 	private DateTime lastClaimTime;     // Lần cuối cùng bấm nhận quà là lúc nào?
 
-	// Tên chìa khóa để lưu xuống bộ nhớ máy (PlayerPrefs)
 	private const string STREAK_KEY = "DailyReward_Streak";
 	private const string TIME_KEY = "DailyReward_LastClaimTime";
 
 	void Awake()
 	{
-		// Khởi tạo Singleton
 		if (Instance == null) Instance = this;
 		else Destroy(gameObject);
 
@@ -69,7 +67,6 @@ public class DailyRewardManager : MonoBehaviour
 		return timePassed.Days >= 1; // Chỉ cần qua ngày mới (đổi ngày) là được nhận
 	}
 
-	// Hàm để UI hỏi: "Sếp ơi, ô số 'dayIndex' vẽ trạng thái gì bây giờ?"
 	public DaySlotState GetStateForDay(int dayIndex)
 	{
 		// Những ngày đã qua
@@ -85,15 +82,13 @@ public class DailyRewardManager : MonoBehaviour
 		return DaySlotState.Locked;
 	}
 
-	// Hàm QUAN TRỌNG NHẤT: Thực hiện hành động trao quà khi nút được bấm
 	public void ClaimTodayReward()
 	{
 		if (!CanClaimToday()) return;
 
 		RewardItem item = rewardData.rewards[currentStreak];
 
-		// Gọi Ngân hàng trung ương để chuyển tiền
-		if (item.rewardType == "Coin") // (Dùng Enum như mình khuyên ở trước)
+		if (item.rewardType == "Coin")
 		{
 			CurrencyManager.Instance.AddCoin(item.amount);
 		}
@@ -108,7 +103,6 @@ public class DailyRewardManager : MonoBehaviour
 		SaveData();
 	}
 
-	// Ghi dữ liệu xuống bộ nhớ điện thoại/máy tính
 	private void SaveData()
 	{
 		PlayerPrefs.SetInt(STREAK_KEY, currentStreak);
