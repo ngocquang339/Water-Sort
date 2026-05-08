@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 	private Bottle selectedBottle;
+	private Stack<stepInfor> saveStepInfor = new Stack<stepInfor>();
 
-	// DANH SÁCH CÁC CHAI ĐANG BẬN BAY HOẶC RÓT NƯỚC
 	private List<Bottle> busyBottles = new List<Bottle>();
 
 	[Header("Cài đặt Game")]
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 	public LineRenderer waterStream;
 
 	[Header("Cài đặt Animation")]
-	[SerializeField] private float moveSpeed = 0.3f;
+	[SerializeField] private float moveSpeed = 0.1f;
 	[SerializeField] private float pourAngle = 90f;
 	[SerializeField] private float pourOffsetX = 0.8f;
 	[SerializeField] private float pourOffsetY = 1.0f;
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 				// 2. CHƯA CHỌN CHAI NÀO -> NHẤC LÊN
 				else if (selectedBottle == null)
 				{
-					if (clickBottle.getTopColor() == WaterColor.None) return;
+					if (clickBottle.getTopColor() == null) return;
 
 					Vector3 liftPos = clickBottle.transform.position + new Vector3(0f, liftOffset, 0f);
 					StartCoroutine(AnimateBottle(clickBottle.transform, liftPos, 0f, moveSpeed));
@@ -72,9 +72,11 @@ public class GameManager : MonoBehaviour
 	// HÀM RÓT NƯỚC (Đã gộp chung cả Danh sách bận + Tia nước)
 	private IEnumerator PourWaterRoutine(Bottle source, Bottle target, Vector3 groundPos)
 	{
-		if (target.isFull() || source.isEmpty()) yield break;
-
-		// ĐƯA VÀO DANH SÁCH BẬN
+		if (target.isFull() || source.isEmpty() || (!target.isEmpty() && target.getTopColor().Peek() != source.getTopColor().Peek()))
+		{
+			yield return StartCoroutine(AnimateBottle(source.transform, groundPos, 0f, moveSpeed));
+			yield break;
+		}
 		busyBottles.Add(source);
 		busyBottles.Add(target);
 
@@ -88,8 +90,7 @@ public class GameManager : MonoBehaviour
 		// ===============================================
 		// HIỆU ỨNG TIA NƯỚC
 		// ===============================================
-		WaterColor colorToPour = source.getTopColor();
-
+		Stack<WaterColor> colorToPour = source.getTopColor();
 		waterStream.gameObject.SetActive(true);
 		waterStream.startColor = Color.white; // Chỗ này sau nhớ đổi thành màu thực tế nhé
 		waterStream.endColor = Color.white;
@@ -99,18 +100,19 @@ public class GameManager : MonoBehaviour
 		waterStream.SetPosition(1, target.mouthPoint.position);
 
 		// RÓT NƯỚC LOGIC
-		if (target.addNewColor(colorToPour))
-		{
-			source.removeTopColor();
+		int poured = target.addNewColor(colorToPour);
+		if(poured != 0){
+			source.removeTopColor(poured);
 			source.updateBottleVisuals();
 			target.updateBottleVisuals();
 
 			yield return new WaitForSeconds(0.4f); // Chờ tia nước chảy
 		}
 
+		
+		saveStepInfor.Push(createStepInfor(source, target, poured));
 		waterStream.gameObject.SetActive(false); // Tắt tia nước
-												 // ===============================================
-
+									
 		// BAY VỀ VỊ TRÍ MẶT ĐẤT
 		yield return StartCoroutine(AnimateBottle(source.transform, groundPos, 0f, moveSpeed));
 
@@ -156,5 +158,39 @@ public class GameManager : MonoBehaviour
 	public void startGame()
 	{
 		SceneManager.LoadScene("MainPlayScene");
+	}
+
+	public void backStep(){
+		if (saveStepInfor.Count > 0)
+		{
+			stepInfor lastStep = saveStepInfor.Peek();
+			Bottle a = lastStep.A;
+			Bottle b = lastStep.B;
+			if (busyBottles.Contains(a) || busyBottles.Contains(b)) return;
+			WaterColor color = b.getTopColor().Peek();
+			for (int i = 0; i < lastStep.waterLayers; i++)
+			{
+				a.addWater(color);
+			}
+			b.removeTopColor(lastStep.waterLayers);
+			a.updateBottleVisuals();
+			b.updateBottleVisuals();
+			saveStepInfor.Pop();
+		}
+		else return;
+	}
+
+	public struct stepInfor{
+		public Bottle A;
+		public Bottle B;
+		public int waterLayers;
+	}
+
+	stepInfor createStepInfor(Bottle a, Bottle B, int amountOfLayers){
+		stepInfor infor;
+		infor.A = a;
+		infor.B = B;
+		infor.waterLayers = amountOfLayers;
+		return infor;
 	}
 }

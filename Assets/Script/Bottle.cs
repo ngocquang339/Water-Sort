@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 public class Bottle : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Bottle : MonoBehaviour
 	[Header("Logic Dữ liệu")]
 	public int capacity = 4;
     private Stack<WaterColor> waterLayers = new Stack<WaterColor>();
-	public Transform mouthPoint; // Kéo object MouthPoint vào đây trong Inspector
+	public Transform mouthPoint;
 
 	public bool isFull(){
         return waterLayers.Count == capacity;
@@ -20,40 +21,51 @@ public class Bottle : MonoBehaviour
         return waterLayers.Count == 0;
     }
 
-    public WaterColor getTopColor(){
+    public Stack<WaterColor> getTopColor(){
         if(isEmpty()){
 			Debug.LogWarning($"{gameObject.name} đang trống");
-			return WaterColor.None;
+			return null;
         }
-        return waterLayers.Peek();
-    }
-
-    public WaterColor removeTopColor(){
-        if (isEmpty()) {
-            Debug.LogWarning($"{gameObject.name} đang trống, không có gì để đổi");
-            return WaterColor.None;
-        }
-        WaterColor topColor = waterLayers.Pop();
-        Debug.Log($"Đã lấy màu {topColor} ra khỏi {gameObject.name}");
-        return topColor;
-    }
-
-    public bool addNewColor(WaterColor color){
-        if(!isFull()){
-            if(color == getTopColor() || isEmpty()){
-				waterLayers.Push(color);
-				Debug.Log($"Đã thêm màu {color} vào {gameObject.name}");
-				return true;
+		Stack<WaterColor> color = new Stack<WaterColor>();
+		WaterColor[] colorArray = waterLayers.ToArray();
+		color.Push(colorArray[0]);
+		for(int i = 1; i < colorArray.Length; i++){
+			if (colorArray[i] == colorArray[i - 1])
+			{
+				color.Push(colorArray[i]);
 			}
 			else{
-				return false;
+				break;
 			}
 		}
-        else{
-			Debug.LogWarning($"{gameObject.name} đã đầy, không thể thêm!");
-			return false;
+		
+		return color; ;
+    }
+
+    public void removeTopColor(int count){
+        if (isEmpty()) {
+            Debug.LogWarning($"{gameObject.name} đang trống, không có gì để đổi");
+			return;
+        }
+		for(int i = 0; i < count; i++){
+			waterLayers.Pop();
 		}
     }
+
+    public int addNewColor(Stack<WaterColor> color){
+		int amount = color.Count;
+		int count = 0;
+		for(int i = 0; i < amount; i++){
+			if(!isFull()){
+				if (isEmpty() || waterLayers.Peek() == color.Peek())
+				{
+					waterLayers.Push(color.Pop());
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 
 	public void initializeColors(WaterColor[] initialColors)
 	{
@@ -71,9 +83,7 @@ public class Bottle : MonoBehaviour
 
 	public void updateBottleVisuals()
 	{
-		// Chuyển Stack thành mảng. Mặc định ToArray() của Stack sẽ lấy phần tử trên cùng làm index 0.
-		// Ta cần dùng Reverse() để đảo ngược lại: index 0 trở thành phần tử dưới đáy.
-		WaterColor[] currentStackArray = waterLayers.Reverse().ToArray();
+		WaterColor[] currentStackArray = waterLayers.Reverse().ToArray(); // Đảo ngược để phần tử dưới đáy thành index 0
 
 		for (int i = 0; i < waterLayerRenderers.Length; i++)
 		{
@@ -105,5 +115,9 @@ public class Bottle : MonoBehaviour
 	{
 		public WaterColor colorEnum;
 		public Color colorValue;  
+	}
+
+	public void addWater(WaterColor color){
+		waterLayers.Push(color);
 	}
 }
