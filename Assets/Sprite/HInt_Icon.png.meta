@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: cc37e8105ef69294e84cd70e638399ae
+guid: dedd131840c85ca40b40d1931dbf495c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4269962859328261014
-    second: BackgroundUpdate_0
+      213: 872563643905997958
+    second: HInt_Icon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BackgroundUpdate_0
+      name: HInt_Icon_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 512
-        height: 1024
+        x: 64
+        y: 63
+        width: 574
+        height: 272
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 69b4f5ae894f14b30800000000000000
-      internalID: 4269962859328261014
+      spriteID: 68cffe6d208fb1c00800000000000000
+      internalID: 872563643905997958
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BackgroundUpdate_0: 4269962859328261014
+      HInt_Icon_0: 872563643905997958
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

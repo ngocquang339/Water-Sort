@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 81775ea2d59aa824c99ffbfe343fe30f
+guid: 66c328aa7908bc14cba50c8fdc55f0eb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6008363000367171980
-    second: "t\u1EA3i xu\u1ED1ng (26)_0"
+      213: 8040108734085755219
+    second: ReloadLevelButton_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "t\u1EA3i xu\u1ED1ng (26)_0"
+      name: ReloadLevelButton_0
       rect:
         serializedVersion: 2
-        x: 76
-        y: 79
-        width: 96
-        height: 348
+        x: 30
+        y: 74
+        width: 341
+        height: 341
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c894c7ea05ef16350800000000000000
-      internalID: 6008363000367171980
+      spriteID: 35172ba9b44349f60800000000000000
+      internalID: 8040108734085755219
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "t\u1EA3i xu\u1ED1ng (26)_0": 6008363000367171980
+      ReloadLevelButton_0: 8040108734085755219
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
