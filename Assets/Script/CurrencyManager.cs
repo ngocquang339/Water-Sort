@@ -5,8 +5,6 @@ public class CurrencyManager : MonoBehaviour
 {
 	public static CurrencyManager Instance { get; private set; }
 
-	// 1. KHAI BÁO TẦN SỐ PHÁT THANH (Sự kiện)
-	// Action<int> nghĩa là khi hét lên, nó sẽ ném kèm theo 1 con số (tổng tiền mới)
 	public static event Action<int> OnCoinChanged;
 	public static event Action<int> OnDiamondChanged;
 
@@ -27,7 +25,6 @@ public class CurrencyManager : MonoBehaviour
 		currentDiamond = PlayerPrefs.GetInt("Player_Diamond", 0);
 	}
 
-	// Hàm gọi để cộng/trừ Vàng
 	public void AddCoin(int amount)
 	{
 		currentCoin += amount;
@@ -39,7 +36,6 @@ public class CurrencyManager : MonoBehaviour
 		OnCoinChanged?.Invoke(currentCoin);
 	}
 
-	// Hàm gọi để cộng/trừ Kim cương
 	public void AddDiamond(int amount)
 	{
 		currentDiamond += amount;
