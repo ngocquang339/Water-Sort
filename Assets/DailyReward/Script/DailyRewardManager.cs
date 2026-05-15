@@ -15,6 +15,9 @@ public class DailyRewardManager : MonoBehaviour
 	private const string STREAK_KEY = "DailyReward_Streak";
 	private const string TIME_KEY = "DailyReward_LastClaimTime";
 
+	public int totalClaimedDays = 0;
+	private const string TOTAL_TIME_KEY = "DailyReward_TotalDays";
+
 	void Awake()
 	{
 		if (Instance == null) Instance = this;
@@ -28,6 +31,7 @@ public class DailyRewardManager : MonoBehaviour
 	private void LoadData()
 	{
 		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
+		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 0);
 
 		string timeStr = PlayerPrefs.GetString(TIME_KEY, string.Empty);
 		if (string.IsNullOrEmpty(timeStr))
@@ -86,20 +90,39 @@ public class DailyRewardManager : MonoBehaviour
 	{
 		if (!CanClaimToday()) return;
 
-		RewardItem item = rewardData.rewards[currentStreak];
+		// Lấy toàn bộ Hộp Quà của ngày hôm nay
+		DayRewardConfig todayConfig = rewardData.days[currentStreak];
 
-		if (item.rewardType == "Coin")
+		// Dùng vòng lặp để nhét toàn bộ đồ trong hộp vào ví
+		foreach (RewardItem item in todayConfig.items)
 		{
-			CurrencyManager.Instance.AddCoin(item.amount);
-		}
-		else
-		{
-			CurrencyManager.Instance.AddDiamond(item.amount);
+			if (item.rewardType == "Coin")
+			{
+				CurrencyManager.Instance.AddCoin(item.amount);
+			}
+			else
+			{
+				CurrencyManager.Instance.AddDiamond(item.amount);
+			}
 		}
 
-		lastClaimTime = DateTime.Now;
+		lastClaimTime = System.DateTime.Now;
 		currentStreak++;
-		if (currentStreak >= rewardData.rewards.Length) currentStreak = 0;
+		if (currentStreak >= rewardData.days.Length) currentStreak = 0;
+		totalClaimedDays++;
+		// Tìm ngày to nhất của rương cuối cùng (Ví dụ: 30)
+
+		int maxDays = rewardData.milestoneChests[rewardData.milestoneChests.Length - 1].requiredDays;
+
+
+		// Nếu đầy thanh thì reset về 0 để chạy lại vòng lặp tháng mới
+
+		if (totalClaimedDays > maxDays)
+		{
+
+			totalClaimedDays = 1;
+
+		}
 		SaveData();
 	}
 
@@ -107,6 +130,7 @@ public class DailyRewardManager : MonoBehaviour
 	{
 		PlayerPrefs.SetInt(STREAK_KEY, currentStreak);
 		PlayerPrefs.SetString(TIME_KEY, lastClaimTime.ToString());
+		PlayerPrefs.SetInt(TOTAL_TIME_KEY, totalClaimedDays);
 		PlayerPrefs.Save(); // Ép hệ thống lưu ngay lập tức
 	}
 
