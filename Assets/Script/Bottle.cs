@@ -19,6 +19,11 @@ public class Bottle : MonoBehaviour
 	private Stack<WaterColor> waterLayers = new Stack<WaterColor>();
 	public Transform mouthPoint;
 
+	[Header("Cài đặt Nút Bần")]
+	public GameObject corkObject; // Kéo thả cái nút bần vào đây
+	public float corkDropHeight = 1.0f; // Khoảng cách nắp đậy rơi xuống (từ trên cao)
+	public float corkDropDuration = 0.3f; // Thời gian rơi (0.3 giây là vừa đủ nhanh và dứt khoát)
+
 	public bool isFull()
 	{
 		return waterLayers.Count == capacity;
@@ -193,5 +198,104 @@ public class Bottle : MonoBehaviour
 		if (waterCount > surfaceYPositions.Length)
 			return surfaceYPositions[surfaceYPositions.Length - 1];
 		return surfaceYPositions[waterCount - 1];
+	}
+
+	// ========================================================================
+	// --- THÊM CÁC HÀM NÀY VÀO DƯỚI CÙNG CỦA CLASS BOTTLE.CS ĐỂ HỖ TRỢ HINT ---
+	// ========================================================================
+
+	// 1. Cấu trúc dữ liệu phụ (Struct) để lưu trữ CHỈ LOGIC của 1 chai.
+	// Giống như một tấm bản đồ, không phải là cái chai thật.
+	[System.Serializable]
+	public struct BottleLogicState
+	{
+		public int capacity;
+		public WaterColor[] layers; // Dùng mảng thay vì Stack để BFS dễ tính toán
+
+		// Hàm trợ giúp: Kiểm tra xem trạng thái giả lập này có hoàn thiện không
+		public bool IsComplete()
+		{
+			if (layers.Length == 0) return true; // Rỗng = hoàn thiện
+			if (layers.Length != capacity) return false;
+			WaterColor baseColor = layers[0];
+			foreach (WaterColor c in layers) { if (c != baseColor) return false; }
+			return true;
+		}
+	}
+
+	// 2. HÀM CHỤP TRẠNG THÁI (Snapshot):
+	// Hàm này được gọi bởi Manager. Nó tạo ra một bản sao logic rỗng,
+	// copy capacity và copy toàn bộ các tầng màu nước hiện có vào mảng 'layers'.
+	public BottleLogicState GetLogicState()
+	{
+		return new BottleLogicState
+		{
+			capacity = this.capacity,
+			// ToArray() tạo ra một bản sao mảng mới, không ảnh hưởng stack thật
+			layers = this.waterLayers.ToArray()
+		};
+	}
+
+	// 3. HÀM KIỂM TRA HOÀN THIỆN (True/False):
+	// Thường dùng để GameManager kiểm tra điều kiện Win màn.
+	// Yêu cầu: Chai phải đầy (capacity) VÀ tất cả các tầng màu phải giống hệt nhau.
+	public bool isCompleted()
+	{
+		if (isEmpty()) return true; // Chai rỗng được coi là hoàn thiện
+		if (!isFull()) return false; // Chưa đầy thì không hoàn thiện
+
+		WaterColor[] currentArray = waterLayers.ToArray();
+		WaterColor firstColor = currentArray[0];
+
+		// Kiểm tra tất cả các tầng màu xem có giống tầng đáy không
+		for (int i = 1; i < currentArray.Length; i++)
+		{
+			if (currentArray[i] != firstColor) return false;
+		}
+		return true;
+	}
+
+	// Hàm công khai để GameManager gọi
+	public void CloseCork()
+	{
+		if (corkObject != null)
+		{
+			StartCoroutine(AnimateCorkRoutine());
+		}
+		else
+		{
+			Debug.LogWarning($"Chai {gameObject.name} chưa được gắn nút bần!");
+		}
+	}
+
+	// Coroutine xử lý Animation rơi nắp
+	private System.Collections.IEnumerator AnimateCorkRoutine()
+	{
+		// 1. Lưu lại vị trí chuẩn (đích đến) mà bạn đã căn chỉnh bằng tay ngoài Scene
+		Vector3 finalPos = corkObject.transform.localPosition;
+
+		// 2. Tính toán vị trí bắt đầu (Cao hơn vị trí chuẩn một đoạn)
+		Vector3 startPos = finalPos + new Vector3(0f, corkDropHeight, 0f);
+
+		// 3. Đưa nắp lên cao và Bật cho nó hiện lên
+		corkObject.transform.localPosition = startPos;
+		corkObject.SetActive(true);
+
+		// 4. Di chuyển mượt mà từ trên xuống
+		float timePassed = 0f;
+		while (timePassed < corkDropDuration)
+		{
+			timePassed += Time.deltaTime;
+			float percent = timePassed / corkDropDuration;
+
+			// Mẹo Pro: Dùng SmoothStep thay vì Lerp thường để nắp rơi có gia tốc (nhanh dần rồi hãm lại ở đáy)
+			float smoothPercent = Mathf.SmoothStep(0f, 1f, percent);
+
+			corkObject.transform.localPosition = Vector3.Lerp(startPos, finalPos, smoothPercent);
+			yield return null;
+		}
+
+		// 5. Chốt vị trí cuối cùng để tránh sai số
+		corkObject.transform.localPosition = finalPos;
 	}
 }

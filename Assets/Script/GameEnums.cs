@@ -5,5 +5,8 @@ public enum WaterColor
 	Red,
 	Blue,
 	Green,
-	Yellow
+	Yellow,
+	Purple,
+	Orange, 
+	Pink
 }
