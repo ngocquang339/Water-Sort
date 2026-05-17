@@ -12,25 +12,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a3622a254d466438f913d6b2309660, type: 3}
   m_Name: DailyRewardData
   m_EditorClassIdentifier: 
-  rewards:
-  - rewardType: Coin
-    amount: 10
-    image: {fileID: -3338749442709606003, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
-  - rewardType: Coin
-    amount: 20
-    image: {fileID: 5848064539680731454, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
-  - rewardType: Coin
-    amount: 50
-    image: {fileID: -2652133911391862278, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
-  - rewardType: Coin
-    amount: 100
-    image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
-  - rewardType: Diamond
-    amount: 3
-    image: {fileID: -7494059137886779857, guid: 89d262194f975de40b87a75571216eb5, type: 3}
-  - rewardType: Diamond
-    amount: 10
-    image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
-  - rewardType: Diamond
-    amount: 20
-    image: {fileID: 876656032707445072, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+  days:
+  - items:
+    - rewardType: Coin
+      amount: 10
+      image: {fileID: 5848064539680731454, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+  - items:
+    - rewardType: Coin
+      amount: 20
+      image: {fileID: -2652133911391862278, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+  - items:
+    - rewardType: Coin
+      amount: 50
+      image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+  - items:
+    - rewardType: Coin
+      amount: 100
+      image: {fileID: 4786861022352539597, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+  - items:
+    - rewardType: Diamond
+      amount: 3
+      image: {fileID: -7494059137886779857, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+  - items:
+    - rewardType: Diamond
+      amount: 10
+      image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+  - items:
+    - rewardType: Diamond
+      amount: 10
+      image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    - rewardType: Coin
+      amount: 50
+      image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    - rewardType: Diamond
+      amount: 30
+      image: {fileID: 6269729389252753059, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+  milestoneChests:
+  - visualAnchor: 0.4
+    requiredDays: 7
+    rewards:
+    - rewardType: Coin
+      amount: 20
+      image: {fileID: -2652133911391862278, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    chestClosedIcon: {fileID: 6271800901740906358, guid: b4f8b725c8ef8ec45afe0f7117f7b83d, type: 3}
+    chestOpenedIcon: {fileID: 0}
+  - visualAnchor: 0.6
+    requiredDays: 15
+    rewards:
+    - rewardType: Coin
+      amount: 50
+      image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    chestClosedIcon: {fileID: -858055838422489017, guid: 3f6f8348366b32449a62831682346849, type: 3}
+    chestOpenedIcon: {fileID: 0}
+  - visualAnchor: 0.8
+    requiredDays: 21
+    rewards:
+    - rewardType: Coin
+      amount: 50
+      image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    - rewardType: Diamond
+      amount: 10
+      image: {fileID: 876656032707445072, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    chestClosedIcon: {fileID: 1541303099146559613, guid: 7a2a29c56f5115f4c87a1d5891c36edb, type: 3}
+    chestOpenedIcon: {fileID: 0}
+  - visualAnchor: 1
+    requiredDays: 30
+    rewards:
+    - rewardType: Coin
+      amount: 100
+      image: {fileID: 4786861022352539597, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    - rewardType: Diamond
+      amount: 20
+      image: {fileID: 6269729389252753059, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    chestClosedIcon: {fileID: 5276425516723954312, guid: e241ecba59884e44c820256ae6d24861, type: 3}
+    chestOpenedIcon: {fileID: 0}

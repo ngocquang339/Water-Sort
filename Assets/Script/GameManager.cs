@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class GameManager : MonoBehaviour
 
 	[Header("Cài đặt Game")]
 	[SerializeField] private float liftOffset = 0.5f;
+	public TextMeshProUGUI levelText;
+	public LevelManager levelManager;
 
 	[Header("Hiệu ứng Nước chảy")]
 	public LineRenderer waterStream;
@@ -22,6 +27,21 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private float pourAngle = 90f;
 	[SerializeField] private float pourOffsetX = 0.8f;
 	[SerializeField] private float pourOffsetY = 1.0f;
+
+	[Header("Danh sách chai nước")]
+	public List<Bottle> allBottles;
+
+	[Header("UI Bế Tắc")]
+	public GameObject outOfMovesPopup; // Kéo bảng UI thông báo hết bước đi vào đây
+
+	[Header("Hiệu ứng pháo hoa")]
+	public ParticleSystem bottleDonePrefab;
+
+	[Header("Win Game Effects")]
+	public GameObject blackOverlay; // Kéo Black_Overlay vào đây
+	public GameObject confettiRainPrefab; // Kéo Prefab máy phát pháo giấy vào đây
+	public RectTransform winPanelRect;
+	public GameObject winUIPanel;
 
 	void Update()
 	{
@@ -213,6 +233,15 @@ public class GameManager : MonoBehaviour
 
 		busyBottles.Remove(source);
 		busyBottles.Remove(target);
+		
+		if(target.isCompleted()){
+			Debug.Log("Chai này đã hoàn thiện");
+			Instantiate(bottleDonePrefab, target.mouthPoint.position, Quaternion.identity);
+			target.CloseCork();
+		}
+		CheckWin();
+		//Check nước đi hợp lệ
+		if(!CheckWin()) CheckGameState();
 	}
 
 	private IEnumerator AnimateBottle(Transform bottleTransform, Vector3 targetPos, float targetRotation, float duration)
@@ -254,6 +283,68 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene("MainPlayScene");
 	}
 
+	// 1. Hàm siêu nhẹ để kiểm tra xem CÒN BƯỚC ĐI KHÔNG
+	public bool HasAnyValidMove()
+	{
+		for (int i = 0; i < allBottles.Count; i++)
+		{
+			Bottle fromBottle = allBottles[i];
+
+			// Nếu chai rỗng hoặc đã hoàn thiện rồi -> Không rót đi nữa
+			if (fromBottle.isEmpty() || fromBottle.isCompleted()) continue;
+
+			// Lấy màu trên cùng của chai nguồn
+			// (Do hàm getTopColor của bạn trả về Stack, ta dùng Peek() để lấy màu thật)
+			WaterColor colorToPour = fromBottle.getTopColor().Peek();
+
+			for (int j = 0; j < allBottles.Count; j++)
+			{
+				if (i == j) continue; // Không tự kiểm tra với chính mình
+
+				Bottle toBottle = allBottles[j];
+
+				// Nếu chai đích đầy -> Không nhận được
+				if (toBottle.isFull()) continue;
+
+				// Nếu chai đích RỖNG hoặc có MÀU TRÊN CÙNG GIỐNG NHAU -> Có thể rót!
+				if (toBottle.isEmpty() || toBottle.getTopColor().Peek() == colorToPour)
+				{
+					return true; // Chỉ cần tìm thấy 1 đường đi là trả về True ngay
+				}
+			}
+		}
+
+		// Nếu chạy hết vòng lặp mà không return true, nghĩa là HẾT ĐƯỜNG
+		return false;
+	}
+
+	// 2. Coroutine tạo độ trễ trước khi hiện thông báo
+	private IEnumerator HandleDeadlockRoutine()
+	{
+		// Đợi 1.5 giây để hiệu ứng rót nước cuối cùng kịp chạy xong
+		yield return new WaitForSeconds(1.5f);
+
+		// Hiện bảng UI thông báo (Ví dụ: "Bạn đã hết bước đi! Dùng +1 Bình hoặc Xem Quảng Cáo để Undo")
+		if (outOfMovesPopup != null)
+		{
+			outOfMovesPopup.SetActive(true);
+		}
+	}
+
+	// 3. Hàm kích hoạt kiểm tra (Sẽ gọi sau khi người chơi rót xong)
+	public void CheckGameState()
+	{
+		// Kiểm tra Win trước (Giả sử bạn có hàm CheckWin)
+		// if (CheckWinCondition()) return; 
+
+		// Nếu không Win, kiểm tra xem có bị Deadlock không
+		if (!HasAnyValidMove() && !CheckWin())
+		{
+			Debug.Log("Hết bước đi! Chuẩn bị hiện thông báo...");
+			StartCoroutine(HandleDeadlockRoutine());
+		}
+	}
+
 	public void backStep()
 	{
 		if (saveStepInfor.Count > 0)
@@ -275,10 +366,6 @@ public class GameManager : MonoBehaviour
 		else return;
 	}
 
-	public void hintStep(){
-		
-	}
-
 	public struct stepInfor
 	{
 		public Bottle A;
@@ -293,5 +380,110 @@ public class GameManager : MonoBehaviour
 		infor.B = B;
 		infor.waterLayers = amountOfLayers;
 		return infor;
+	}
+
+	// --- THÊM HÀM NÀY VÀO GAMEMANAGER.CS ---
+	public void ExecuteHintPour(Bottle source, Bottle target)
+	{
+		// 1. Nếu các chai này đang bận chạy animation thì bỏ qua để tránh lỗi spam nút
+		if (busyBottles.Contains(source) || busyBottles.Contains(target)) return;
+
+		// 2. Nếu người chơi ĐANG CHỌN (nhấc) 1 chai nào đó trên tay, bắt buộc hạ nó xuống trước
+		if (selectedBottle != null)
+		{
+			Vector3 dropPos = selectedBottle.transform.position - new Vector3(0f, liftOffset, 0f);
+			StartCoroutine(AnimateBottle(selectedBottle.transform, dropPos, 0f, moveSpeed));
+			selectedBottle = null;
+		}
+
+		// 3. Vị trí mặt đất của chai gợi ý (vì nó đang đứng yên dưới đất nên là position gốc)
+		Vector3 groundPos = source.transform.position;
+
+		// 4. Ra lệnh chạy Coroutine rót nước có sẵn của bạn!
+		StartCoroutine(PourWaterRoutine(source, target, groundPos));
+	}
+
+	public bool CheckWin()
+	{
+		bool isWin = true;
+		foreach (Bottle bottle in allBottles)
+		{
+			if (!bottle.isEmpty() && !bottle.isCompleted()){
+				isWin = false;
+				break;
+			}
+		}
+
+		if (isWin)
+		{
+			StartCoroutine(WinSequenceRoutine());
+			return true;
+		}
+		return false;
+	}
+
+	private IEnumerator WinSequenceRoutine()
+	{
+		// 1. CHUẨN BỊ MÀN HÌNH
+		// Bật nền đen mờ ngay lập tức
+		if (blackOverlay != null) blackOverlay.SetActive(true);
+
+		// Bật Canvas Win_UI lên, nhưng ép cái bảng Win_Panel nhỏ xíu (bằng 0) để tàng hình
+		winUIPanel.SetActive(true);
+		winPanelRect.localScale = Vector3.zero;
+
+		// Bắt đầu tạo Mưa pháo giấy từ giữa mép trên màn hình (Y = 1.1 là cao hơn mép trên một chút)
+		Vector3 topCenter = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 10f));
+		if (confettiRainPrefab != null)
+		{
+			Instantiate(confettiRainPrefab, topCenter, confettiRainPrefab.transform.rotation);
+		}
+
+		// 2. HIỆU ỨNG JUICY: PHÓNG TO NẢY (EaseOutBack)
+		float duration = 0.5f;
+		float elapsed = 0f;
+
+		while (elapsed < duration)
+		{
+			elapsed += Time.deltaTime;
+			float t = elapsed / duration;
+
+			// Công thức toán học tạo độ "Nảy" (Overshoot)
+			// Nó sẽ phóng to lên mức 1.1 rồi mới co nhẹ lại về 1.0
+			float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
+
+			// Bắt buộc dùng LerpUnclamped để cho phép phóng to vượt ngưỡng 100%
+			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
+			yield return null;
+		}
+
+		// Chốt lại kích thước chuẩn 100% để đảm bảo không bị lệch
+		winPanelRect.localScale = Vector3.one;
+
+		// 3. THƯỞNG THỨC
+		// Dừng lại 3 giây cho người dùng ngắm mưa pháo giấy và vầng sáng
+		yield return new WaitForSeconds(3.0f);
+
+		// 4. THU NHỎ LẠI TRƯỚC KHI CHUYỂN MÀN (Tùy chọn cho mượt)
+		elapsed = 0f;
+		float outDuration = 0.3f;
+		while (elapsed < outDuration)
+		{
+			elapsed += Time.deltaTime;
+			float t = elapsed / outDuration;
+
+			// Công thức EaseInBack (Co lại có lực hút)
+			float easeT = t * t * (2.70158f * t - 1.70158f);
+			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.one, Vector3.zero, easeT);
+			yield return null;
+		}
+
+		// 5. LƯU GAME VÀ LOAD MÀN MỚI
+		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+		PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
+		PlayerPrefs.Save();
+
+		levelText.text = "Level " + levelManager.currentLevelData.levelId.ToString();
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 }
