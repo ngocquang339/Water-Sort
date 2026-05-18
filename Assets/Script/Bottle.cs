@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -269,7 +270,7 @@ public class Bottle : MonoBehaviour
 	}
 
 	// Coroutine xử lý Animation rơi nắp
-	private System.Collections.IEnumerator AnimateCorkRoutine()
+	private IEnumerator AnimateCorkRoutine()
 	{
 		// 1. Lưu lại vị trí chuẩn (đích đến) mà bạn đã căn chỉnh bằng tay ngoài Scene
 		Vector3 finalPos = corkObject.transform.localPosition;
@@ -297,5 +298,33 @@ public class Bottle : MonoBehaviour
 
 		// 5. Chốt vị trí cuối cùng để tránh sai số
 		corkObject.transform.localPosition = finalPos;
+	}
+
+	// --- THÊM VÀO BOTTLE.CS ---
+	public void MakeEmptyBottle()
+	{
+		// 1. DỌN SẠCH DỮ LIỆU BÊN TRONG
+		waterLayers.Clear();
+
+		// 2. TẮT HIỂN THỊ CỦA CÁC LỚP NƯỚC BÊN NGOÀI
+		if (waterLayerRenderers != null)
+		{
+			for (int i = 0; i < waterLayerRenderers.Length; i++)
+			{
+				// CHỈ CẦN ẨN ĐI LÀ ĐỦ. TUYỆT ĐỐI KHÔNG ÉP SCALE VỀ 0 Ở ĐÂY NỮA!
+				// Để nguyên kích thước gốc cho GameManager đọc được chiều cao chuẩn.
+				waterLayerRenderers[i].gameObject.SetActive(false);
+			}
+		}
+
+		// Tắt luôn mặt Oval đi vì chai rỗng thì không có bề mặt nước
+		if (ovalInsideRenderer != null) ovalInsideRenderer.gameObject.SetActive(false);
+		if (ovalBorderRenderer != null) ovalBorderRenderer.gameObject.SetActive(false);
+
+		// 3. ĐẢM BẢO MỞ NẮP CHAI
+		if (corkObject != null)
+		{
+			corkObject.SetActive(false);
+		}
 	}
 }
