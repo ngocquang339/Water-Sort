@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -90,5 +91,36 @@ public class LevelManager : MonoBehaviour
 				bottleIndex++;
 			}
 		}
+	}
+
+	// Hàm này trả về danh sách tọa độ mới khi tổng số chai thay đổi
+	public List<Vector3> GetBottleTargetPositions(int totalBottles)
+	{
+		List<Vector3> targetPositions = new List<Vector3>();
+
+		int numRows = Mathf.CeilToInt((float)totalBottles / maxBottlesPerRow);
+		int remainingBottles = totalBottles;
+
+		for (int row = 0; row < numRows; row++)
+		{
+			// THUẬT TOÁN CHIA ĐỀU (Giữ y nguyên logic của bạn)
+			int rowsLeft = numRows - row;
+			int bottlesInThisRow = Mathf.CeilToInt((float)remainingBottles / rowsLeft);
+			remainingBottles -= bottlesInThisRow;
+
+			float startX = -(bottlesInThisRow - 1) * spacingX / 2f;
+			float startY = (numRows - 1) * spacingY / 2f;
+
+			for (int col = 0; col < bottlesInThisRow; col++)
+			{
+				float posX = startX + (col * spacingX);
+				float posY = startY - (row * spacingY);
+
+				// Lưu tọa độ Z = 0f để các chai không bị lệch chiều sâu
+				targetPositions.Add(new Vector3(posX, posY, 0f));
+			}
+		}
+
+		return targetPositions;
 	}
 }

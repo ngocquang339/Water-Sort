@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine.UI;
 
+public enum HelpType { Undo, Hint, AddBottle }
 public class GameManager : MonoBehaviour
 {
 	private Bottle selectedBottle;
 	private Stack<stepInfor> saveStepInfor = new Stack<stepInfor>();
 
 	private List<Bottle> busyBottles = new List<Bottle>();
+	public static GameManager instance;
 
 	[Header("Cài đặt Game")]
 	[SerializeField] private float liftOffset = 0.5f;
 	public TextMeshProUGUI levelText;
 	public LevelManager levelManager;
+	public GameHintManager gameHintManager;
 
 	[Header("Hiệu ứng Nước chảy")]
 	public LineRenderer waterStream;
@@ -43,6 +48,44 @@ public class GameManager : MonoBehaviour
 	public RectTransform winPanelRect;
 	public GameObject winUIPanel;
 
+	[Header("Next Level Popup")]
+	public RectTransform nextLevelPopupRect; // Kéo object NextLevel_Popup vào đây
+
+	[Header("UI Hiển Thị Số Lượt Trợ Giúp")]
+	public TextMeshProUGUI undoText;       // Kéo Text số của nút Undo vào đây
+	public TextMeshProUGUI hintText;       // Kéo Text số của nút Hint vào đây
+	public TextMeshProUGUI addBottleText;  // Kéo Text số của nút Thêm Chai vào đây
+
+	[Header("Cài đặt Thêm Chai")]
+	public int maxExtraBottlesPerLevel = 1; // Giới hạn số chai được thêm mỗi màn
+	private int extraBottlesUsedThisLevel = 0; // Đếm số chai đã thêm trong màn hiện tại
+	public GameObject emptyBottlePrefab; // Kéo Prefab chai rỗng vào đây
+	public Button addBottleButton;
+	// Các biến để quản lý số lượng trong Code
+	private int remainingUndo;
+	private int remainingHint;
+	private int remainingAddBottle;
+
+	// Đặt tên các Key lưu trữ thành hằng số để tránh gõ sai chính tả
+	private const string KEY_UNDO = "Help_Undo";
+	private const string KEY_HINT = "Help_Hint";
+	private const string KEY_ADD_BOTTLE = "Help_AddBottle";
+
+	public PopupManager popupManager;
+
+	private void Awake()
+	{
+		if (instance == null) instance = this;
+		else Destroy(gameObject);
+	}
+
+	void Start()
+	{
+		LoadHelpQuantities();
+	}
+
+	// Hàm tải dữ liệu khi vừa vào game
+
 	void Update()
 	{
 		liftBottle();
@@ -50,11 +93,12 @@ public class GameManager : MonoBehaviour
 
 	private void liftBottle()
 	{
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
 		{
 			Bottle clickBottle = getBottleFromClick();
 			if (clickBottle != null)
 			{
+				if (AudioManager.instance != null) AudioManager.instance.PlayBottleClick();
 				// NẾU CHAI NÀY ĐANG BẬN -> BỎ QUA
 				if (busyBottles.Contains(clickBottle)) return;
 
@@ -347,6 +391,13 @@ public class GameManager : MonoBehaviour
 
 	public void backStep()
 	{
+		// LƯU Ý 1: Kiểm tra xem người chơi còn lượt không, hết rồi thì nghỉ khỏe
+		if (remainingUndo <= 0)
+		{
+			Debug.Log("Hết lượt Undo rồi Hy ơi!");
+			return;
+		}
+
 		if (saveStepInfor.Count > 0)
 		{
 			stepInfor lastStep = saveStepInfor.Peek();
@@ -362,6 +413,12 @@ public class GameManager : MonoBehaviour
 			a.updateBottleVisuals();
 			b.updateBottleVisuals();
 			saveStepInfor.Pop();
+
+			// LƯU Ý 2: Sau khi đã lùi bước thành công -> Thực hiện trừ lượt và đổi số UI luôn!
+			remainingUndo--;
+			PlayerPrefs.SetInt(KEY_UNDO, remainingUndo);
+			PlayerPrefs.Save();
+			UpdateHelpUI(); // <--- ĐỂ Ô SỐ UI CẬP NHẬT NGAY LẬP TỨC
 		}
 		else return;
 	}
@@ -424,22 +481,27 @@ public class GameManager : MonoBehaviour
 
 	private IEnumerator WinSequenceRoutine()
 	{
+		if (AudioManager.instance != null) AudioManager.instance.PlayWinSound();
 		// 1. CHUẨN BỊ MÀN HÌNH
-		// Bật nền đen mờ ngay lập tức
 		if (blackOverlay != null) blackOverlay.SetActive(true);
 
-		// Bật Canvas Win_UI lên, nhưng ép cái bảng Win_Panel nhỏ xíu (bằng 0) để tàng hình
 		winUIPanel.SetActive(true);
 		winPanelRect.localScale = Vector3.zero;
 
-		// Bắt đầu tạo Mưa pháo giấy từ giữa mép trên màn hình (Y = 1.1 là cao hơn mép trên một chút)
+		// Đảm bảo Popup Next Level đang bị ẩn/thu nhỏ từ đầu
+		if (nextLevelPopupRect != null)
+		{
+			nextLevelPopupRect.gameObject.SetActive(true);
+			nextLevelPopupRect.localScale = Vector3.zero;
+		}
+
 		Vector3 topCenter = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 10f));
 		if (confettiRainPrefab != null)
 		{
 			Instantiate(confettiRainPrefab, topCenter, confettiRainPrefab.transform.rotation);
 		}
 
-		// 2. HIỆU ỨNG JUICY: PHÓNG TO NẢY (EaseOutBack)
+		// 2. PHÓNG TO WIN_PANEL ("LEVEL COMPLETE")
 		float duration = 0.5f;
 		float elapsed = 0f;
 
@@ -447,43 +509,298 @@ public class GameManager : MonoBehaviour
 		{
 			elapsed += Time.deltaTime;
 			float t = elapsed / duration;
-
-			// Công thức toán học tạo độ "Nảy" (Overshoot)
-			// Nó sẽ phóng to lên mức 1.1 rồi mới co nhẹ lại về 1.0
 			float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
-
-			// Bắt buộc dùng LerpUnclamped để cho phép phóng to vượt ngưỡng 100%
 			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
 			yield return null;
 		}
-
-		// Chốt lại kích thước chuẩn 100% để đảm bảo không bị lệch
 		winPanelRect.localScale = Vector3.one;
 
-		// 3. THƯỞNG THỨC
-		// Dừng lại 3 giây cho người dùng ngắm mưa pháo giấy và vầng sáng
-		yield return new WaitForSeconds(3.0f);
+		// 3. Thời gian hiển thị panel
+		yield return new WaitForSeconds(0.8f);
 
-		// 4. THU NHỎ LẠI TRƯỚC KHI CHUYỂN MÀN (Tùy chọn cho mượt)
+		// 4. THU NHỎ WIN_PANEL XUỐNG BẰNG 0
 		elapsed = 0f;
 		float outDuration = 0.3f;
 		while (elapsed < outDuration)
 		{
 			elapsed += Time.deltaTime;
 			float t = elapsed / outDuration;
-
-			// Công thức EaseInBack (Co lại có lực hút)
 			float easeT = t * t * (2.70158f * t - 1.70158f);
 			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.one, Vector3.zero, easeT);
 			yield return null;
 		}
+		// Thu nhỏ xong thì tắt hẳn cái bảng Level Complete đi cho nhẹ máy
+		winPanelRect.gameObject.SetActive(false);
 
-		// 5. LƯU GAME VÀ LOAD MÀN MỚI
+		// 5. LƯU GAME
 		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
 		PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
 		PlayerPrefs.Save();
-
 		levelText.text = "Level " + levelManager.currentLevelData.levelId.ToString();
+
+		// 6. PHÓNG TO POPUP CÚP VÀNG & NÚT BẤM (NEXT LEVEL POPUP)
+		if (nextLevelPopupRect != null)
+		{
+			elapsed = 0f;
+			while (elapsed < duration) // Vẫn dùng thời gian duration = 0.5f
+			{
+				elapsed += Time.deltaTime;
+				float t = elapsed / duration;
+				// Công thức nảy Juicy y hệt lúc nãy
+				float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
+				nextLevelPopupRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
+				yield return null;
+			}
+			nextLevelPopupRect.localScale = Vector3.one; // Chốt hạ
+		}
+
+		// (Xong Coroutine! Game sẽ dừng ở đây để đợi người chơi bấm nút NEXT LEVEL)
+	}
+
+	public void onClickHome(){
+		SceneManager.LoadScene("MainScene");
+	}
+
+	public void onClickNextLevel(){
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
+
+	private void LoadHelpQuantities()
+	{
+		// Bí quyết ở đây: Số 2 ở cuối chính là giá trị mặc định nếu Key chưa tồn tại!
+		remainingUndo = PlayerPrefs.GetInt(KEY_UNDO, 2);
+		remainingHint = PlayerPrefs.GetInt(KEY_HINT, 2);
+		remainingAddBottle = PlayerPrefs.GetInt(KEY_ADD_BOTTLE, 2);
+
+		UpdateHelpUI();
+	}
+
+	// Hàm cập nhật số lượng lên các nút UI dưới màn hình
+	private void UpdateHelpUI()
+	{
+		if (undoText != null) undoText.text = remainingUndo.ToString();
+		if (hintText != null) hintText.text = remainingHint.ToString();
+		if (addBottleText != null) addBottleText.text = remainingAddBottle.ToString();
+	}
+
+	// 1. Hàm gọi khi bấm nút QUAY LẠI 1 BƯỚC (Undo)
+	public void OnClickUndoButton()
+	{
+		if (remainingUndo > 0)
+		{
+			remainingUndo--; // Trừ đi 1 lượt
+			PlayerPrefs.SetInt(KEY_UNDO, remainingUndo); // Lưu lại vào máy
+			PlayerPrefs.Save();
+			UpdateHelpUI(); // Cập nhật lại số trên màn hình
+
+			backStep();
+		}
+		else
+		{
+			Debug.Log("Đã hết lượt Undo!");
+			if (PopupManager.instance != null) PopupManager.instance.ShowOutOfHelpPopup(HelpType.Undo);
+			return;
+		}
+	}
+
+	
+
+	// 3. Hàm gọi khi bấm nút THÊM CHAI NƯỚC RỖNG
+	public void OnClickAddBottleButton()
+	{
+		if (remainingAddBottle > 0)
+		{
+			remainingAddBottle--;
+			PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+			PlayerPrefs.Save();
+			UpdateHelpUI();
+
+			// --- GỌI LOGIC SINH THÊM CHAI RỖNG CỦA BẠN Ở ĐÂY ---
+		}
+		else
+		{
+			Debug.Log("Đã hết lượt Thêm chai rỗng!");
+		}
+	}
+
+	// Hàm này nối vào sự kiện OnClick của nút GỢI Ý (Hint) ngoài Unity
+	public void UseHint()
+	{
+		// 1. KIỂM TRA QUYỀN LỰC: CÒN LƯỢT KHÔNG?
+		if (remainingHint <= 0)
+		{
+			Debug.Log("Hết lượt dùng Gợi ý rồi!");
+			if (PopupManager.instance != null) PopupManager.instance.ShowOutOfHelpPopup(HelpType.Hint);
+			return;
+		}
+
+		// Nếu đang có chai nước rót dở, không cho dùng gợi ý để tránh lỗi animation
+		if (busyBottles.Count > 0) return;
+
+		// 2. GIAO VIỆC CHO THƯ KÝ: TÌM BƯỚC ĐI ĐI!
+		if (gameHintManager != null)
+		{
+			// Chuyền allBottles sang cho thư ký tính
+			PourStep? hintStep = gameHintManager.FindHint(allBottles);
+
+			// 3. NẾU TÌM ĐƯỢC ĐƯỜNG
+			if (hintStep.HasValue)
+			{
+				// Lấy ra 2 chai nước từ kết quả của thư ký
+				Bottle fromBottle = allBottles[hintStep.Value.fromIndex];
+				Bottle toBottle = allBottles[hintStep.Value.toIndex];
+
+				Debug.Log($"Gợi ý: Tự động rót từ {fromBottle.name} sang {toBottle.name}");
+
+				// THỰC HIỆN ANIMATION
+				ExecuteHintPour(fromBottle, toBottle);
+
+				// TRỪ LƯỢT VÀ UPDATE UI (Chỉ trừ lượt khi đã tìm ra và rót thành công)
+				remainingHint--;
+				PlayerPrefs.SetInt(KEY_HINT, remainingHint);
+				PlayerPrefs.Save();
+				UpdateHelpUI();
+			}
+			else
+			{
+				// Không trừ lượt nếu màn chơi đã bị khóa (deadlock)
+				Debug.Log("Màn chơi bế tắc, không có bước đi gợi ý nào!");
+			}
+		}
+	}
+
+	// Hàm này nối vào sự kiện OnClick của nút THÊM BÌNH ngoài Unity
+	public void UseAddBottle()
+	{
+		// 1. KIỂM TRA GIỚI HẠN CỦA MÀN CHƠI TRƯỚC
+		if (extraBottlesUsedThisLevel >= maxExtraBottlesPerLevel)
+		{
+			Debug.Log("Màn này đã đạt giới hạn thêm chai rồi!");
+			return;
+		}
+
+		// 2. KIỂM TRA TÚI ĐỒ NGƯỜI CHƠI
+		if (remainingAddBottle <= 0)
+		{
+			Debug.Log("Hết lượt Thêm bình rồi!");
+			if (PopupManager.instance != null) PopupManager.instance.ShowOutOfHelpPopup(HelpType.AddBottle);
+			return;
+		}
+
+		// Đang có chai rót dở thì cấm thêm để tránh lỗi
+		if (busyBottles.Count > 0) return;
+
+		// 3. THỰC HIỆN LOGIC THÊM CHAI
+		// Sinh chai mới ở tít trên cao (Y = 10)
+		Vector3 spawnPos = new Vector3(0, 10f, 0);
+		GameObject newBottleObj = Instantiate(emptyBottlePrefab, spawnPos, Quaternion.identity);
+		Bottle newBottle = newBottleObj.GetComponent<Bottle>();
+
+		// -- PHẦN CODE MỚI THÊM VÀO ĐÂY --
+		if (newBottle != null)
+		{
+			// Bắt buộc phải gán sức chứa cho chai mới (Thường là bằng với sức chứa của màn hiện tại)
+			// Nếu bạn có lưu capacity chung ở LevelManager thì lấy ra, hoặc fix cứng là 4
+			newBottle.capacity = levelManager.currentLevelData != null ? levelManager.currentLevelData.bottleCapacity : 4;
+
+			// RÚT CẠN NƯỚC!
+			newBottle.MakeEmptyBottle();
+		}
+
+		// Thêm vào danh sách quản lý
+		allBottles.Add(newBottle);
+
+		// Tăng biến đếm màn chơi
+		extraBottlesUsedThisLevel++;
+		if (extraBottlesUsedThisLevel >= maxExtraBottlesPerLevel)
+		{
+			if (addBottleButton != null)
+			{
+				addBottleButton.interactable = false;
+			}
+		}
+
+		// GỌI HÀM SẮP XẾP LẠI VÀ CHẠY ANIMATION TRƯỢT
+		// Giả sử hàm này bạn viết trong GameManager hoặc LevelManager
+		StartCoroutine(RearrangeBottlesRoutine());
+
+		// 4. TRỪ LƯỢT VÀ UPDATE UI
+		remainingAddBottle--;
+		PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+		PlayerPrefs.Save();
+		UpdateHelpUI();
+	}
+
+	// ---- BÊN TRONG FILE GameManager.cs ----
+	private IEnumerator RearrangeBottlesRoutine()
+	{
+		// 1. LẤY TỌA ĐỘ MỚI TỪ LEVEL MANAGER
+		// allBottles lúc này đã chứa cả cái chai rỗng mới được sinh ra rồi
+		List<Vector3> targetPositions = levelManager.GetBottleTargetPositions(allBottles.Count);
+
+		// 2. LƯU LẠI VỊ TRÍ XUẤT PHÁT CỦA CÁC CHAI
+		List<Vector3> startPositions = new List<Vector3>();
+		for (int i = 0; i < allBottles.Count; i++)
+		{
+			startPositions.Add(allBottles[i].transform.position);
+		}
+
+		// 3. VÒNG LẶP ANIMATION TRƯỢT MƯỢT MÀ
+		float duration = 0.4f; // Trượt trong 0.4 giây cho dứt khoát
+		float elapsed = 0f;
+
+		while (elapsed < duration)
+		{
+			elapsed += Time.deltaTime;
+			float t = elapsed / duration;
+
+			// Công thức Ease Out Cubic: Trượt nhanh lúc đầu, chậm dần về đích
+			float easeT = 1f - Mathf.Pow(1f - t, 3f);
+
+			for (int i = 0; i < allBottles.Count; i++)
+			{
+				// Đảm bảo không bị lỗi Out of Bounds nếu số lượng chai và tọa độ khớp nhau
+				if (i < targetPositions.Count)
+				{
+					allBottles[i].transform.position = Vector3.Lerp(startPositions[i], targetPositions[i], easeT);
+				}
+			}
+
+			yield return null;
+		}
+
+		// 4. CHỐT HẠ TỌA ĐỘ CHÍNH XÁC (Đề phòng sai số của frame cuối)
+		for (int i = 0; i < allBottles.Count; i++)
+		{
+			if (i < targetPositions.Count)
+			{
+				allBottles[i].transform.position = targetPositions[i];
+			}
+		}
+	}
+
+	// Hàm hỗ trợ cộng lượt mua từ Popup sang
+	public void		AddHelpQuantity(HelpType type, int amount)
+	{
+		switch (type)
+		{
+			case HelpType.Undo:
+				remainingUndo += amount;
+				PlayerPrefs.SetInt(KEY_UNDO, remainingUndo);
+				break;
+
+			case HelpType.Hint:
+				remainingHint += amount;
+				PlayerPrefs.SetInt(KEY_HINT, remainingHint);
+				break;
+
+			case HelpType.AddBottle:
+				remainingAddBottle += amount;
+				PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+				break;
+		}
+
+		PlayerPrefs.Save();
+		UpdateHelpUI(); // Cập nhật lại số hiển thị trên UI ngay lập tức
 	}
 }

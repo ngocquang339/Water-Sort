@@ -3067,63 +3067,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &792998461
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.8672
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.304
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -6.1613445
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 386410323516341468, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8829921817319407611, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
-      propertyPath: m_Name
-      value: Bottle (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
 --- !u!1 &795164873
 GameObject:
   m_ObjectHideFlags: 0
@@ -6646,12 +6589,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   liftOffset: 0.5
+  levelText: {fileID: 0}
+  levelManager: {fileID: 0}
+  gameHintManager: {fileID: 0}
   waterStream: {fileID: 0}
   waterSplashPrefab: {fileID: 0}
   moveSpeed: 0.1
   pourAngle: 90
   pourOffsetX: 0.8
   pourOffsetY: 1
+  allBottles: []
+  outOfMovesPopup: {fileID: 0}
+  bottleDonePrefab: {fileID: 0}
+  blackOverlay: {fileID: 0}
+  confettiRainPrefab: {fileID: 0}
+  winPanelRect: {fileID: 0}
+  winUIPanel: {fileID: 0}
+  nextLevelPopupRect: {fileID: 0}
+  undoText: {fileID: 0}
+  hintText: {fileID: 0}
+  addBottleText: {fileID: 0}
+  maxExtraBottlesPerLevel: 1
+  emptyBottlePrefab: {fileID: 0}
+  addBottleButton: {fileID: 0}
+  popupManager: {fileID: 0}
 --- !u!4 &1999548892
 Transform:
   m_ObjectHideFlags: 0
@@ -7220,4 +7181,3 @@ SceneRoots:
   - {fileID: 2062201916}
   - {fileID: 1174199213}
   - {fileID: 792696870}
-  - {fileID: 792998461}
