@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474ffca1c470bce42bb2e84774e2a973, type: 3}
   m_Name: Pack1
   m_EditorClassIdentifier: 
-  packName: "G\xF3i qu\xE0 ng\u01B0\u1EDDi m\u1EDBi"
-  themeColor: {r: 0, g: 0, b: 0, a: 0}
-  chestIcon: {fileID: 0}
+  packName: Starter Pack
   priceString: 29000 VND
+  packBackground: {fileID: -714184754405095627, guid: 018dbdc273ebb02498db15d025bf8a5b, type: 3}
+  isPopular: 1
+  mainReward:
+    itemType: 0
+    amount: 100
+    itemIcon: {fileID: -3338749442709606003, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
   rewards:
   - itemType: 0
     amount: 100

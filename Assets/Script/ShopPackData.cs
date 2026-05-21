@@ -19,6 +19,13 @@ public class ShopPackData : ScriptableObject
 	public string packName;        // Tên gói (VD: Gói Quà Người Mới)
 	public string priceString;     // Giá tiền (VD: "VNđ 29000.00")
 
+	[Header("Giao diện thay đổi")]
+	public Sprite packBackground; // Kéo hình nền Vàng hoặc Xanh vào đây
+	public bool isPopular;          // Tích true nếu muốn hiện mác "Popular!"
+
+	[Header("Phần thưởng CHÍNH (Cục to bên trái)")]
+	public PackReward mainReward; // Thêm biến này đứng riêng lẻ
+
 	[Header("Danh sách vật phẩm")]
 	public PackReward[] rewards;   // MẢNG CHỨA CÁC VẬT PHẨM
 }

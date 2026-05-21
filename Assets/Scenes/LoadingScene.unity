@@ -653,8 +653,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: FIRING UP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 90f28ac9020a4174f95f89fcf900d13f, type: 2}
-  m_sharedMaterial: {fileID: -397243588260644944, guid: 90f28ac9020a4174f95f89fcf900d13f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4765507f94affc040b78bf8e454519b3, type: 2}
+  m_sharedMaterial: {fileID: -397243588260644944, guid: 4765507f94affc040b78bf8e454519b3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

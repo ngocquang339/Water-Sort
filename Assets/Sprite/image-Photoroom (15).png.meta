@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8713f281b08cbad4bbff32e0fdfa0ee8
+guid: 8b6d00ba163edac4c83d8503f60a854a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6836234078016266964
-    second: GameOverPanel_0
+      213: -3412434927895479767
+    second: image-Photoroom (15)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GameOverPanel_0
+      name: image-Photoroom (15)_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 565
+        x: 182
+        y: 443
+        width: 207
+        height: 193
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4d2649d8cae2fde50800000000000000
-      internalID: 6836234078016266964
+      spriteID: 92a77af438894a0d0800000000000000
+      internalID: -3412434927895479767
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GameOverPanel_0: 6836234078016266964
+      image-Photoroom (15)_0: -3412434927895479767
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
