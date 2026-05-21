@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
 	[Header("UI Bế Tắc")]
 	public GameObject outOfMovesPopup; // Kéo bảng UI thông báo hết bước đi vào đây
+	public GameObject dark_Panel;
 
 	[Header("Hiệu ứng pháo hoa")]
 	public ParticleSystem bottleDonePrefab;
@@ -72,7 +73,6 @@ public class GameManager : MonoBehaviour
 	private const string KEY_ADD_BOTTLE = "Help_AddBottle";
 
 	public PopupManager popupManager;
-
 	private void Awake()
 	{
 		if (instance == null) instance = this;
@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
 			Bottle clickBottle = getBottleFromClick();
 			if (clickBottle != null)
 			{
-				if (AudioManager.instance != null) AudioManager.instance.PlayBottleClick();
 				// NẾU CHAI NÀY ĐANG BẬN -> BỎ QUA
 				if (busyBottles.Contains(clickBottle)) return;
 
@@ -106,12 +105,14 @@ public class GameManager : MonoBehaviour
 				if (clickBottle == selectedBottle)
 				{
 					Vector3 groundPos = clickBottle.transform.position - new Vector3(0f, liftOffset, 0f);
+					AudioManager.instance.PlayBottleDown();
 					StartCoroutine(AnimateBottle(clickBottle.transform, groundPos, 0f, moveSpeed));
 					selectedBottle = null;
 				}
 				// 2. CHƯA CHỌN CHAI NÀO -> NHẤC LÊN
 				else if (selectedBottle == null)
 				{
+					if (AudioManager.instance != null) AudioManager.instance.PlayBottleLift();
 					if (clickBottle.getTopColor() == null) return;
 
 					Vector3 liftPos = clickBottle.transform.position + new Vector3(0f, liftOffset, 0f);
@@ -198,8 +199,16 @@ public class GameManager : MonoBehaviour
 			// ========================================================
 			// VÒNG LẶP MA THUẬT: ĐỒNG BỘ THỜI GIAN THỰC (0.4 GIÂY)
 			// ========================================================
-			float pourDuration = 0.4f; // Bạn có thể chỉnh con số này để nước chảy nhanh/chậm
+			// 1. TÍNH TOÁN THỜI GIAN RÓT LINH HOẠT
+			float timePerLayer = 0.25f; // Thời gian rót cho 1 lớp nước (Bạn có thể tăng giảm tùy ý)
+
+			// Tổng thời gian = Số lớp nước x Thời gian 1 lớp
+			// Nếu rót 1 lớp: 1 * 0.25 = 0.25 giây. Nếu rót 3 lớp: 3 * 0.25 = 0.75 giây.
+			float pourDuration = actualPourAmount * timePerLayer;
+
 			float timePassed = 0f;
+			// 2. BẬT TIẾNG RÓT NƯỚC BẮT ĐẦU TỪ GIÂY HAY NHẤT (Ví dụ: Giây 5.5)
+			if (AudioManager.instance != null) AudioManager.instance.StartPourSound();
 
 			while (timePassed < pourDuration)
 			{
@@ -246,6 +255,8 @@ public class GameManager : MonoBehaviour
 				yield return null; // Chờ frame tiếp theo
 			}
 			// ========================================================
+			// 4. CHÍNH XÁC LÚC NƯỚC DỪNG CHẢY -> TẮT ÂM THANH NGAY LẬP TỨC!
+			if (AudioManager.instance != null) AudioManager.instance.StopPourSound();
 
 			// Dừng bắn thêm hạt mới, nhưng để các hạt cũ rơi tự nhiên
 			splash.Stop();
@@ -283,9 +294,9 @@ public class GameManager : MonoBehaviour
 			Instantiate(bottleDonePrefab, target.mouthPoint.position, Quaternion.identity);
 			target.CloseCork();
 		}
-		CheckWin();
+		bool check = CheckWin();
 		//Check nước đi hợp lệ
-		if(!CheckWin()) CheckGameState();
+		if(!check) CheckGameState();
 	}
 
 	private IEnumerator AnimateBottle(Transform bottleTransform, Vector3 targetPos, float targetRotation, float duration)
@@ -369,9 +380,9 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSeconds(1.5f);
 
 		// Hiện bảng UI thông báo (Ví dụ: "Bạn đã hết bước đi! Dùng +1 Bình hoặc Xem Quảng Cáo để Undo")
-		if (outOfMovesPopup != null)
+		if (outOfMovesPopup != null && !HasAnyValidMove())
 		{
-			outOfMovesPopup.SetActive(true);
+			StartCoroutine(GameOverSequenceRoutine());
 		}
 	}
 
@@ -780,7 +791,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	// Hàm hỗ trợ cộng lượt mua từ Popup sang
-	public void		AddHelpQuantity(HelpType type, int amount)
+	public void	AddHelpQuantity(HelpType type, int amount)
 	{
 		switch (type)
 		{
@@ -802,5 +813,41 @@ public class GameManager : MonoBehaviour
 
 		PlayerPrefs.Save();
 		UpdateHelpUI(); // Cập nhật lại số hiển thị trên UI ngay lập tức
+	}
+
+	public void reloadLevel() { 
+		Scene currentScene = SceneManager.GetActiveScene();
+		SceneManager.LoadScene(currentScene.buildIndex);
+	}
+
+	private IEnumerator GameOverSequenceRoutine()
+	{
+		if(dark_Panel != null){
+			dark_Panel.SetActive(true);
+		}
+		// 1. Bật object lên và ép kích thước về 0
+		outOfMovesPopup.SetActive(true);
+		RectTransform popupRect = outOfMovesPopup.GetComponent<RectTransform>();
+		popupRect.localScale = Vector3.zero;
+
+		// 2. Cài đặt thời gian phóng to (0.5 giây)
+		float duration = 0.5f;
+		float elapsed = 0f;
+
+		// 3. Vòng lặp Animation
+		while (elapsed < duration)
+		{
+			elapsed += Time.deltaTime;
+			float t = elapsed / duration;
+
+			// Công thức nảy Juicy (Ease Out Back) mượn từ WinPanel
+			float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
+
+			popupRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
+			yield return null;
+		}
+
+		// 4. Chốt hạ kích thước chuẩn tránh sai số
+		popupRect.localScale = Vector3.one;
 	}
 }

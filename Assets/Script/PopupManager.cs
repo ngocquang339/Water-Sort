@@ -54,6 +54,7 @@ public class PopupManager : MonoBehaviour
 		if (currentAnimCoroutine != null) StopCoroutine(currentAnimCoroutine);
 
 		outOfHelpPopup.SetActive(true);
+		AudioManager.instance.PlayPopupSound();
 		popupRect.localScale = Vector3.zero;
 		currentAnimCoroutine = StartCoroutine(JuicyAnimationRoutine(Vector3.zero, Vector3.one));
 	}
