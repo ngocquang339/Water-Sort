@@ -15,6 +15,7 @@ public class AudioManager : MonoBehaviour
 	public AudioClip pourClip;
 	public AudioClip PopupClip;
 	public AudioClip bottleDown;
+	public AudioClip gameOver;
 
 	private void Awake()
 	{
@@ -91,6 +92,12 @@ public class AudioManager : MonoBehaviour
 		if (sfxSource != null && PopupClip != null)
 		{
 			sfxSource.PlayOneShot(PopupClip);
+		}
+	}
+
+	public void PlayGameOver(){
+		if(sfxSource != null && gameOver != null){
+			sfxSource.PlayOneShot(gameOver);
 		}
 	}
 }

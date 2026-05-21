@@ -18,6 +18,8 @@ public class ShopManager : MonoBehaviour
 		{
 			// Sinh ra 1 thẻ Pack
 			GameObject packGO = Instantiate(shopPackPrefab, shopContent);
+			// THÊM DÒNG NÀY VÀO: Ép thẻ Pack về đúng tỷ lệ 1:1, không bị dãn chữ
+			packGO.transform.localScale = Vector3.one;
 
 			// Tìm script ShopPackUI trên thẻ đó và truyền Data vào
 			ShopPackUI uiScript = packGO.GetComponent<ShopPackUI>();

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	private Stack<stepInfor> saveStepInfor = new Stack<stepInfor>();
 
 	private List<Bottle> busyBottles = new List<Bottle>();
+	private bool isLocked = false;
 	public static GameManager instance;
 
 	[Header("Cài đặt Game")]
@@ -62,6 +63,14 @@ public class GameManager : MonoBehaviour
 	private int extraBottlesUsedThisLevel = 0; // Đếm số chai đã thêm trong màn hiện tại
 	public GameObject emptyBottlePrefab; // Kéo Prefab chai rỗng vào đây
 	public Button addBottleButton;
+
+	[Header("Xem quảng cáo")]
+	public GameObject watchAdsPopup;
+	public GameObject darkPanel;
+
+	[Header("Cài đặt Shop")]
+	public GameObject shopPopup;
+	public GameObject backButton;
 	// Các biến để quản lý số lượng trong Code
 	private int remainingUndo;
 	private int remainingHint;
@@ -93,7 +102,7 @@ public class GameManager : MonoBehaviour
 
 	private void liftBottle()
 	{
-		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !isLocked)
 		{
 			Bottle clickBottle = getBottleFromClick();
 			if (clickBottle != null)
@@ -376,13 +385,14 @@ public class GameManager : MonoBehaviour
 	// 2. Coroutine tạo độ trễ trước khi hiện thông báo
 	private IEnumerator HandleDeadlockRoutine()
 	{
+		isLocked = true;
 		// Đợi 1.5 giây để hiệu ứng rót nước cuối cùng kịp chạy xong
 		yield return new WaitForSeconds(1.5f);
 
 		// Hiện bảng UI thông báo (Ví dụ: "Bạn đã hết bước đi! Dùng +1 Bình hoặc Xem Quảng Cáo để Undo")
 		if (outOfMovesPopup != null && !HasAnyValidMove())
 		{
-			StartCoroutine(GameOverSequenceRoutine());
+			StartCoroutine(popupCoroutine(dark_Panel, outOfMovesPopup));
 		}
 	}
 
@@ -596,7 +606,8 @@ public class GameManager : MonoBehaviour
 
 	// 1. Hàm gọi khi bấm nút QUAY LẠI 1 BƯỚC (Undo)
 	public void OnClickUndoButton()
-	{
+	{	
+		if(isLocked) return;
 		if (remainingUndo > 0)
 		{
 			remainingUndo--; // Trừ đi 1 lượt
@@ -617,26 +628,28 @@ public class GameManager : MonoBehaviour
 	
 
 	// 3. Hàm gọi khi bấm nút THÊM CHAI NƯỚC RỖNG
-	public void OnClickAddBottleButton()
-	{
-		if (remainingAddBottle > 0)
-		{
-			remainingAddBottle--;
-			PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
-			PlayerPrefs.Save();
-			UpdateHelpUI();
+	//public void OnClickAddBottleButton()
+	//{
+	//	if (isLocked) return;
+	//	if (remainingAddBottle > 0)
+	//	{
+	//		remainingAddBottle--;
+	//		PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+	//		PlayerPrefs.Save();
+	//		UpdateHelpUI();
 
-			// --- GỌI LOGIC SINH THÊM CHAI RỖNG CỦA BẠN Ở ĐÂY ---
-		}
-		else
-		{
-			Debug.Log("Đã hết lượt Thêm chai rỗng!");
-		}
-	}
+	//		// --- GỌI LOGIC SINH THÊM CHAI RỖNG CỦA BẠN Ở ĐÂY ---
+	//	}
+	//	else
+	//	{
+	//		Debug.Log("Đã hết lượt Thêm chai rỗng!");
+	//	}
+	//}
 
 	// Hàm này nối vào sự kiện OnClick của nút GỢI Ý (Hint) ngoài Unity
 	public void UseHint()
 	{
+		if (isLocked) return;
 		// 1. KIỂM TRA QUYỀN LỰC: CÒN LƯỢT KHÔNG?
 		if (remainingHint <= 0)
 		{
@@ -683,6 +696,7 @@ public class GameManager : MonoBehaviour
 	// Hàm này nối vào sự kiện OnClick của nút THÊM BÌNH ngoài Unity
 	public void UseAddBottle()
 	{
+		if(isLocked) return;
 		// 1. KIỂM TRA GIỚI HẠN CỦA MÀN CHƠI TRƯỚC
 		if (extraBottlesUsedThisLevel >= maxExtraBottlesPerLevel)
 		{
@@ -820,20 +834,28 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(currentScene.buildIndex);
 	}
 
-	private IEnumerator GameOverSequenceRoutine()
-	{
-		if(dark_Panel != null){
-			dark_Panel.SetActive(true);
+	private IEnumerator popupCoroutine(GameObject darkPanel, GameObject popup){
+		if (darkPanel != null)
+		{
+			darkPanel.SetActive(true);
 		}
 		// 1. Bật object lên và ép kích thước về 0
-		outOfMovesPopup.SetActive(true);
-		RectTransform popupRect = outOfMovesPopup.GetComponent<RectTransform>();
+		popup.SetActive(true);
+		RectTransform popupRect = popup.GetComponent<RectTransform>();
+		// --- THÊM DÒNG NÀY: Ép nó về chính giữa màn hình (Tọa độ 0, 0) ---
+		popupRect.anchoredPosition = Vector2.zero;
 		popupRect.localScale = Vector3.zero;
 
 		// 2. Cài đặt thời gian phóng to (0.5 giây)
 		float duration = 0.5f;
 		float elapsed = 0f;
-
+		bool check = HasAnyValidMove();
+		if(!check){
+			AudioManager.instance.PlayGameOver();
+		}
+		else{
+			AudioManager.instance.PlayPopupSound();
+		}
 		// 3. Vòng lặp Animation
 		while (elapsed < duration)
 		{
@@ -849,5 +871,74 @@ public class GameManager : MonoBehaviour
 
 		// 4. Chốt hạ kích thước chuẩn tránh sai số
 		popupRect.localScale = Vector3.one;
+	}
+
+	public void clickWatchAds(){
+		if (isLocked) return;
+		StartCoroutine(popupCoroutine(darkPanel, watchAdsPopup));
+	}
+
+	public void closeWatchPopup()
+	{
+		// Xóa 2 dòng SetActive(false) cũ đi và thay bằng lệnh gọi Animation này:
+		StartCoroutine(ClosePopupCoroutine(darkPanel, watchAdsPopup));
+
+		// Rất quan trọng: Nếu đóng popup xong mà bạn muốn người chơi ĐƯỢC PHÉP CHƠI TIẾP, 
+		// thì phải nhớ mở khóa (isLocked = false) ở đây nhé!
+		isLocked = false;
+	}
+
+	private IEnumerator ClosePopupCoroutine(GameObject panelToClose, GameObject popupToClose)
+	{
+		RectTransform popupRect = popupToClose.GetComponent<RectTransform>();
+		if (popupRect == null) yield break; // Tránh lỗi nếu không có RectTransform
+
+		// 1. Cài đặt thời gian (Thường hiệu ứng đóng nên nhanh hơn mở một chút cho dứt khoát)
+		float duration = 0.3f;
+		float elapsed = 0f;
+
+		// Tùy chọn: Thêm âm thanh tắt popup ở đây nếu bạn có (Ví dụ: AudioManager.instance.PlayClosePopupSound();)
+
+		// 2. Vòng lặp Animation thu nhỏ
+		while (elapsed < duration)
+		{
+			elapsed += Time.deltaTime;
+			float t = elapsed / duration;
+
+			// Công thức nhún lùi (Ease In Back) lấy từ WinSequenceRoutine của bạn
+			float easeT = t * t * (2.70158f * t - 1.70158f);
+
+			popupRect.localScale = Vector3.LerpUnclamped(Vector3.one, Vector3.zero, easeT);
+			yield return null;
+		}
+
+		// 3. Chốt hạ kích thước bằng 0 để tránh sai số
+		popupRect.localScale = Vector3.zero;
+
+		// 4. Tắt hẳn các object để giải phóng bộ nhớ
+		popupToClose.SetActive(false);
+		if (panelToClose != null)
+		{
+			panelToClose.SetActive(false);
+		}
+	}
+
+	// Hàm nối vào Nút Mở Shop
+	public void ClickOpenShop()
+	{
+		// Nếu đang trong trạng thái khóa (như đang rót nước dở) thì không cho mở để tránh bug
+		if (busyBottles.Count > 0 || isLocked) return;
+		watchAdsPopup.SetActive(false);
+		darkPanel.SetActive(false);
+		// Tận dụng luồng coroutine vạn năng có sẵn của bạn
+		StartCoroutine(popupCoroutine(null, shopPopup));
+		backButton.SetActive(true);
+	}
+
+	// Hàm nối vào Nút Đóng Shop (Tắt cái rụp, hoặc bạn có thể dùng đóng animation sau)
+	public void ClickCloseShop()
+	{
+		if (shopPopup != null) StartCoroutine(ClosePopupCoroutine(null, shopPopup));
+		
 	}
 }
