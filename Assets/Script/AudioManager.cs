@@ -10,8 +10,11 @@ public class AudioManager : MonoBehaviour
 
 	[Header("Kho Âm Thanh (Audio Clips)")]
 	public AudioClip buttonClickClip;
-	public AudioClip bottleClickClip;
+	public AudioClip bottleLift;
 	public AudioClip winGameClip;
+	public AudioClip pourClip;
+	public AudioClip PopupClip;
+	public AudioClip bottleDown;
 
 	private void Awake()
 	{
@@ -39,12 +42,21 @@ public class AudioManager : MonoBehaviour
 	}
 
 	// 2. Tiếng chạm vào chai nước
-	public void PlayBottleClick()
+	public void PlayBottleLift()
 	{
-		if (sfxSource != null && bottleClickClip != null)
+		if (sfxSource != null && bottleLift != null)
 		{
 			// PlayOneShot giúp các âm thanh đè lên nhau mà không bị ngắt quãng
-			sfxSource.PlayOneShot(bottleClickClip);
+			sfxSource.PlayOneShot(bottleLift);
+		}
+	}
+
+	public void PlayBottleDown()
+	{
+		if (sfxSource != null && bottleDown != null)
+		{
+			// PlayOneShot giúp các âm thanh đè lên nhau mà không bị ngắt quãng
+			sfxSource.PlayOneShot(bottleDown);
 		}
 	}
 
@@ -54,6 +66,31 @@ public class AudioManager : MonoBehaviour
 		if (sfxSource != null && winGameClip != null)
 		{
 			sfxSource.PlayOneShot(winGameClip);
+		}
+	}
+
+	public void StartPourSound()
+	{
+		if (sfxSource != null && pourClip != null)
+		{
+			sfxSource.clip = pourClip;
+			sfxSource.loop = true;
+			sfxSource.Play();
+		}
+	}
+
+	public void StopPourSound()
+	{
+		if (sfxSource != null)
+		{
+			sfxSource.Stop();
+		}
+	}
+	public void PlayPopupSound()
+	{
+		if (sfxSource != null && PopupClip != null)
+		{
+			sfxSource.PlayOneShot(PopupClip);
 		}
 	}
 }
