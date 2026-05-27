@@ -12,11 +12,10 @@ public class UIManager : MonoBehaviour
 	// Tọa độ điểm giấu và điểm hiện
 	private Vector2 hiddenPos = new Vector2(-1500f, 862f); // Giấu bên trái
 	private Vector2 centerPos = new Vector2(0f, 0f);     // Ngay giữa màn hình
+	private static bool showDailyPopup = false;
 
-	// Hàm này gắn vào nút bấm mở Shop
 	void Start(){
-		dailyReward.SetActive(true);
-		darkBackground.SetActive(true);
+		showDailyReward();
 	}
 	public void OpenShop()
 	{
@@ -29,6 +28,16 @@ public class UIManager : MonoBehaviour
 	{
 		StopAllCoroutines();
 		StartCoroutine(SlidePanel(shopPanel, hiddenPos, slideDuration));
+	}
+
+	public void showDailyReward(){
+		if(showDailyPopup){
+			return;
+		}
+		dailyReward.SetActive(true);
+		darkBackground.SetActive(true);
+		showDailyPopup = true;
+		Debug.Log("Show daily reward");
 	}
 
 	// Cỗ máy di chuyển UI

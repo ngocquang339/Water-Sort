@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TableKey-Value_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 880736ad4e76a0d469db9987c6723928, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 2586879299584
+    m_Localized: Sound/Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2951473369088
+    m_Localized: Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3130855362560
+    m_Localized: Out of Turns
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3580316979200
+    m_Localized: Additional settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3804590608384
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4158409510912
+    m_Localized: Go To Shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4431655833600
+    m_Localized: Watch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4650564947968
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4779829202944
+    m_Localized: Daily Reward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4927435149312
+    m_Localized: Day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5095668682752
+    m_Localized: Starter Pack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5274857738240
+    m_Localized: Medium Pack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 107411302354944
+    m_Localized: CONFIRM
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

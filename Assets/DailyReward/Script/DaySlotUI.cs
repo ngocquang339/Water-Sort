@@ -20,6 +20,7 @@ public class DaySlotUI : MonoBehaviour
 
 	[Header("Trạng thái Overlay")]
 	public GameObject checkmarkIcon;
+	public GameObject lockIcon;
 
 	public void updateSlotUI(int dayNumber, DayRewardConfig config, DaySlotState state)
 	{
@@ -38,7 +39,7 @@ public class DaySlotUI : MonoBehaviour
 				amountTexts[i].text = "x" + config.items[i].amount.ToString();
 
 				// Làm mờ icon nếu chưa đến ngày nhận
-				rewardIcons[i].color = (state == DaySlotState.Locked || state == DaySlotState.Claimed) ? new Color(0.5f, 0.5f, 0.5f, 1f) : Color.white;
+				rewardIcons[i].color = (state == DaySlotState.Locked) ? new Color(0.5f, 0.5f, 0.5f, 1f) : Color.white;
 			}
 			else
 			{
@@ -52,10 +53,12 @@ public class DaySlotUI : MonoBehaviour
 		{
 			case DaySlotState.Locked:
 				checkmarkIcon.SetActive(false);
+				lockIcon.SetActive(true);
 				slotButton.interactable = false;
 				break;
 			case DaySlotState.Available:
 				checkmarkIcon.SetActive(false);
+				lockIcon.SetActive(false);
 				headerBanner.color = new Color32(60, 200, 100, 255);
 				slotButton.interactable = true;
 				break;

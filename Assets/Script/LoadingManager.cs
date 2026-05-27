@@ -39,9 +39,7 @@ public class LoadingManager : MonoBehaviour
 
 		float currentFill = 0f;
 
-		// ==========================================
 		// GIAI ĐOẠN 1: Chạy mượt đến điểm dừng (85%)
-		// ==========================================
 		while (currentFill < pausePoint)
 		{
 			// Lấy tiến trình thật của máy, nhưng bị "khóa đỉnh" ở mức pausePoint
@@ -54,16 +52,13 @@ public class LoadingManager : MonoBehaviour
 			yield return null;
 		}
 
-		// ==========================================
 		// GIAI ĐOẠN 2: Nghỉ ngơi giải lao 2 giây
-		// ==========================================
 		// Trong lúc thanh UI đang đứng im khè người chơi, 
 		// thì hệ thống ngầm vẫn đang tiếp tục load phần còn lại cho xong.
 		yield return new WaitForSeconds(pauseDuration);
 
-		// ==========================================
+		
 		// GIAI ĐOẠN 3: Chạy tốc biến lên 100%
-		// ==========================================
 		while (currentFill < 1f)
 		{
 			// Lúc này tháo khóa chặn, cho phép target vọt lên tận 1.0

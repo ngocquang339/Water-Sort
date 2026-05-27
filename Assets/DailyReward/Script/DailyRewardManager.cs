@@ -100,6 +100,16 @@ public class DailyRewardManager : MonoBehaviour
 			{
 				CurrencyManager.Instance.AddCoin(item.amount);
 			}
+			else if(item.rewardType == "Undo")
+			{
+				
+			}
+			else if(item.rewardType == "Hint"){
+				
+			}
+			else if(item.rewardType == "AddBottle"){
+				
+			}
 			else
 			{
 				CurrencyManager.Instance.AddDiamond(item.amount);

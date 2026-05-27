@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: TableKey-Value Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: TableKey-Value
+  m_TableCollectionNameGuidString: 880736ad4e76a0d469db9987c6723928
+  m_Entries:
+  - m_Id: 2586879299584
+    m_Key: txt_SoundText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2951473369088
+    m_Key: txt_Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3130855362560
+    m_Key: txt_OutofHelp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3580316979200
+    m_Key: txt_AdditionalSetting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3804590608384
+    m_Key: txt_Setting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4158409510912
+    m_Key: txt_GotoShop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4431655833600
+    m_Key: txt_WatchAds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4650564947968
+    m_Key: txt_Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4779829202944
+    m_Key: txt_DailyReward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4927435149312
+    m_Key: txt_DayText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5095668682752
+    m_Key: txt_PackName1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5274857738240
+    m_Key: txt_PackName2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 107411302354944
+    m_Key: txt_ConfirmText
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5855972032475300122
+  references:
+    version: 2
+    RefIds:
+    - rid: 5855972032475300122
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1779767395885

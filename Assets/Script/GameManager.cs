@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
 
 	[Header("Cài đặt Game")]
 	[SerializeField] private float liftOffset = 0.5f;
-	public TextMeshProUGUI levelText;
 	public LevelManager levelManager;
 	public GameHintManager gameHintManager;
 
@@ -51,7 +50,15 @@ public class GameManager : MonoBehaviour
 	public GameObject winUIPanel;
 
 	[Header("Next Level Popup")]
-	public RectTransform nextLevelPopupRect; // Kéo object NextLevel_Popup vào đây
+	public RectTransform nextLevelPopupRect;
+
+	[Header("Settings Popup")]
+	public GameObject settingPopup;
+	public GameObject settingDarkPanel;
+
+	[Header("Reload Popup")]
+	public GameObject reloadPopup;
+	public GameObject reloadDarkPanel;
 
 	[Header("UI Hiển Thị Số Lượt Trợ Giúp")]
 	public TextMeshProUGUI undoText;       // Kéo Text số của nút Undo vào đây
@@ -61,7 +68,7 @@ public class GameManager : MonoBehaviour
 	[Header("Cài đặt Thêm Chai")]
 	public int maxExtraBottlesPerLevel = 1; // Giới hạn số chai được thêm mỗi màn
 	private int extraBottlesUsedThisLevel = 0; // Đếm số chai đã thêm trong màn hiện tại
-	public GameObject emptyBottlePrefab; // Kéo Prefab chai rỗng vào đây
+	private GameObject emptyBottlePrefab; // Kéo Prefab chai rỗng vào đây
 	public Button addBottleButton;
 
 	[Header("Xem quảng cáo")]
@@ -297,15 +304,16 @@ public class GameManager : MonoBehaviour
 
 		busyBottles.Remove(source);
 		busyBottles.Remove(target);
-		
-		if(target.isCompleted()){
+
+		if (target.isCompleted())
+		{
 			Debug.Log("Chai này đã hoàn thiện");
 			Instantiate(bottleDonePrefab, target.mouthPoint.position, Quaternion.identity);
 			target.CloseCork();
 		}
 		bool check = CheckWin();
 		//Check nước đi hợp lệ
-		if(!check) CheckGameState();
+		if (!check) CheckGameState();
 	}
 
 	private IEnumerator AnimateBottle(Transform bottleTransform, Vector3 targetPos, float targetRotation, float duration)
@@ -486,7 +494,8 @@ public class GameManager : MonoBehaviour
 		bool isWin = true;
 		foreach (Bottle bottle in allBottles)
 		{
-			if (!bottle.isEmpty() && !bottle.isCompleted()){
+			if (!bottle.isEmpty() && !bottle.isCompleted())
+			{
 				isWin = false;
 				break;
 			}
@@ -556,8 +565,8 @@ public class GameManager : MonoBehaviour
 		// 5. LƯU GAME
 		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
 		PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
+		PlayerPrefs.SetInt("LevelNumber", currentLevel + 1);
 		PlayerPrefs.Save();
-		levelText.text = "Level " + levelManager.currentLevelData.levelId.ToString();
 
 		// 6. PHÓNG TO POPUP CÚP VÀNG & NÚT BẤM (NEXT LEVEL POPUP)
 		if (nextLevelPopupRect != null)
@@ -578,11 +587,13 @@ public class GameManager : MonoBehaviour
 		// (Xong Coroutine! Game sẽ dừng ở đây để đợi người chơi bấm nút NEXT LEVEL)
 	}
 
-	public void onClickHome(){
+	public void onClickHome()
+	{
 		SceneManager.LoadScene("MainScene");
 	}
 
-	public void onClickNextLevel(){
+	public void onClickNextLevel()
+	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
@@ -606,15 +617,10 @@ public class GameManager : MonoBehaviour
 
 	// 1. Hàm gọi khi bấm nút QUAY LẠI 1 BƯỚC (Undo)
 	public void OnClickUndoButton()
-	{	
-		if(isLocked) return;
+	{
+		if (isLocked) return;
 		if (remainingUndo > 0)
 		{
-			remainingUndo--; // Trừ đi 1 lượt
-			PlayerPrefs.SetInt(KEY_UNDO, remainingUndo); // Lưu lại vào máy
-			PlayerPrefs.Save();
-			UpdateHelpUI(); // Cập nhật lại số trên màn hình
-
 			backStep();
 		}
 		else
@@ -625,7 +631,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	
+
 
 	// 3. Hàm gọi khi bấm nút THÊM CHAI NƯỚC RỖNG
 	//public void OnClickAddBottleButton()
@@ -696,7 +702,7 @@ public class GameManager : MonoBehaviour
 	// Hàm này nối vào sự kiện OnClick của nút THÊM BÌNH ngoài Unity
 	public void UseAddBottle()
 	{
-		if(isLocked) return;
+		if (isLocked) return;
 		// 1. KIỂM TRA GIỚI HẠN CỦA MÀN CHƠI TRƯỚC
 		if (extraBottlesUsedThisLevel >= maxExtraBottlesPerLevel)
 		{
@@ -718,6 +724,8 @@ public class GameManager : MonoBehaviour
 		// 3. THỰC HIỆN LOGIC THÊM CHAI
 		// Sinh chai mới ở tít trên cao (Y = 10)
 		Vector3 spawnPos = new Vector3(0, 10f, 0);
+		int currentLevel = PlayerPrefs.GetInt("CurrentLevel");
+		emptyBottlePrefab = levelManager.currentLevelData.customBottlePrefab;
 		GameObject newBottleObj = Instantiate(emptyBottlePrefab, spawnPos, Quaternion.identity);
 		Bottle newBottle = newBottleObj.GetComponent<Bottle>();
 
@@ -756,7 +764,6 @@ public class GameManager : MonoBehaviour
 		UpdateHelpUI();
 	}
 
-	// ---- BÊN TRONG FILE GameManager.cs ----
 	private IEnumerator RearrangeBottlesRoutine()
 	{
 		// 1. LẤY TỌA ĐỘ MỚI TỪ LEVEL MANAGER
@@ -805,7 +812,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	// Hàm hỗ trợ cộng lượt mua từ Popup sang
-	public void	AddHelpQuantity(HelpType type, int amount)
+	public void AddHelpQuantity(HelpType type, int amount)
 	{
 		switch (type)
 		{
@@ -829,12 +836,14 @@ public class GameManager : MonoBehaviour
 		UpdateHelpUI(); // Cập nhật lại số hiển thị trên UI ngay lập tức
 	}
 
-	public void reloadLevel() { 
+	public void reloadLevel()
+	{
 		Scene currentScene = SceneManager.GetActiveScene();
 		SceneManager.LoadScene(currentScene.buildIndex);
 	}
 
-	private IEnumerator popupCoroutine(GameObject darkPanel, GameObject popup){
+	private IEnumerator popupCoroutine(GameObject darkPanel, GameObject popup)
+	{
 		if (darkPanel != null)
 		{
 			darkPanel.SetActive(true);
@@ -850,10 +859,12 @@ public class GameManager : MonoBehaviour
 		float duration = 0.5f;
 		float elapsed = 0f;
 		bool check = HasAnyValidMove();
-		if(!check){
+		if (!check)
+		{
 			AudioManager.instance.PlayGameOver();
 		}
-		else{
+		else
+		{
 			AudioManager.instance.PlayPopupSound();
 		}
 		// 3. Vòng lặp Animation
@@ -873,7 +884,8 @@ public class GameManager : MonoBehaviour
 		popupRect.localScale = Vector3.one;
 	}
 
-	public void clickWatchAds(){
+	public void clickWatchAds()
+	{
 		if (isLocked) return;
 		StartCoroutine(popupCoroutine(darkPanel, watchAdsPopup));
 	}
@@ -939,6 +951,25 @@ public class GameManager : MonoBehaviour
 	public void ClickCloseShop()
 	{
 		if (shopPopup != null) StartCoroutine(ClosePopupCoroutine(null, shopPopup));
-		
+
+	}
+	public void closeSettingPopup()
+	{
+		if (settingPopup != null) StartCoroutine(ClosePopupCoroutine(settingDarkPanel, settingPopup));
+	}
+
+	public void openSettingPopup()
+	{
+		if (settingPopup != null) StartCoroutine(popupCoroutine(settingDarkPanel, settingPopup));
+	}
+
+	public void openReloadPopup()
+	{
+		if (reloadPopup != null) StartCoroutine(popupCoroutine(reloadDarkPanel, reloadPopup));
+	}
+
+	public void closeReloadPopup()
+	{
+		if (reloadPopup != null) StartCoroutine(ClosePopupCoroutine(reloadDarkPanel, reloadPopup));
 	}
 }
