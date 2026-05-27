@@ -5,9 +5,6 @@ public class AudioManager : MonoBehaviour
 	// Tạo Singleton để có thể gọi ở bất cứ đâu bằng cú pháp AudioManager.instance
 	public static AudioManager instance;
 
-	[Header("Trạm Phát Âm Thanh")]
-	public AudioSource sfxSource; // Cái loa để phát hiệu ứng âm thanh (SFX)
-
 	[Header("Kho Âm Thanh (Audio Clips)")]
 	public AudioClip buttonClickClip;
 	public AudioClip bottleLift;
@@ -16,7 +13,11 @@ public class AudioManager : MonoBehaviour
 	public AudioClip PopupClip;
 	public AudioClip bottleDown;
 	public AudioClip gameOver;
+	public AudioClip doneBottle;
 
+	[Header("Nguồn âm thanh")]
+	public AudioSource musicSource;
+	public AudioSource sfxSource;
 	private void Awake()
 	{
 		// Bí quyết chống tắt tiếng: Giữ cho AudioManager sống sót khi chuyển màn chơi
@@ -99,5 +100,31 @@ public class AudioManager : MonoBehaviour
 		if(sfxSource != null && gameOver != null){
 			sfxSource.PlayOneShot(gameOver);
 		}
+	}
+
+	public void PlayDoneBottle(){
+		if(sfxSource != null && doneBottle != null){
+			sfxSource.PlayOneShot(doneBottle);
+		}
+	}
+
+	// Hàm chỉnh volume cho Nhạc nền (Nhận giá trị từ 0 đến 1)
+	public void SetMusicVolume(float volume)
+	{
+		if (musicSource != null)
+		{
+			musicSource.volume = volume;
+		}
+	}
+
+	// Hàm chỉnh volume cho Tiếng động hiệu ứng (Nhận giá trị từ 0 đến 1)
+	public void SetSFXVolume(float volume)
+	{
+		if (sfxSource != null)
+		{
+			sfxSource.volume = volume;
+		}
+		// Lưu ý: Nếu bạn dùng lệnh AudioSource.PlayOneShot(clip) thông qua sfxSource này,
+		// thì khi thay đổi sfxSource.volume, tất cả âm thanh phát ra đều sẽ to nhỏ theo chuẩn xác!
 	}
 }

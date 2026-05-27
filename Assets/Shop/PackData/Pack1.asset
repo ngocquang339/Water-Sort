@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pack1
   m_EditorClassIdentifier: 
   packName: Starter Pack
-  priceString: 29000 VND
+  priceString: 29K VND
   packBackground: {fileID: -714184754405095627, guid: 018dbdc273ebb02498db15d025bf8a5b, type: 3}
   isPopular: 1
   mainReward:
@@ -21,12 +21,12 @@ MonoBehaviour:
     amount: 100
     itemIcon: {fileID: -3338749442709606003, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
   rewards:
-  - itemType: 0
-    amount: 100
-    itemIcon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
+  - itemType: 3
+    amount: 2
+    itemIcon: {fileID: -74184666753424748, guid: 018cdc1d4e7c3d44ab170b5fb80987a1, type: 3}
   - itemType: 2
     amount: 3
-    itemIcon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
+    itemIcon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
   - itemType: 4
-    amount: 1
-    itemIcon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
+    amount: 2
+    itemIcon: {fileID: -4584739765052203562, guid: 2e1c71fca7e496843b07a30c7cfa3e64, type: 3}

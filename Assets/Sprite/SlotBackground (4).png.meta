@@ -103,13 +103,13 @@ TextureImporter:
       name: SlotBackground (4)_0
       rect:
         serializedVersion: 2
-        x: 338
-        y: 120
-        width: 203
+        x: 339
+        y: 119
+        width: 202
         height: 295
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 101, y: 147, z: 101, w: 147}
       customData: 
       outline: []
       physicsShape: []
@@ -121,11 +121,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SlotBackground (4)_1
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 262
+        width: 24
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd51992862a4bf74998adba7331c5f0e
+      internalID: 910848492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3df39d918e8977042b781a55efc8aaeb
     internalID: 0
     vertices: []
     indices: 
@@ -136,6 +158,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       SlotBackground (4)_0: 2564520641484333389
+      SlotBackground (4)_1: 910848492
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

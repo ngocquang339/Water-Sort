@@ -261,6 +261,7 @@ public class Bottle : MonoBehaviour
 	{
 		if (corkObject != null)
 		{
+			AudioManager.instance.PlayDoneBottle();
 			StartCoroutine(AnimateCorkRoutine());
 		}
 		else

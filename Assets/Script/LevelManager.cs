@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class LevelManager : MonoBehaviour
 	public GameObject bottlePrefab;
 	public LevelData currentLevelData;
 	public GameManager gameManager;
+	public TextMeshPro levelText;
 
 	[Header("Cài đặt Lưới (Grid Settings)")]
 	public float spacingX = 1.5f;
@@ -25,6 +27,10 @@ public class LevelManager : MonoBehaviour
 		if (loadedData != null)
 		{
 			currentLevelData = loadedData;
+			if (levelText != null)
+			{
+				levelText.text = currentLevelNumber.ToString();
+			}
 		}
 		else
 		{

@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34672881402d74c46b91b815a32b5342, type: 3}
   m_Name: Level_12
   m_EditorClassIdentifier: 
-  levelId: 0
+  levelId: 12
   bottleCapacity: 4
-  customBottlePrefab: {fileID: 0}
+  customBottlePrefab: {fileID: 8829921817319407611, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
   bottleInLevel:
-  - initialColors: 0100000004000000
-  - initialColors: 0300000001000000
-  - initialColors: 0300000003000000
-  - initialColors: 0000000000000000
+  - initialColors: 06000000070000000500000003000000
+  - initialColors: 02000000060000000700000007000000
+  - initialColors: 03000000050000000400000006000000
+  - initialColors: 05000000020000000200000004000000
+  - initialColors: 02000000050000000700000006000000
+  - initialColors: 00000000000000000000000000000000
+  - initialColors: 00000000000000000000000000000000
