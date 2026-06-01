@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
 	[Header("Hiệu ứng pháo hoa")]
 	public ParticleSystem bottleDonePrefab;
 
+	[Header("Hiệu ứng Pháo Hoa Khi Win")]
+	public ParticleSystem leftConfetti;
+	public ParticleSystem rightConfetti;
+
 	[Header("Win Game Effects")]
 	public GameObject blackOverlay; // Kéo Black_Overlay vào đây
 	public GameObject confettiRainPrefab; // Kéo Prefab máy phát pháo giấy vào đây
@@ -572,6 +576,8 @@ public class GameManager : MonoBehaviour
 		if (nextLevelPopupRect != null)
 		{
 			elapsed = 0f;
+			leftConfetti.Play();
+			rightConfetti.Play();
 			while (elapsed < duration) // Vẫn dùng thời gian duration = 0.5f
 			{
 				elapsed += Time.deltaTime;

@@ -67,6 +67,26 @@ MonoBehaviour:
     m_Key: txt_ConfirmText
     m_Metadata:
       m_Items: []
+  - m_Id: 352353333383168
+    m_Key: txt_QuestionReloadPopup
+    m_Metadata:
+      m_Items: []
+  - m_Id: 465334864023552
+    m_Key: txt_ReloadText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 466494895263744
+    m_Key: txt_CancelText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085243021168640
+    m_Key: txt_FreeGift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085735667339264
+    m_Key: txt_WatchCoins
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

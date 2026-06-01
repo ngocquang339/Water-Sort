@@ -675,7 +675,13 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -697,10 +703,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 6711f65d-3908-4e38-b940-9034a113162c
+  cloudProjectId: f7448b22-1723-4329-b19f-f13ee21c5f57
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: My project 2026-04-04_13-18-48
+  projectName: Water-Sort
   organizationId: quanglee123
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

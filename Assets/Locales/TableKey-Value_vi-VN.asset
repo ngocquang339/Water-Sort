@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3580316979200
-    m_Localized: "C\xE0i \u0111\u1EB7t kh\xE1c"
+    m_Localized: "C\xE0i \u0111\u1EB7t ng\xF4n ng\u1EEF"
     m_Metadata:
       m_Items: []
   - m_Id: 3804590608384
@@ -68,6 +68,27 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 107411302354944
     m_Localized: "X\xC1C NH\u1EACN"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 352353333383168
+    m_Localized: "B\u1EA0N C\xD3 MU\u1ED0N CH\u01A0I L\u1EA0I C\u1EA4P \u0110\u1ED8
+      N\xC0Y KH\xD4NG?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 465334864023552
+    m_Localized: "CH\u01A0I L\u1EA0I"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 466494895263744
+    m_Localized: "H\u1EE6Y"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085243021168640
+    m_Localized: "Mi\u1EC5n ph\xED"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085735667339264
+    m_Localized: "Xem video \u0111\u1EC3 nh\u1EADn coin mi\u1EC5n ph\xED!"
     m_Metadata:
       m_Items: []
   references:
