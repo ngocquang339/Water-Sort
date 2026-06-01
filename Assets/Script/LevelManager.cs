@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
 	public GameObject bottlePrefab;
 	public LevelData currentLevelData;
 	public GameManager gameManager;
-	public TextMeshPro levelText;
+	public TextMeshProUGUI levelText;
 
 	[Header("Cài đặt Lưới (Grid Settings)")]
 	public float spacingX = 1.5f;

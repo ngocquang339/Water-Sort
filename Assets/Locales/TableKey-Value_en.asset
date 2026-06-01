@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3580316979200
-    m_Localized: Additional settings
+    m_Localized: Language settings
     m_Metadata:
       m_Items: []
   - m_Id: 3804590608384
@@ -68,6 +68,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 107411302354944
     m_Localized: CONFIRM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 352353333383168
+    m_Localized: DO YOU WANT TO RELOAD THIS LEVEL?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 465334864023552
+    m_Localized: RELOAD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 466494895263744
+    m_Localized: CANCEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085243021168640
+    m_Localized: Free gift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1085735667339264
+    m_Localized: Watch a video to get free coins!
     m_Metadata:
       m_Items: []
   references:

@@ -44,5 +44,8 @@ TagManager:
   - name: Bottle
     uniqueID: 533001881
     locked: 0
+  - name: UI_Top
+    uniqueID: 3279200935
+    locked: 0
   m_RenderingLayers:
   - Default
