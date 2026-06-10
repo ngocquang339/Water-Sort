@@ -4,15 +4,26 @@ using UnityEngine.Advertisements;
 // Bắt buộc phải kế thừa các Interface này để nhận phản hồi từ Unity Ads
 public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
+	public static AdsManager instance;
 	[SerializeField] string _androidGameId = "6126835"; // Game ID Android của bạn
 	[SerializeField] string _iOSGameId = "6126834";     // Game ID iOS của bạn
 	[SerializeField] bool _testMode = true; // Đang code thì để True, khi nào build thật thì đổi thành False
 
 	private string _gameId;
 	private string _adUnitId = "Rewarded_Android"; // ID mặc định của quảng cáo nhận thưởng
-
+	private CurrencyManager currencyManager;
 	void Awake()
 	{
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else {
+			Destroy(gameObject);
+			return;
+		}
+		currencyManager = CurrencyManager.Instance;
 		InitializeAds();
 	}
 
@@ -50,7 +61,12 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 
 	// --- Các hàm Interface bắt buộc cho Load (Không cần viết code vào trong cũng được) ---
 	public void OnUnityAdsAdLoaded(string adUnitId) { }
-	public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message) { }
+	public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message) {
+		Debug.Log($"Lỗi tải quảng cáo ({error}): {message}. Đang tự động thử lại sau 3 giây...");
+
+		// Gọi lại hàm LoadAd sau 3 giây để khắc phục rớt mạng tạm thời
+		Invoke(nameof(LoadAd), 3f);
+	}
 
 	// --- Các hàm Interface bắt buộc cho Show ---
 	public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
@@ -60,8 +76,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 		{
 			Debug.Log("Người chơi đã xem hết quảng cáo! Trả thưởng thành công.");
 
-			// TODO: XỬ LÝ LOGIC NHẬN THƯỞNG Ở ĐÂY
-			// Ví dụ: Cộng thêm vàng, hoặc thêm 1 ống nước trống để dễ rót màu hơn
+			currencyManager.AddCoin(20);
 
 			LoadAd(); // Tải video mới để sẵn sàng cho lần bấm tiếp theo
 		}
