@@ -4,6 +4,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
 	public GameObject dailyReward;
+	public GameObject blockInputPanel;
 	public GameObject darkBackground;
 	[Header("Cài đặt Shop UI")]
 	public RectTransform shopPanel;
@@ -14,7 +15,16 @@ public class UIManager : MonoBehaviour
 	private Vector2 centerPos = new Vector2(0f, 0f);     // Ngay giữa màn hình
 	private static bool showDailyPopup = false;
 
-	void Start(){
+	void Start()
+	{
+		StartCoroutine(ShowDailyRewardDelay());
+	}
+
+	IEnumerator ShowDailyRewardDelay()
+	{
+		blockInputPanel.SetActive(true);
+		yield return new WaitForSeconds(1f);
+
 		showDailyReward();
 	}
 	public void OpenShop()
@@ -36,6 +46,7 @@ public class UIManager : MonoBehaviour
 		}
 		dailyReward.SetActive(true);
 		darkBackground.SetActive(true);
+		blockInputPanel.SetActive(false);
 		showDailyPopup = true;
 		Debug.Log("Show daily reward");
 	}
