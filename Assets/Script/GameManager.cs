@@ -507,7 +507,7 @@ public class GameManager : MonoBehaviour
 
 		if (isWin)
 		{
-			StartCoroutine(WinSequenceRoutine());
+			StartCoroutine(HandleWinCoroutine());
 			return true;
 		}
 		return false;
@@ -566,12 +566,6 @@ public class GameManager : MonoBehaviour
 		// Thu nhỏ xong thì tắt hẳn cái bảng Level Complete đi cho nhẹ máy
 		winPanelRect.gameObject.SetActive(false);
 
-		// 5. LƯU GAME
-		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
-		PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
-		PlayerPrefs.SetInt("LevelNumber", currentLevel + 1);
-		PlayerPrefs.Save();
-
 		// 6. PHÓNG TO POPUP CÚP VÀNG & NÚT BẤM (NEXT LEVEL POPUP)
 		if (nextLevelPopupRect != null)
 		{
@@ -591,6 +585,24 @@ public class GameManager : MonoBehaviour
 		}
 
 		// (Xong Coroutine! Game sẽ dừng ở đây để đợi người chơi bấm nút NEXT LEVEL)
+	}
+
+	private void SaveProgress(){
+		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+		PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
+		PlayerPrefs.SetInt("LevelNumber", currentLevel + 1);
+		PlayerPrefs.Save();
+	}
+
+	private void RewardPlayer(){
+		CurrencyManager.Instance.AddCoin(20);
+		Debug.Log("Đã thêm 20 Coin vào ví.");
+	}
+
+	private IEnumerator HandleWinCoroutine(){
+		yield return StartCoroutine(WinSequenceRoutine());
+		SaveProgress();
+		RewardPlayer();
 	}
 
 	public void onClickHome()
@@ -636,27 +648,6 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 	}
-
-
-
-	// 3. Hàm gọi khi bấm nút THÊM CHAI NƯỚC RỖNG
-	//public void OnClickAddBottleButton()
-	//{
-	//	if (isLocked) return;
-	//	if (remainingAddBottle > 0)
-	//	{
-	//		remainingAddBottle--;
-	//		PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
-	//		PlayerPrefs.Save();
-	//		UpdateHelpUI();
-
-	//		// --- GỌI LOGIC SINH THÊM CHAI RỖNG CỦA BẠN Ở ĐÂY ---
-	//	}
-	//	else
-	//	{
-	//		Debug.Log("Đã hết lượt Thêm chai rỗng!");
-	//	}
-	//}
 
 	// Hàm này nối vào sự kiện OnClick của nút GỢI Ý (Hint) ngoài Unity
 	public void UseHint()
@@ -865,7 +856,11 @@ public class GameManager : MonoBehaviour
 		float duration = 0.5f;
 		float elapsed = 0f;
 		bool check = HasAnyValidMove();
-		if (!check)
+		if (SceneManager.GetActiveScene().name == "MainScene")
+		{
+			AudioManager.instance.PlayPopupSound();
+		}
+		else if(!check)
 		{
 			AudioManager.instance.PlayGameOver();
 		}
@@ -892,7 +887,7 @@ public class GameManager : MonoBehaviour
 
 	public void clickWatchAds()
 	{
-		if (isLocked) return;
+		Debug.Log("Click Watch Ads");
 		StartCoroutine(popupCoroutine(darkPanel, watchAdsPopup));
 	}
 

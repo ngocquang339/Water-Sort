@@ -10,7 +10,7 @@ public class LoadingManager : MonoBehaviour
 	public GameObject loading_Container;
 
 	[Header("Cài đặt Load")]
-	public string sceneToLoad = "MainScene";
+	public string sceneToLoad = "SetName_Scene";
 	public float fillSpeed = 1.2f;
 
 	[Header("Cài đặt Fake Load (Dừng hình)")]

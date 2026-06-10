@@ -396,7 +396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillColor: {fileID: 166987762}
   loading_Container: {fileID: 1837699675}
-  sceneToLoad: MainScene
+  sceneToLoad: SetName_Scene
   fillSpeed: 0.8
   pausePoint: 0.85
   pauseDuration: 2
