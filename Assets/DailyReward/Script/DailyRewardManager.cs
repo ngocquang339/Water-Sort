@@ -1,12 +1,20 @@
 using System;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 public class DailyRewardManager : MonoBehaviour
 {
 	public static DailyRewardManager Instance { get; private set; }
 
 	[Header("Dữ liệu phần thưởng")]
 	public DailyRewardData rewardData;
+
+	[Header("UI Elements")]
+	public GameObject dailyRewardPanel;
+	public GameObject blockInputPanel;
+	public GameObject darkBackground;
+
+	private static bool showDailyPopup = false;
 
 	// Các biến trạng thái nội bộ
 	private int currentStreak = 0;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
@@ -25,6 +33,43 @@ public class DailyRewardManager : MonoBehaviour
 
 		LoadData();
 		CheckStreakReset();
+	}
+
+	void Start()
+	{
+		// Vừa vào game là chạy luôn đếm ngược
+		if (!showDailyPopup)
+		{
+			StartCoroutine(ShowDailyRewardDelay());
+		}
+	}
+
+	IEnumerator ShowDailyRewardDelay()
+	{
+		if (blockInputPanel != null) blockInputPanel.SetActive(true);
+
+		yield return new WaitForSeconds(1f);
+
+		ShowDailyReward();
+	}
+
+	public void ShowDailyReward()
+	{
+		if (showDailyPopup) return;
+
+		if (dailyRewardPanel != null) dailyRewardPanel.SetActive(true);
+		if (darkBackground != null) darkBackground.SetActive(true);
+		if (blockInputPanel != null) blockInputPanel.SetActive(false);
+
+		showDailyPopup = true;
+		Debug.Log("Đã tự động hiển thị Daily Reward!");
+	}
+
+	// Hàm để gắn vào nút X (đóng quà)
+	public void CloseDailyReward()
+	{
+		if (dailyRewardPanel != null) dailyRewardPanel.SetActive(false);
+		if (darkBackground != null) darkBackground.SetActive(false);
 	}
 
 	// Lôi dữ liệu từ RAM điện thoại lên khi vừa mở game

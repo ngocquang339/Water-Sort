@@ -5,7 +5,10 @@ public class ShopManager : MonoBehaviour
 	public ShopPackData[] allShopPacks; // Kéo thả 5 cái file ScriptableObject bạn tạo ở Bước 1 vào đây
 
 	public GameObject shopPackPrefab;   // Kéo ShopPack_Prefab tổng vào đây
-	public Transform shopContent;       // Kéo cái khay Vertical Layout vào đây
+	public Transform shopContent;  // Kéo cái khay Vertical Layout vào đây
+	[Header("UI Reference")]
+	// Chỉ cần kéo script PanelSlider của ShopPanel vào đây
+	public PanelSlider shopPanelSlider;
 
 	void Start()
 	{
@@ -28,5 +31,19 @@ public class ShopManager : MonoBehaviour
 				uiScript.SetupPack(packData);
 			}
 		}
+	}
+
+	public void ClickOpenShop()
+	{
+		// Gọi động cơ trượt mở ra
+		shopPanelSlider.OpenPanel();
+		
+	}
+
+	public void ClickCloseShop()
+	{
+		// Gọi động cơ trượt cất đi
+		shopPanelSlider.ClosePanel();
+		
 	}
 }

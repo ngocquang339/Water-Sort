@@ -356,7 +356,7 @@ public class GameManager : MonoBehaviour
 
 	public void startGame()
 	{
-		SceneManager.LoadScene("MainPlayScene");
+		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("MainPlayScene"));
 	}
 
 	// 1. Hàm siêu nhẹ để kiểm tra xem CÒN BƯỚC ĐI KHÔNG
@@ -583,7 +583,9 @@ public class GameManager : MonoBehaviour
 			}
 			nextLevelPopupRect.localScale = Vector3.one; // Chốt hạ
 		}
-
+		// Truyền số Level hiện tại vào. Unity sẽ tự so sánh, nếu cao hơn điểm cũ nó mới lưu.
+		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+		LeaderboardManager.Instance.AddScore(currentLevel);
 		// (Xong Coroutine! Game sẽ dừng ở đây để đợi người chơi bấm nút NEXT LEVEL)
 	}
 
@@ -607,7 +609,7 @@ public class GameManager : MonoBehaviour
 
 	public void onClickHome()
 	{
-		SceneManager.LoadScene("MainScene");
+		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("MainScene"));
 	}
 
 	public void onClickNextLevel()
@@ -972,5 +974,21 @@ public class GameManager : MonoBehaviour
 	public void closeReloadPopup()
 	{
 		if (reloadPopup != null) StartCoroutine(ClosePopupCoroutine(reloadDarkPanel, reloadPopup));
+	}
+
+	// Gắn hàm này vào nút Test Rank
+	// Thêm chữ async vào đây
+	public async void ClickTestRankButton()
+	{
+		Debug.Log("Đã click nút Test Rank! Đang tiến hành đẩy điểm và nội soi...");
+
+		if (LeaderboardManager.Instance != null)
+		{
+			// BẮT BUỘC PHẢI CHỜ gửi điểm xong...
+			await LeaderboardManager.Instance.AddScore(15);
+
+			// ...Thì mới được phép kéo điểm về!
+			LeaderboardManager.Instance.FetchLeaderboard();
+		}
 	}
 }

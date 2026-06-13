@@ -27,74 +27,9 @@ public class SetNameManager : MonoBehaviour
 		{
 			Debug.LogWarning("Username cannot be empty.");
 		}
-		StartCoroutine(LoadSceneSmooth());
-	}
-
-
-	IEnumerator LoadSceneSmooth()
-	{
-		// =========================================================
-		// 1. KÉO RÈM ĐEN TRƯỚC (Che mắt người chơi)
-		// =========================================================
-		if (fadeImage != null)
-		{
-			fadeImage.raycastTarget = true; // Chặn bấm bậy
-			float timer = 0f;
-			Color c = fadeImage.color;
-			while (timer < fadeDuration)
-			{
-				timer += Time.deltaTime;
-				c.a = Mathf.Clamp01(timer / fadeDuration);
-				fadeImage.color = c;
-				yield return null; // Lúc này CPU rảnh rỗi 100% nên Fade cực kỳ mượt
-			}
-		}
-
-		// [BÍ QUYẾT]: Bất tử hóa script này và tấm rèm đen để Coroutine không bị chết
-		DontDestroyOnLoad(this.gameObject);
-		if (fadeImage != null) DontDestroyOnLoad(fadeImage.canvas.gameObject);
-
-		// =========================================================
-		// 2. BẮT ĐẦU LOAD NGẦM LÚC MÀN HÌNH ĐÃ TỐI ĐEN
-		// =========================================================
-		AsyncOperation operation = SceneManager.LoadSceneAsync("MainScene");
-		operation.allowSceneActivation = false;
-
-		// Chờ load xong dữ liệu (tiến trình đạt 90%)
-		while (operation.progress < 0.9f)
-		{
-			yield return null;
-		}
-
-		// Mở khóa cho sang bài
-		operation.allowSceneActivation = true;
-
-		// Chờ Unity dọn dẹp màn cũ, vẽ màn mới (đây là lúc nó giật nhất, nhưng màn hình đang đen nên không sao)
-		while (!operation.isDone)
-		{
-			yield return null;
-		}
-
-		// =========================================================
-		// 3. MỞ RÈM RA TẠI MÀN HÌNH MỚI (FADE IN)
-		// =========================================================
-		if (fadeImage != null)
-		{
-			float timer = 0f;
-			Color c = fadeImage.color;
-			while (timer < fadeDuration)
-			{
-				timer += Time.deltaTime;
-				c.a = 1f - Mathf.Clamp01(timer / fadeDuration);
-				fadeImage.color = c;
-				yield return null;
-			}
-
-			// Dọn dẹp tấm rèm
-			Destroy(fadeImage.canvas.gameObject);
-		}
-
-		// Tự hủy object chứa script
-		Destroy(this.gameObject);
+		// Đợi game lưu tên lên mạng xong mới cho chuyển màn (hoặc gọi chuyển màn luôn cũng được)
+		LeaderboardManager.Instance.SubmitPlayerName(newName);
+		// Sửa toàn bộ các lệnh gọi fade ở mọi nơi trong game thành dạng này:
+		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("MainScene"));
 	}
 }
