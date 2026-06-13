@@ -1,17 +1,26 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
+using System.Collections;
+using TMPro;
 
-// Bắt buộc phải kế thừa các Interface này để nhận phản hồi từ Unity Ads
 public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
 	public static AdsManager instance;
-	[SerializeField] string _androidGameId = "6126835"; // Game ID Android của bạn
-	[SerializeField] string _iOSGameId = "6126834";     // Game ID iOS của bạn
-	[SerializeField] bool _testMode = true; // Đang code thì để True, khi nào build thật thì đổi thành False
+	[SerializeField] string _androidGameId = "6126835";
+	[SerializeField] string _iOSGameId = "6126834";
+	[SerializeField] bool _testMode = true;
 
+	[Header("UI Cảnh Báo")]
+	public GameObject notAvailablePopup;
+
+	public TextMeshProUGUI notAvailableAds;
 	private string _gameId;
-	private string _adUnitId = "Rewarded_Android"; // ID mặc định của quảng cáo nhận thưởng
+	private string _adUnitId = "Rewarded_Android";
 	private CurrencyManager currencyManager;
+
+	// THÊM BIẾN NÀY ĐỂ TỰ THEO DÕI TRẠNG THÁI QUẢNG CÁO
+	private bool _isAdReady = false;
+
 	void Awake()
 	{
 		if (instance == null)
@@ -19,7 +28,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 			instance = this;
 			DontDestroyOnLoad(gameObject);
 		}
-		else {
+		else
+		{
 			Destroy(gameObject);
 			return;
 		}
@@ -27,7 +37,6 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 		InitializeAds();
 	}
 
-	// 1. Khởi tạo SDK Quảng cáo
 	public void InitializeAds()
 	{
 		_gameId = (Application.platform == RuntimePlatform.IPhonePlayer) ? _iOSGameId : _androidGameId;
@@ -37,7 +46,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 	public void OnInitializationComplete()
 	{
 		Debug.Log("Khởi tạo Unity Ads thành công!");
-		LoadAd(); // Khởi tạo xong thì tự động tải quảng cáo luôn
+		LoadAd();
 	}
 
 	public void OnInitializationFailed(UnityAdsInitializationError error, string message)
@@ -45,44 +54,79 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 		Debug.Log($"Lỗi khởi tạo: {error.ToString()} - {message}");
 	}
 
-	// 2. Tải Quảng cáo
 	public void LoadAd()
 	{
 		Debug.Log("Đang tải quảng cáo...");
 		Advertisement.Load(_adUnitId, this);
 	}
 
-	// 3. HÀM NÀY SẼ GẮN VÀO NÚT WATCH ADS
-	public void ShowAd()
+	// ==========================================================
+	// HÀM BẮT SỰ KIỆN: KHI QUẢNG CÁO TẢI XONG THÌ BẬT BIẾN LÊN TRUE
+	// ==========================================================
+	public void OnUnityAdsAdLoaded(string adUnitId)
 	{
-		Debug.Log("Hiển thị quảng cáo...");
-		Advertisement.Show(_adUnitId, this);
+		if (adUnitId.Equals(_adUnitId))
+		{
+			Debug.Log("Video đã tải xong vào bộ nhớ tạm!");
+			_isAdReady = true; // Đánh dấu là đã sẵn sàng
+		}
 	}
 
-	// --- Các hàm Interface bắt buộc cho Load (Không cần viết code vào trong cũng được) ---
-	public void OnUnityAdsAdLoaded(string adUnitId) { }
-	public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message) {
+	public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
+	{
 		Debug.Log($"Lỗi tải quảng cáo ({error}): {message}. Đang tự động thử lại sau 3 giây...");
-
-		// Gọi lại hàm LoadAd sau 3 giây để khắc phục rớt mạng tạm thời
+		_isAdReady = false; // Tải lỗi thì chắc chắn là chưa sẵn sàng
 		Invoke(nameof(LoadAd), 3f);
 	}
 
-	// --- Các hàm Interface bắt buộc cho Show ---
+	// ==========================================================
+	// HÀM SHOW QUẢNG CÁO SỬ DỤNG BIẾN TỰ VIẾT
+	// ==========================================================
+	public void ShowAd()
+	{
+		if (_isAdReady)
+		{
+			_isAdReady = false;
+			Advertisement.Show(_adUnitId, this);
+		}
+		else
+		{
+			// DÙNG 1 DÒNG CODE DUY NHẤT:
+			ToastManager.instance.ShowToast(notAvailableAds.text);
+		}
+	}
+
+	private IEnumerator ShowToastMessage()
+	{
+		if (notAvailablePopup != null)
+		{
+			notAvailablePopup.SetActive(true);
+			yield return new WaitForSeconds(2f);
+			notAvailablePopup.SetActive(false);
+		}
+	}
+
 	public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
 	{
-		// Kiểm tra xem người chơi có xem hết video không
 		if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
 		{
 			Debug.Log("Người chơi đã xem hết quảng cáo! Trả thưởng thành công.");
 
-			currencyManager.AddCoin(20);
+			if (currencyManager != null)
+			{
+				currencyManager.AddCoin(20);
+			}
 
-			LoadAd(); // Tải video mới để sẵn sàng cho lần bấm tiếp theo
+			LoadAd(); // Tải video mới
 		}
 	}
 
-	public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message) { }
+	public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
+	{
+		// Xem lỗi thì cũng phải load lại video mới
+		LoadAd();
+	}
+
 	public void OnUnityAdsShowStart(string adUnitId) { }
 	public void OnUnityAdsShowClick(string adUnitId) { }
 }

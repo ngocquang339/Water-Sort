@@ -67,60 +67,8 @@ public class LoadingManager : MonoBehaviour
 			yield return null;
 		}
 
-		// =========================================================
-		// GIAI ĐOẠN 4: KÉO RÈM ĐEN CHE MÀN HÌNH (FADE OUT)
-		// =========================================================
-		if (fadeImage != null)
-		{
-			fadeImage.raycastTarget = true; // Chặn bấm bậy
-			float timer = 0f;
-			Color c = fadeImage.color;
-			while (timer < fadeDuration)
-			{
-				timer += Time.deltaTime;
-				c.a = Mathf.Clamp01(timer / fadeDuration);
-				fadeImage.color = c;
-				yield return null;
-			}
-		}
-
-		// Ẩn thanh Loading cũ đi để không bị lôi sang màn mới
-		if (loading_Container != null) loading_Container.SetActive(false);
-
-		// [BÍ QUYẾT]: Bất tử hóa script này và tấm rèm đen để Coroutine không bị chết khi sang Scene mới!
-		DontDestroyOnLoad(this.gameObject);
-		if (fadeImage != null) DontDestroyOnLoad(fadeImage.canvas.gameObject);
-
-		// Mở khóa cho sang bài
-		operation.allowSceneActivation = true;
-
-		// Chờ màn mới tải xong đồ đạc
-		while (!operation.isDone)
-		{
-			yield return null;
-		}
-
-		// =========================================================
-		// GIAI ĐOẠN 5: MỞ RÈM RA TẠI MÀN HÌNH MỚI (FADE IN)
-		// =========================================================
-		if (fadeImage != null)
-		{
-			float timer = 0f;
-			Color c = fadeImage.color;
-			while (timer < fadeDuration)
-			{
-				timer += Time.deltaTime;
-				c.a = 1f - Mathf.Clamp01(timer / fadeDuration);
-				fadeImage.color = c;
-				yield return null;
-			}
-
-			// Dọn dẹp tấm rèm
-			Destroy(fadeImage.canvas.gameObject);
-		}
-
-		// Tự hủy object chứa script này vì đã hoàn thành nhiệm vụ
-		Destroy(this.gameObject);
+		// Thêm "LoadingSceneSmooth.Instance." vào ngay trước chữ StartCoroutine
+		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.TransitionWithOperation(operation));
 	}
 
 	// Hàm phụ để cập nhật UI cho gọn code
