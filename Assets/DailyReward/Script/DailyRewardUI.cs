@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,10 @@ public class DailyRewardUI : MonoBehaviour
 
 	[Header("Danh sách 7 ô ngày")]
 	public DaySlotUI[] daySlots;
+
+	// --- BỔ SUNG: Danh sách 4 cái rương mốc trên thanh Slider ---
+	[Header("Danh sách Rương Mốc UI")]
+	public MilestoneChestUI[] milestoneChestsUI;
 
 	[Header("Top Banner UI")]
 	public Slider topProgressBar;
@@ -22,6 +27,13 @@ public class DailyRewardUI : MonoBehaviour
 				slot.slotButton.onClick.AddListener(OnSlotClicked);
 			}
 		}
+		// --- BỔ SUNG: Khởi tạo sự kiện bấm cho 4 cái rương ---
+		for (int i = 0; i < milestoneChestsUI.Length; i++)
+		{
+			int index = i; // Khai báo biến tạm để tránh lỗi Closure trong C#
+			milestoneChestsUI[i].SetupChest(index, OnChestMilestoneClicked);
+		}
+
 	}
 
 	void OnEnable()
@@ -60,7 +72,7 @@ public class DailyRewardUI : MonoBehaviour
 
 		// 3. CẬP NHẬT THANH TIẾN TRÌNH Ở TRÊN
 
-		// Lấy ngày max (ví dụ 30) để làm độ dài tối đa cho thanh
+		// Lấy ngày max để làm độ dài tối đa cho thanh
 		int maxDays = data.milestoneChests[data.milestoneChests.Length - 1].requiredDays;
 		topProgressBar.maxValue = maxDays;
 
@@ -71,8 +83,16 @@ public class DailyRewardUI : MonoBehaviour
 		topProgressBar.minValue = 0f;
 		topProgressBar.maxValue = 1f;
 
-		// Đổ nước bằng hàm bóp méo tự viết
 		topProgressBar.value = CalculateFakeProgress(manager.totalClaimedDays, data.milestoneChests);
+
+		for (int i = 0; i < milestoneChestsUI.Length; i++)
+		{
+			if (i >= data.milestoneChests.Length) break;
+			bool isChestClaimed = manager.IsChestClaimed(i);
+
+			// Giao việc cho từng rương tự xử lý bộ nhận diện của nó
+			milestoneChestsUI[i].UpdateChestUI(data.milestoneChests[i], manager.totalClaimedDays, isChestClaimed);
+		}
 	}
 
 	// Hàm này sẽ tự động kích hoạt khi người chơi bấm vào BẤT KỲ ô quà nào có thể bấm
@@ -95,6 +115,10 @@ public class DailyRewardUI : MonoBehaviour
 	{
 		dailyReward.SetActive(false);
 		darkBackground.SetActive(false);
+	}
+
+	public void ImplementAnimation(){
+		Debug.Log("Chạy animation mở rương mốc!");
 	}
 
 	private float CalculateFakeProgress(int currentDays, MilestoneChestConfig[] chests)
@@ -126,5 +150,16 @@ public class DailyRewardUI : MonoBehaviour
 
 		// Nếu đã qua rương cuối cùng thì auto đầy thanh
 		return 1f;
+	}
+
+	//Hàm kích hoạt khi người chơi click cái rương đủ điều kiện
+	private void OnChestMilestoneClicked(int chestIndex)
+	{
+		Debug.Log("Người chơi bấm vào rương mốc số: " + chestIndex);
+
+		ImplementAnimation();
+		DailyRewardManager.Instance.ClaimMilestoneChest(chestIndex);
+		// 3. Nhận xong load lại UI để rương đổi sang ảnh Mở Nắp và tắt Chấm Đỏ/Glow
+		RefreshUI();
 	}
 }

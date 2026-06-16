@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 public class DailyRewardManager : MonoBehaviour
 {
 	public static DailyRewardManager Instance { get; private set; }
@@ -13,11 +14,13 @@ public class DailyRewardManager : MonoBehaviour
 	public GameObject dailyRewardPanel;
 	public GameObject blockInputPanel;
 	public GameObject darkBackground;
+	public Button chestButton;
+	private bool isClaimed = false;
 
 	private static bool showDailyPopup = false;
 
 	// Các biến trạng thái nội bộ
-	private int currentStreak = 0;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
+	private int currentStreak = 6;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
 	private DateTime lastClaimTime;     // Lần cuối cùng bấm nhận quà là lúc nào?
 
 	private const string STREAK_KEY = "DailyReward_Streak";
@@ -145,15 +148,15 @@ public class DailyRewardManager : MonoBehaviour
 			{
 				CurrencyManager.Instance.AddCoin(item.amount);
 			}
-			else if(item.rewardType == "Undo")
+			else if (item.rewardType == "Undo")
 			{
-				
+				CurrencyManager.Instance.AddUndo(item.amount);
 			}
-			else if(item.rewardType == "Hint"){
-				
+			else if (item.rewardType == "Hint") {
+				CurrencyManager.Instance.AddHint(item.amount);
 			}
-			else if(item.rewardType == "AddBottle"){
-				
+			else if (item.rewardType == "AddBottle") {
+				CurrencyManager.Instance.AddBonusBottle(item.amount);
 			}
 			else
 			{
@@ -186,7 +189,52 @@ public class DailyRewardManager : MonoBehaviour
 		PlayerPrefs.SetInt(STREAK_KEY, currentStreak);
 		PlayerPrefs.SetString(TIME_KEY, lastClaimTime.ToString());
 		PlayerPrefs.SetInt(TOTAL_TIME_KEY, totalClaimedDays);
-		PlayerPrefs.Save(); // Ép hệ thống lưu ngay lập tức
+		PlayerPrefs.Save();
 	}
 
+	public bool IsChestClaimed(int chestIndex)
+	{
+		if (chestIndex < 0 || chestIndex >= rewardData.milestoneChests.Length) return false;
+		return isClaimed;
+	}
+
+	public void ClaimMilestoneChest(int chestIndex)
+	{
+		if (chestIndex < 0 || chestIndex >= rewardData.milestoneChests.Length) return;
+
+		MilestoneChestConfig chest = rewardData.milestoneChests[chestIndex];
+		if (!IsChestClaimed(chestIndex))
+		{
+			if (chest != null)
+			{
+				foreach (var item in chest.rewards)
+				{
+					if (item != null)
+					{
+						if (item.rewardType == "Coin")
+						{
+							CurrencyManager.Instance.AddCoin(item.amount);
+						}
+						else if (item.rewardType == "Undo")
+						{
+							CurrencyManager.Instance.AddUndo(item.amount);
+						}
+						else if (item.rewardType == "Hint")
+						{
+							CurrencyManager.Instance.AddHint(item.amount);
+						}
+						else if (item.rewardType == "AddBottle")
+						{	
+							CurrencyManager.Instance.AddBonusBottle(item.amount);
+						}
+						else
+						{
+							CurrencyManager.Instance.AddDiamond(item.amount);
+						}
+					}
+				}
+			}
+		}
+		isClaimed = true;
+	}
 }

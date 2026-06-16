@@ -14,10 +14,9 @@ public class MilestoneChestConfig
 {
 	[Header("Vị trí hiển thị trên thanh UI (Từ 0.0 đến 1.0)")]
 	[Range(0f, 1f)]
-	public float visualAnchor; // <--- THÊM DÒNG NÀY
+	public float visualAnchor; 
 
 	[Header("Điều kiện mở rương")]
-	[Tooltip("Số ngày cần đạt để mở. Ví dụ: 8, 15, 22, 30")]
 	public int requiredDays;
 
 	[Header("Phần thưởng trong rương")]
@@ -33,7 +32,6 @@ public class MilestoneChestConfig
 public class DailyRewardData : ScriptableObject
 {
 	[Header("Danh sách 7 ngày điểm danh")]
-	// 2. Sửa mảng RewardItem thành mảng DayRewardConfig
 	public DayRewardConfig[] days;
 
 	[Header("Danh sách Rương Mốc Chuỗi (Vòng lặp dài)")]
