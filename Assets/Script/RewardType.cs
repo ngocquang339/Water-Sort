@@ -2,5 +2,8 @@ using UnityEngine;
 
 public enum RewardType{
 	Coin,
-	Diamond
+	Diamond,
+	Undo,
+	Hint,
+	AddBottle
 }

@@ -24,7 +24,7 @@ public class DaySlotUI : MonoBehaviour
 
 	public void updateSlotUI(int dayNumber, DayRewardConfig config, DaySlotState state)
 	{
-		dayText.text = "Day " + dayNumber.ToString();
+		dayText.text = dayNumber.ToString();
 
 		// Dùng vòng lặp để bật/tắt và gán Data cho các Icon trong Slot này
 		for (int i = 0; i < rewardIcons.Length; i++)

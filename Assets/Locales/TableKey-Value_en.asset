@@ -90,6 +90,10 @@ MonoBehaviour:
     m_Localized: Watch a video to get free coins!
     m_Metadata:
       m_Items: []
+  - m_Id: 7293123122532352
+    m_Localized: Advertisements are unavailable.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
