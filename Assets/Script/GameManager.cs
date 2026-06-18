@@ -359,6 +359,10 @@ public class GameManager : MonoBehaviour
 		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("MainPlayScene"));
 	}
 
+	public void startMultiPlayerMode(){
+		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("SpecialScene"));
+	}
+
 	// 1. Hàm siêu nhẹ để kiểm tra xem CÒN BƯỚC ĐI KHÔNG
 	public bool HasAnyValidMove()
 	{

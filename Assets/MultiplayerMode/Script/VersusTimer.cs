@@ -46,4 +46,14 @@ public class VersusTimer : MonoBehaviour
 	{
 		isRunning = false;
 	}
+
+	// Hàm này dùng để gửi chuỗi thời gian đã đóng băng cho VersusManager lưu lại
+	public string GetFinalTime()
+	{
+		// Giả sử bạn đang có 1 biến tên là p1TimerText hiển thị thời gian
+		// Nếu bạn dùng biến khác (như currentTime), hãy format lại nó ở đây
+		if (p1TimerText != null) return p1TimerText.text;
+
+		return "00:00";
+	}
 }

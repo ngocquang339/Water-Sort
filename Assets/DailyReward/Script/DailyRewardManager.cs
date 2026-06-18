@@ -214,22 +214,27 @@ public class DailyRewardManager : MonoBehaviour
 						if (item.rewardType == "Coin")
 						{
 							CurrencyManager.Instance.AddCoin(item.amount);
+							Debug.Log($"Đã nhận được {item.amount} Coin từ rương cột mốc!");
 						}
 						else if (item.rewardType == "Undo")
 						{
 							CurrencyManager.Instance.AddUndo(item.amount);
+							Debug.Log($"Đã nhận được {item.amount} Undo từ rương cột mốc!");
 						}
 						else if (item.rewardType == "Hint")
 						{
 							CurrencyManager.Instance.AddHint(item.amount);
+							Debug.Log($"Đã nhận được {item.amount} Hint từ rương cột mốc!");
 						}
 						else if (item.rewardType == "AddBottle")
 						{	
 							CurrencyManager.Instance.AddBonusBottle(item.amount);
+							Debug.Log($"Đã nhận được {item.amount} Bonus Bottle từ rương cột mốc!");
 						}
 						else
 						{
 							CurrencyManager.Instance.AddDiamond(item.amount);
+							Debug.Log($"Đã nhận được {item.amount} Diamond từ rương cột mốc!");
 						}
 					}
 				}

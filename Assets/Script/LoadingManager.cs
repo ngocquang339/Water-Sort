@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadingManager : MonoBehaviour
 {
+	public static LoadingManager Instance;
 	[Header("Giao diện UI")]
 	public Image fillColor;
 	public GameObject loading_Container;
@@ -22,6 +23,20 @@ public class LoadingManager : MonoBehaviour
 	[Header("Hiệu ứng chuyển cảnh")]
 	public Image fadeImage;
 	public float fadeDuration = 0.5f;
+
+	void Awake()
+	{
+		if (Instance == null)
+		{
+			Instance = this;
+		}
+		else
+		{
+			// Nếu bị trùng lặp khi load lại
+			Destroy(gameObject);
+		}
+	}
+
 	void Start()
 	{
 		fillColor.fillAmount = 0f;
