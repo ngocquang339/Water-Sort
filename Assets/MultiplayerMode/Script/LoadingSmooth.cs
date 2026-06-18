@@ -1,11 +1,10 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
-public class LoadingSceneSmooth : MonoBehaviour
+using System.Collections;
+public class LoadingSmooth : MonoBehaviour
 {
-	public static LoadingSceneSmooth Instance;
+	public static LoadingSmooth Instance;
 
 	[Header("Hiệu ứng chuyển cảnh")]
 	public Image fadeImage;
@@ -27,17 +26,6 @@ public class LoadingSceneSmooth : MonoBehaviour
 			if (fadeImage != null && fadeImage.canvas != null) Destroy(fadeImage.canvas.gameObject);
 			return;
 		}
-	}
-
-	void Start()
-	{
-		// CODE DÀNH RIÊNG CHO BẢN BUILD PC: Ép thành cửa sổ dọc
-		#if UNITY_STANDALONE || UNITY_EDITOR
-				// Thu nhỏ tỷ lệ dọc để vừa với màn hình laptop (Ví dụ: 540 ngang, 960 cao)
-				Screen.SetResolution(540, 960, FullScreenMode.Windowed);
-		#endif
-
-		// ... (các đoạn code cũ của bạn ở dưới giữ nguyên)
 	}
 	// HÀM 1: DÙNG CHO CÁC NÚT BẤM (TỰ LOAD NGẦM, TỰ CHUYỂN)
 	public IEnumerator LoadSceneSmooth(string sceneName)

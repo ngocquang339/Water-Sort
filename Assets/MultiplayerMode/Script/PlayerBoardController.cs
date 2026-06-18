@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening.Core.Easing;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerBoardController : MonoBehaviour
 {
-	public GameManager gameManager;
-	private List<Bottle> busyBottles = new List<Bottle>();
+	private BottleMulti selectedBottle;
+	private List<BottleMulti> busyBottles = new List<BottleMulti>();
 	[Header("Cấu hình Người chơi")]
 	public int playerID; // 1 hoặc 2
 	public Camera playerCamera;
@@ -27,7 +30,6 @@ public class PlayerBoardController : MonoBehaviour
 
 	[Header("Win Game Effects")]
 	public GameObject blackOverlay; // Kéo Black_Overlay vào đây
-	public GameObject confettiRainPrefab; // Kéo Prefab máy phát pháo giấy vào đây
 	public RectTransform winPanelRect;
 	public GameObject winUIPanel;
 
@@ -35,7 +37,7 @@ public class PlayerBoardController : MonoBehaviour
 	public RectTransform nextLevelPopupRect;
 
 	[Header("Danh sách chai nước")]
-	public List<Bottle> allBottles;
+	public List<BottleMulti> allBottles;
 
 	[Header("Hiệu ứng Nước chảy")]
 	public LineRenderer waterStream;
@@ -60,12 +62,31 @@ public class PlayerBoardController : MonoBehaviour
 	[SerializeField] private float pourOffsetX = 0.8f;
 	[SerializeField] private float pourOffsetY = 1.0f;
 
-	private Bottle selectedBottle;
+	[Header("Cài đặt Game")]
+	public LevelManagerMultiplayer levelManager;
+
+	[Header("Hiệu ứng chuyển màn (Fade Nửa Màn Hình)")]
+	public Image localFadeImage;
+	public float fadeDuration = 0.5f;
 	private int currentLevelIndex = 0;
 
 	// Danh sách chứa các chai thuộc về nửa màn hình này để check win
 	private List<Bottle> myBottles = new List<Bottle>();
 
+
+	void Update()
+	{
+		if (isLocked) return;
+
+		if (Input.touchCount > 0)
+		{
+			HandleMultiTouchInput();
+		}
+		else
+		{
+			liftBottle(); // Giữ nguyên hàm liftBottle của bạn để test bằng chuột
+		}
+	}
 	// ==========================================
 	// 1. PHẦN MỚI: NHẬN ĐỀ THI TỪ TRỌNG TÀI
 	// ==========================================
@@ -75,70 +96,19 @@ public class PlayerBoardController : MonoBehaviour
 		selectedBottle = null;
 		isLocked = false;
 
+		busyBottles.Clear();
+		allBottles.Clear();
+
 		// Dọn dẹp chai cũ
 		foreach (Transform child in bottleContainer) { Destroy(child.gameObject); }
 		myBottles.Clear();
 
-		// Kéo Data và sinh bình mới
+		// Kéo Data
 		LevelData levelData = VersusManager.Instance.versusLevels[levelIndex];
-		GenerateLevel(levelData);
-	}
-	public void GenerateLevel(LevelData levelData)
-	{
-		int totalBottles = levelData.bottleInLevel.Length;
-
-		int numRows = Mathf.CeilToInt((float)totalBottles / maxBottlesPerRow);
-
-		int bottleIndex = 0; // Biến theo dõi xem đang khởi tạo đến chai thứ mấy trong Data
-		int remainingBottles = totalBottles; // Số chai còn lại chưa được xếp
-
-		for (int row = 0; row < numRows; row++)
-		{
-			// THUẬT TOÁN CHIA ĐỀU: Lấy số chai còn lại chia cho số hàng còn lại
-			int rowsLeft = numRows - row;
-			//Làm tròn số chai 
-			int bottlesInThisRow = Mathf.CeilToInt((float)remainingBottles / rowsLeft);
-			remainingBottles -= bottlesInThisRow;
-
-			float startX = -(bottlesInThisRow - 1) * spacingX / 2f;
-			float startY = (numRows - 1) * spacingY / 2f; //Căn giữa cả cụm theo chiều dọc
-
-			//Vòng lặp vẽ từng chai trong hàng hiện tại
-			for (int col = 0; col < bottlesInThisRow; col++)
-			{
-				float posX = startX + (col * spacingX);
-				float posY = startY - (row * spacingY);
-				Vector2 spawnPosition = new Vector2(posX, posY);
-
-				// 1. Kiểm tra xem Level này có xài Prefab chai riêng không, nếu không thì dùng chai mặc định
-				GameObject prefabToUse = levelData.customBottlePrefab != null ? levelData.customBottlePrefab : bottlePrefab;
-
-				// 2. Đẻ ra GameObject chai
-				GameObject newBottle = Instantiate(prefabToUse, spawnPosition, Quaternion.identity);
-
-				Bottle bottleScript = newBottle.GetComponent<Bottle>();
-				if (bottleScript != null)
-				{
-					// 3. TRUYỀN SỨC CHỨA TỪ LEVEL DATA VÀO CHAI
-					bottleScript.capacity = levelData.bottleCapacity;
-
-					// 4. Nạp màu
-					bottleScript.initializeColors(levelData.bottleInLevel[bottleIndex].initialColors);
-					// ========================================================
-					// 2. NHÉT CHAI VỪA ĐẺ VÀO DANH SÁCH CỦA GAMEMANAGER
-					// ========================================================
-					if (gameManager != null)
-					{
-						gameManager.allBottles.Add(bottleScript);
-					}
-				}
-
-				bottleIndex++;
-			}
-		}
+		LevelManagerMultiplayer.Instance.GeneratePlayerLevel(levelData, bottleContainer, playerID, this);
 	}
 
-	private IEnumerator PourWaterRoutine(Bottle source, Bottle target, Vector3 groundPos)
+	private IEnumerator PourWaterRoutine(BottleMulti source, BottleMulti target, Vector3 groundPos)
 	{
 		// 1. KIỂM TRA ĐIỀU KIỆN TRƯỚC KHI BAY
 		if (target.isFull() || source.isEmpty() || (!target.isEmpty() && target.getTopColor().Peek() != source.getTopColor().Peek()))
@@ -159,7 +129,7 @@ public class PlayerBoardController : MonoBehaviour
 		Stack<WaterColor> colorStack = source.getTopColor();
 		int amountToPour = colorStack.Count;
 		int spaceInTarget = target.capacity - target.currentWaterCount;
-		int actualPourAmount = Mathf.Min(amountToPour, spaceInTarget); // Lấy số lượng thực tế có thể rót
+		int actualPourAmount = Mathf.Min(amountToPour, spaceInTarget);
 
 		if (actualPourAmount > 0)
 		{
@@ -171,21 +141,36 @@ public class PlayerBoardController : MonoBehaviour
 			int srcEndCount = srcStartCount - actualPourAmount;
 			int tgtEndCount = tgtStartCount + actualPourAmount;
 
+			// 👇 KHÔI PHỤC: Mảng lưu trữ kích thước gốc của các lớp nước
 			Vector3[] tgtOrigScales = new Vector3[actualPourAmount];
 			Vector3[] srcOrigScales = new Vector3[actualPourAmount];
 
 			for (int i = 0; i < actualPourAmount; i++)
 			{
-				// Bật trước các cục nước ở chai Target, tô màu và ÉP CHIỀU CAO VỀ 0
+				// Chai Target: Bật lên, tô màu và ép chiều cao Y về 0
 				var tgtRend = target.waterLayerRenderers[tgtStartCount + i];
-				tgtOrigScales[i] = tgtRend.transform.localScale; // Lưu lại kích thước chuẩn
+				tgtOrigScales[i] = tgtRend.transform.localScale;
 				tgtRend.gameObject.SetActive(true);
 				tgtRend.color = unityColor;
 				tgtRend.transform.localScale = new Vector3(tgtOrigScales[i].x, 0f, tgtOrigScales[i].z);
 
-				// Lưu lại kích thước chuẩn của chai Source để bóp nhỏ dần
+				// Chai Source: Lưu lại kích thước gốc để bóp nhỏ dần
 				var srcRend = source.waterLayerRenderers[srcStartCount - 1 - i];
 				srcOrigScales[i] = srcRend.transform.localScale;
+			}
+
+			// Bật mặt Oval chai đích lên trước (Đề phòng chai đang rỗng bị ẩn)
+			if (!target.ovalInsideRenderer.gameObject.activeSelf)
+			{
+				target.ovalInsideRenderer.gameObject.SetActive(true);
+				target.ovalBorderRenderer.gameObject.SetActive(true);
+
+				float h, s, v;
+				Color.RGBToHSV(unityColor, out h, out s, out v);
+				s = Mathf.Clamp01(s - 0.2f);
+				v = Mathf.Clamp01(v + 0.3f);
+				target.ovalInsideRenderer.color = Color.HSVToRGB(h, s, v);
+				target.ovalBorderRenderer.color = Color.white;
 			}
 
 			// Bật Tia nước và Hạt nước
@@ -200,17 +185,12 @@ public class PlayerBoardController : MonoBehaviour
 			splash.Play();
 
 			// ========================================================
-			// VÒNG LẶP MA THUẬT: ĐỒNG BỘ THỜI GIAN THỰC (0.4 GIÂY)
+			// VÒNG LẶP MA THUẬT: ĐỒNG BỘ THỜI GIAN THỰC
 			// ========================================================
-			// 1. TÍNH TOÁN THỜI GIAN RÓT LINH HOẠT
-			float timePerLayer = 0.25f; // Thời gian rót cho 1 lớp nước (Bạn có thể tăng giảm tùy ý)
-
-			// Tổng thời gian = Số lớp nước x Thời gian 1 lớp
-			// Nếu rót 1 lớp: 1 * 0.25 = 0.25 giây. Nếu rót 3 lớp: 3 * 0.25 = 0.75 giây.
+			float timePerLayer = 0.25f;
 			float pourDuration = actualPourAmount * timePerLayer;
-
 			float timePassed = 0f;
-			// 2. BẬT TIẾNG RÓT NƯỚC BẮT ĐẦU TỪ GIÂY HAY NHẤT (Ví dụ: Giây 5.5)
+
 			if (AudioManager.instance != null) AudioManager.instance.StartPourSound();
 
 			while (timePassed < pourDuration)
@@ -218,36 +198,45 @@ public class PlayerBoardController : MonoBehaviour
 				timePassed += Time.deltaTime;
 				float percent = timePassed / pourDuration;
 
-				// A. Kéo giãn/Thu nhỏ các khối nước (NỐI TIẾP NHAU)
-				float totalProgress = percent * actualPourAmount; // Nhân rộng tiến trình theo số lớp
+				float totalProgress = percent * actualPourAmount;
 
+				float srcCurrentY = source.GetOvalYPosition(srcStartCount);
+				float tgtCurrentY = target.GetOvalYPosition(tgtStartCount);
+
+				// A. Kéo giãn/Thu nhỏ các khối nước (NỐI TIẾP NHAU)
 				for (int i = 0; i < actualPourAmount; i++)
 				{
-					// Bí quyết: Tính toán phần trăm chạy cho TỪNG lớp
-					// Lớp i=1 sẽ bị kìm ở mức 0 cho đến khi lớp i=0 chạy được 100%
 					float layerProgress = Mathf.Clamp01(totalProgress - i);
 
-					// Chai Source: Thu nhỏ từ Scale Gốc -> 0 (Lớp trên cùng xẹp trước)
+					// 👇 KHÔI PHỤC: Ép scale Y để tạo hiệu ứng rút/dâng nước
+					// Chai Source: Thu nhỏ từ Scale Gốc -> 0
 					var srcRend = source.waterLayerRenderers[srcStartCount - 1 - i];
 					srcRend.transform.localScale = new Vector3(srcOrigScales[i].x, Mathf.Lerp(srcOrigScales[i].y, 0f, layerProgress), srcOrigScales[i].z);
 
-					// Chai Target: Kéo dài từ 0 -> Scale Gốc (Lớp dưới cùng mọc trước)
+					// Chai Target: Kéo dài từ 0 -> Scale Gốc
 					var tgtRend = target.waterLayerRenderers[tgtStartCount + i];
 					tgtRend.transform.localScale = new Vector3(tgtOrigScales[i].x, Mathf.Lerp(0f, tgtOrigScales[i].y, layerProgress), tgtOrigScales[i].z);
+
+					// ĐỒNG BỘ MẶT OVAL TỪNG NẤC
+					if (layerProgress > 0f)
+					{
+						float sStartY = source.GetOvalYPosition(srcStartCount - i);
+						float sEndY = source.GetOvalYPosition(srcStartCount - i - 1);
+						srcCurrentY = Mathf.Lerp(sStartY, sEndY, layerProgress);
+
+						float tStartY = target.GetOvalYPosition(tgtStartCount + i);
+						float tEndY = target.GetOvalYPosition(tgtStartCount + i + 1);
+						tgtCurrentY = Mathf.Lerp(tStartY, tEndY, layerProgress);
+					}
 				}
 
-				// B. Cho mặt Oval trôi lên/xuống cực mượt (GIỮ NGUYÊN TỌA ĐỘ X VÀ Z GỐC)
-				float srcCurrentY = Mathf.Lerp(source.GetOvalYPosition(srcStartCount), source.GetOvalYPosition(srcEndCount), percent);
-				float tgtCurrentY = Mathf.Lerp(target.GetOvalYPosition(tgtStartCount), target.GetOvalYPosition(tgtEndCount), percent);
-
-				// Sửa chai Source
+				// B. Gán tọa độ Y cho mặt Oval
 				Vector3 srcPos = source.ovalInsideRenderer.transform.parent.localPosition;
-				srcPos.y = srcCurrentY; // Chỉ ghi đè trục Y
+				srcPos.y = srcCurrentY;
 				source.ovalInsideRenderer.transform.parent.localPosition = srcPos;
 
-				// Sửa chai Target
 				Vector3 tgtPos = target.ovalInsideRenderer.transform.parent.localPosition;
-				tgtPos.y = tgtCurrentY; // Chỉ ghi đè trục Y
+				tgtPos.y = tgtCurrentY;
 				target.ovalInsideRenderer.transform.parent.localPosition = tgtPos;
 
 				// C. Tia nước và bọt biển chạy theo mặt Oval Target đang dâng lên
@@ -257,17 +246,14 @@ public class PlayerBoardController : MonoBehaviour
 
 				yield return null; // Chờ frame tiếp theo
 			}
+
 			// ========================================================
-			// 4. CHÍNH XÁC LÚC NƯỚC DỪNG CHẢY -> TẮT ÂM THANH NGAY LẬP TỨC!
+			// 4. CHÍNH XÁC LÚC NƯỚC DỪNG CHẢY
 			if (AudioManager.instance != null) AudioManager.instance.StopPourSound();
-
-			// Dừng bắn thêm hạt mới, nhưng để các hạt cũ rơi tự nhiên
 			splash.Stop();
-
-			// Hẹn giờ 1.5 giây sau mới xóa object để dọn rác
 			Destroy(splash.gameObject, 1.5f);
 
-			// Dọn dẹp: Trả lại kích thước gốc cho Prefab để lần sau không bị lỗi tàng hình
+			// 👇 KHÔI PHỤC: Dọn dẹp trả lại kích thước chuẩn cho các lớp để không bị lỗi tàng hình
 			for (int i = 0; i < actualPourAmount; i++)
 			{
 				source.waterLayerRenderers[srcStartCount - 1 - i].transform.localScale = srcOrigScales[i];
@@ -296,8 +282,8 @@ public class PlayerBoardController : MonoBehaviour
 			Instantiate(bottleDonePrefab, target.mouthPoint.position, Quaternion.identity);
 			target.CloseCork();
 		}
+
 		bool check = CheckWin();
-		//Check nước đi hợp lệ
 		if (!check) CheckGameState();
 	}
 
@@ -378,7 +364,7 @@ public class PlayerBoardController : MonoBehaviour
 	{
 		for (int i = 0; i < allBottles.Count; i++)
 		{
-			Bottle fromBottle = allBottles[i];
+			BottleMulti fromBottle = allBottles[i];
 
 			// Nếu chai rỗng hoặc đã hoàn thiện rồi -> Không rót đi nữa
 			if (fromBottle.isEmpty() || fromBottle.isCompleted()) continue;
@@ -391,7 +377,7 @@ public class PlayerBoardController : MonoBehaviour
 			{
 				if (i == j) continue; // Không tự kiểm tra với chính mình
 
-				Bottle toBottle = allBottles[j];
+				BottleMulti toBottle = allBottles[j];
 
 				// Nếu chai đích đầy -> Không nhận được
 				if (toBottle.isFull()) continue;
@@ -426,6 +412,7 @@ public class PlayerBoardController : MonoBehaviour
 			yield return null;
 		}
 
+		// Chốt hạ tọa độ và góc quay chính xác khi kết thúc Animation
 		bottleTransform.position = targetPos;
 		bottleTransform.rotation = endRot;
 	}
@@ -433,25 +420,82 @@ public class PlayerBoardController : MonoBehaviour
 	// ==========================================
 	// 3. PHẦN MỚI TỐI ƯU: ĐIỀU KHIỂN CẢM ỨNG 
 	// ==========================================
-	void Update()
+
+
+	private void liftBottle()
 	{
-		HandleMultiTouchInput();
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !isLocked)
+		{
+			BottleMulti clickBottle = getBottleFromClick();
+			if (clickBottle != null)
+			{
+				// NẾU CHAI NÀY ĐANG BẬN -> BỎ QUA
+				if (busyBottles.Contains(clickBottle)) return;
+
+				// 1. CHẠM LẠI VÀO CHAI ĐANG CHỌN -> BỎ XUỐNG
+				if (clickBottle == selectedBottle)
+				{
+					Vector3 groundPos = clickBottle.transform.position - new Vector3(0f, liftOffset, 0f);
+					AudioManager.instance.PlayBottleDown();
+					StartCoroutine(AnimateBottle(clickBottle.transform, groundPos, 0f, moveSpeed));
+					selectedBottle = null;
+				}
+				// 2. CHƯA CHỌN CHAI NÀO -> NHẤC LÊN
+				else if (selectedBottle == null)
+				{
+					if (AudioManager.instance != null) AudioManager.instance.PlayBottleLift();
+					if (clickBottle.getTopColor() == null) return;
+
+					Vector3 liftPos = clickBottle.transform.position + new Vector3(0f, liftOffset, 0f);
+					StartCoroutine(AnimateBottle(clickBottle.transform, liftPos, 0f, moveSpeed));
+
+					selectedBottle = clickBottle;
+				}
+				// 3. ĐÃ CHỌN CHAI A, BẤM VÀO CHAI B -> ĐỔ NƯỚC
+				else
+				{
+					Vector3 sourceGroundPos = selectedBottle.transform.position - new Vector3(0f, liftOffset, 0f);
+
+					// Chạy Coroutine rót nước đã được gộp chung tia nước
+					StartCoroutine(PourWaterRoutine(selectedBottle, clickBottle, sourceGroundPos));
+
+					// Giải phóng để chọn cặp khác
+					selectedBottle = null;
+				}
+			}
+		}
 	}
+
+	private BottleMulti getBottleFromClick()
+	{
+		// Đổi Camera.main thành playerCamera để ăn khớp với Camera của từng nửa màn hình
+		Vector2 mousePosition = playerCamera.ScreenToWorldPoint(Input.mousePosition);
+		RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+		if (hit.collider != null)
+		{
+			return hit.collider.GetComponent<BottleMulti>();
+		}
+		return null;
+	}
+
 
 	private void HandleMultiTouchInput()
 	{
-		if (isLocked) return;
-
 		for (int i = 0; i < Input.touchCount; i++)
 		{
 			Touch touch = Input.GetTouch(i);
+
+			// Chỉ xử lý khi ngón tay vừa chạm vào màn hình
 			if (touch.phase == TouchPhase.Began)
 			{
+				// Logic chia đôi màn hình cho 2 người chơi của bạn
 				bool isInCorrectHalf = isPlayerOne ? (touch.position.x < Screen.width / 2f) : (touch.position.x >= Screen.width / 2f);
 
 				if (isInCorrectHalf)
 				{
+					// Tránh lỗi bấm xuyên qua UI (ví dụ chạm vào nút Pause mà chai vẫn nhấc lên)
 					if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId)) continue;
+
 					ProcessBottleAction(touch.position);
 				}
 			}
@@ -460,9 +504,13 @@ public class PlayerBoardController : MonoBehaviour
 
 	private void ProcessBottleAction(Vector2 touchPosition)
 	{
-		Bottle clickBottle = getBottleFromTouch(touchPosition);
+		BottleMulti clickBottle = getBottleFromTouch(touchPosition);
 		if (clickBottle != null)
 		{
+			// QUAN TRỌNG: Chặn thao tác nếu chai đang bận chạy animation rót nước
+			if (busyBottles.Contains(clickBottle)) return;
+
+			// 1. Chạm lại vào chai đang chọn -> Đặt xuống
 			if (clickBottle == selectedBottle)
 			{
 				Vector3 groundPos = clickBottle.transform.position - new Vector3(0f, liftOffset, 0f);
@@ -470,6 +518,7 @@ public class PlayerBoardController : MonoBehaviour
 				StartCoroutine(AnimateBottle(clickBottle.transform, groundPos, 0f, moveSpeed));
 				selectedBottle = null;
 			}
+			// 2. Chưa chọn chai nào -> Nhấc lên
 			else if (selectedBottle == null)
 			{
 				if (AudioManager.instance != null) AudioManager.instance.PlayBottleLift();
@@ -479,6 +528,7 @@ public class PlayerBoardController : MonoBehaviour
 				StartCoroutine(AnimateBottle(clickBottle.transform, liftPos, 0f, moveSpeed));
 				selectedBottle = clickBottle;
 			}
+			// 3. Đã chọn chai A, chạm vào chai B -> Rót nước
 			else
 			{
 				Vector3 sourceGroundPos = selectedBottle.transform.position - new Vector3(0f, liftOffset, 0f);
@@ -488,11 +538,14 @@ public class PlayerBoardController : MonoBehaviour
 		}
 	}
 
-	private Bottle getBottleFromTouch(Vector2 screenPosition)
+	private BottleMulti getBottleFromTouch(Vector2 screenPosition)
 	{
 		Vector2 worldPosition = playerCamera.ScreenToWorldPoint(screenPosition);
 		RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
-		if (hit.collider != null) return hit.collider.GetComponent<Bottle>();
+		if (hit.collider != null)
+		{
+			return hit.collider.GetComponent<BottleMulti>();
+		}
 		return null;
 	}
 
@@ -511,7 +564,7 @@ public class PlayerBoardController : MonoBehaviour
 	public bool CheckWin()
 	{
 		bool isWin = true;
-		foreach (Bottle bottle in allBottles)
+		foreach (BottleMulti bottle in allBottles)
 		{
 			if (!bottle.isEmpty() && !bottle.isCompleted())
 			{
@@ -522,22 +575,100 @@ public class PlayerBoardController : MonoBehaviour
 
 		if (isWin)
 		{
+			// Thêm dòng này để KHÓA nửa màn hình của người đã giải xong (Người kia vẫn vuốt được)
+			isLocked = true;
 			StartCoroutine(HandleWinCoroutine());
 			return true;
 		}
 		return false;
 
-		if (isWin)
-		{
-			Debug.Log($"Player {playerID} đã giải xong!");
-			VersusManager.Instance.OnPlayerCompleteLevel(playerID, currentLevelIndex);
-		}
+		// HÃY XÓA TOÀN BỘ ĐOẠN NÀY ĐI VÌ NÓ BỊ NẰM DƯỚI RETURN (SẼ KHÔNG BAO GIỜ CHẠY):
+		// if (isWin) {
+		//    Debug.Log($"Player {playerID} đã giải xong!");
+		//    VersusManager.Instance.OnPlayerCompleteLevel(playerID, currentLevelIndex);
+		// }
 	}
 
 	private IEnumerator HandleWinCoroutine()
 	{
-		yield return StartCoroutine(WinSequenceRoutine());
-		SaveProgress();
+		isLocked = true; // Khóa cảm ứng của nửa màn hình này lại
+
+		if (AudioManager.instance != null) AudioManager.instance.PlayWinSound();
+
+		// 1. Tùy chọn: Bắn pháo hoa ăn mừng nhẹ nhàng cho vui mắt
+		if (leftConfetti != null) leftConfetti.Play();
+		if (rightConfetti != null) rightConfetti.Play();
+
+		// 2. Chờ 1.5 giây để người chơi nhìn ngắm các chai nước đã hoàn thành
+		yield return new WaitForSeconds(1.5f);
+
+		// 3. Kiểm tra xem đây có phải là màn cuối cùng của bộ đề thi không?
+		int totalLevels = VersusManager.Instance.versusLevels.Length;
+		bool isFinalLevel = (currentLevelIndex >= totalLevels - 1);
+
+		if (isFinalLevel)
+		{
+			// MÀN CUỐI CÙNG: Báo thẳng cho Trọng Tài để hiện bảng "CHIẾN THẮNG CHUNG CUỘC" giữa màn hình
+			VersusManager.Instance.OnPlayerCompleteLevel(playerID, currentLevelIndex);
+		}
+		else
+		{
+			// MÀN TRUNG GIAN: Dùng hiệu ứng kéo rèm để chuyển qua màn tiếp theo một cách mượt mà
+
+			// Kéo rèm đen che kín nửa màn hình
+			yield return StartCoroutine(LocalFadeOut());
+
+			// Báo Trọng Tài. Trọng tài sẽ lập tức dọn chai cũ và đẻ chai mới (InitBoard) ở phía sau tấm rèm đen
+			VersusManager.Instance.OnPlayerCompleteLevel(playerID, currentLevelIndex);
+
+			// (Phòng hờ InitBoard mở khóa quá sớm, ta khóa lại cho chắc)
+			isLocked = true;
+
+			// Mở rèm đen ra. Lúc này bộ chai nước mới đã được xếp sẵn sàng!
+			yield return StartCoroutine(LocalFadeIn());
+
+			// Mở khóa để người chơi bắt đầu giải màn mới
+			isLocked = false;
+		}
+	}
+
+	// ========================================================
+	// 2 HÀM PHỤ TRỢ: CHỈ KÉO RÈM Ở NỬA MÀN HÌNH HIỆN TẠI
+	// ========================================================
+	private IEnumerator LocalFadeOut()
+	{
+		if (localFadeImage != null)
+		{
+			localFadeImage.gameObject.SetActive(true);
+			localFadeImage.raycastTarget = true; // Chặn mọi thao tác bấm bậy
+			float timer = 0f;
+			Color c = localFadeImage.color;
+			while (timer < fadeDuration)
+			{
+				timer += Time.deltaTime;
+				c.a = Mathf.Clamp01(timer / fadeDuration);
+				localFadeImage.color = c;
+				yield return null;
+			}
+		}
+	}
+
+	private IEnumerator LocalFadeIn()
+	{
+		if (localFadeImage != null)
+		{
+			float timer = 0f;
+			Color c = localFadeImage.color;
+			while (timer < fadeDuration)
+			{
+				timer += Time.deltaTime;
+				c.a = 1f - Mathf.Clamp01(timer / fadeDuration);
+				localFadeImage.color = c;
+				yield return null;
+			}
+			localFadeImage.raycastTarget = false;
+			localFadeImage.gameObject.SetActive(false);
+		}
 	}
 
 	private void SaveProgress()
@@ -551,26 +682,26 @@ public class PlayerBoardController : MonoBehaviour
 	private IEnumerator WinSequenceRoutine()
 	{
 		if (AudioManager.instance != null) AudioManager.instance.PlayWinSound();
-		// 1. CHUẨN BỊ MÀN HÌNH
 		if (blackOverlay != null) blackOverlay.SetActive(true);
 
 		winUIPanel.SetActive(true);
 		winPanelRect.localScale = Vector3.zero;
+		winPanelRect.anchoredPosition = Vector2.zero; // Ép về giữa
 
-		// Đảm bảo Popup Next Level đang bị ẩn/thu nhỏ từ đầu
 		if (nextLevelPopupRect != null)
 		{
 			nextLevelPopupRect.gameObject.SetActive(true);
 			nextLevelPopupRect.localScale = Vector3.zero;
+			nextLevelPopupRect.anchoredPosition = Vector2.zero; // Ép về giữa
+
 		}
 
-		Vector3 topCenter = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 10f));
-		if (confettiRainPrefab != null)
-		{
-			Instantiate(confettiRainPrefab, topCenter, confettiRainPrefab.transform.rotation);
-		}
+		// =======================================================
+		// BỔ SUNG: Tạo một tỷ lệ mục tiêu nhỏ hơn (Ví dụ 0.65 = 65% kích thước gốc)
+		// Bạn có thể tự tăng giảm 0.65f thành 0.7f hoặc 0.5f cho vừa mắt
+		// =======================================================
+		Vector3 targetScale = new Vector3(0.65f, 0.65f, 1f);
 
-		// 2. PHÓNG TO WIN_PANEL ("LEVEL COMPLETE")
 		float duration = 0.5f;
 		float elapsed = 0f;
 
@@ -579,15 +710,19 @@ public class PlayerBoardController : MonoBehaviour
 			elapsed += Time.deltaTime;
 			float t = elapsed / duration;
 			float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
-			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
+
+			// THAY Vector3.one BẰNG targetScale
+			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.zero, targetScale, easeT);
 			yield return null;
 		}
-		winPanelRect.localScale = Vector3.one;
 
-		// 3. Thời gian hiển thị panel
+		// CHỐT HẠ BẰNG targetScale
+		winPanelRect.localScale = targetScale;
+		
+
 		yield return new WaitForSeconds(0.8f);
 
-		// 4. THU NHỎ WIN_PANEL XUỐNG BẰNG 0
+		// THU NHỎ LẠI TỪ targetScale VỀ 0
 		elapsed = 0f;
 		float outDuration = 0.3f;
 		while (elapsed < outDuration)
@@ -595,30 +730,48 @@ public class PlayerBoardController : MonoBehaviour
 			elapsed += Time.deltaTime;
 			float t = elapsed / outDuration;
 			float easeT = t * t * (2.70158f * t - 1.70158f);
-			winPanelRect.localScale = Vector3.LerpUnclamped(Vector3.one, Vector3.zero, easeT);
+
+			// THAY Vector3.one BẰNG targetScale
+			winPanelRect.localScale = Vector3.LerpUnclamped(targetScale, Vector3.zero, easeT);
 			yield return null;
 		}
-		// Thu nhỏ xong thì tắt hẳn cái bảng Level Complete đi cho nhẹ máy
 		winPanelRect.gameObject.SetActive(false);
 
-		// 6. PHÓNG TO POPUP CÚP VÀNG & NÚT BẤM (NEXT LEVEL POPUP)
+		// PHÓNG TO POPUP NEXT LEVEL CŨNG DÙNG targetScale
 		if (nextLevelPopupRect != null)
 		{
 			elapsed = 0f;
 			leftConfetti.Play();
 			rightConfetti.Play();
-			while (elapsed < duration) // Vẫn dùng thời gian duration = 0.5f
+			while (elapsed < duration)
 			{
 				elapsed += Time.deltaTime;
 				float t = elapsed / duration;
-				// Công thức nảy Juicy y hệt lúc nãy
 				float easeT = 1f + 2.70158f * Mathf.Pow(t - 1f, 3f) + 1.70158f * Mathf.Pow(t - 1f, 2f);
-				nextLevelPopupRect.localScale = Vector3.LerpUnclamped(Vector3.zero, Vector3.one, easeT);
+
+				// THAY Vector3.one BẰNG targetScale
+				nextLevelPopupRect.localScale = Vector3.LerpUnclamped(Vector3.zero, targetScale, easeT);
 				yield return null;
 			}
-			nextLevelPopupRect.localScale = Vector3.one; // Chốt hạ
+
+			// CHỐT HẠ BẰNG targetScale
+			nextLevelPopupRect.localScale = targetScale;
 		}
-		// Truyền số Level hiện tại vào. Unity sẽ tự so sánh, nếu cao hơn điểm cũ nó mới lưu.
 		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+	}
+
+	// HÀM NÀY GẮN VÀO NÚT RELOAD TRÊN POPUP
+	public void OnClickReloadLevel()
+	{
+		// 1. Tắt các Popup che màn hình đi
+		if (outOfMovesPopup != null) outOfMovesPopup.SetActive(false);
+		if (dark_Panel != null) dark_Panel.SetActive(false);
+
+		// (Nếu bạn có làm hàm ClosePopupCoroutine thì gọi nó thay cho SetActive cũng được)
+
+		// 2. Gọi lại hàm InitBoard với chính Level Index hiện tại
+		InitBoard(currentLevelIndex);
+		// 3. Mở khóa cảm ứng để chơi lại
+		isLocked = false;
 	}
 }
