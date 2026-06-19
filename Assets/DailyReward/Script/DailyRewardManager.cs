@@ -1,14 +1,18 @@
 using System;
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework.Interfaces;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 public class DailyRewardManager : MonoBehaviour
 {
 	public static DailyRewardManager Instance { get; private set; }
 
 	[Header("Dữ liệu phần thưởng")]
 	public DailyRewardData rewardData;
+	public GameObject rewardItemPrefab;
 
 	[Header("UI Elements")]
 	public GameObject dailyRewardPanel;
@@ -28,6 +32,8 @@ public class DailyRewardManager : MonoBehaviour
 
 	public int totalClaimedDays = 0;
 	private const string TOTAL_TIME_KEY = "DailyReward_TotalDays";
+
+	public ChestOpeningController chestAnimationController;
 
 	void Awake()
 	{
@@ -78,8 +84,8 @@ public class DailyRewardManager : MonoBehaviour
 	// Lôi dữ liệu từ RAM điện thoại lên khi vừa mở game
 	private void LoadData()
 	{
-		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
-		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 0);
+		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 6);
+		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 6);
 
 		string timeStr = PlayerPrefs.GetString(TIME_KEY, string.Empty);
 		if (string.IsNullOrEmpty(timeStr))
@@ -200,46 +206,64 @@ public class DailyRewardManager : MonoBehaviour
 
 	public void ClaimMilestoneChest(int chestIndex)
 	{
+		// 1. Kiểm tra tính hợp lệ
 		if (chestIndex < 0 || chestIndex >= rewardData.milestoneChests.Length) return;
 
-		MilestoneChestConfig chest = rewardData.milestoneChests[chestIndex];
-		if (!IsChestClaimed(chestIndex))
+		// Chặn ngay nếu rương đã được nhận (Sử dụng IsChestClaimed)
+		// Giả sử isClaimed là biến để check cho rương hiện tại, nên check IsChestClaimed(chestIndex) thì đúng hơn
+		if (IsChestClaimed(chestIndex))
 		{
-			if (chest != null)
+			Debug.Log("Rương này đã được nhận rồi!");
+			return;
+		}
+
+		MilestoneChestConfig chest = rewardData.milestoneChests[chestIndex];
+		if (chest == null || chest.rewards == null) return;
+
+		// 👇 ĐÃ SỬA: Xóa bỏ bước GenerateRewardUIs (tức xóa Step 2 cũ)
+
+		// 👇 CHỖ NÀY CỰC QUAN TRỌNG: Sửa lại cách gọi hàm Animation
+		// Thay vì truyền generatedRewardUIs (mảng UI), bạn truyền thẳng MẢNG DATA (chest.rewards) sang!
+		chestAnimationController.PlayChestAnimation(
+			chest.chestClosedIcon,
+			chest.chestOpenedIcon,
+			chest.rewards // <-- Truyền Data thuần túy sang đây
+		);
+
+		// 4. Thực hiện cộng quà vào kho đồ (Dữ nguyên logic này của bạn)
+		foreach (var item in chest.rewards)
+		{
+			if (item != null)
 			{
-				foreach (var item in chest.rewards)
+				if (item.rewardType == "Coin")
 				{
-					if (item != null)
-					{
-						if (item.rewardType == "Coin")
-						{
-							CurrencyManager.Instance.AddCoin(item.amount);
-							Debug.Log($"Đã nhận được {item.amount} Coin từ rương cột mốc!");
-						}
-						else if (item.rewardType == "Undo")
-						{
-							CurrencyManager.Instance.AddUndo(item.amount);
-							Debug.Log($"Đã nhận được {item.amount} Undo từ rương cột mốc!");
-						}
-						else if (item.rewardType == "Hint")
-						{
-							CurrencyManager.Instance.AddHint(item.amount);
-							Debug.Log($"Đã nhận được {item.amount} Hint từ rương cột mốc!");
-						}
-						else if (item.rewardType == "AddBottle")
-						{	
-							CurrencyManager.Instance.AddBonusBottle(item.amount);
-							Debug.Log($"Đã nhận được {item.amount} Bonus Bottle từ rương cột mốc!");
-						}
-						else
-						{
-							CurrencyManager.Instance.AddDiamond(item.amount);
-							Debug.Log($"Đã nhận được {item.amount} Diamond từ rương cột mốc!");
-						}
-					}
+					CurrencyManager.Instance.AddCoin(item.amount);
+					Debug.Log($"Đã nhận được {item.amount} Coin từ rương cột mốc!");
+				}
+				else if (item.rewardType == "Undo")
+				{
+					CurrencyManager.Instance.AddUndo(item.amount);
+					Debug.Log($"Đã nhận được {item.amount} Undo từ rương cột mốc!");
+				}
+				else if (item.rewardType == "Hint")
+				{
+					CurrencyManager.Instance.AddHint(item.amount);
+					Debug.Log($"Đã nhận được {item.amount} Hint từ rương cột mốc!");
+				}
+				else if (item.rewardType == "AddBottle")
+				{
+					CurrencyManager.Instance.AddBonusBottle(item.amount);
+					Debug.Log($"Đã nhận được {item.amount} Bonus Bottle từ rương cột mốc!");
+				}
+				else
+				{
+					CurrencyManager.Instance.AddDiamond(item.amount);
+					Debug.Log($"Đã nhận được {item.amount} Diamond từ rương cột mốc!");
 				}
 			}
 		}
-		isClaimed = true;
+
+		// 5. Đánh dấu đã nhận rương
+		// isClaimed = true; // Cần lưu ý logic này phụ thuộc vào cách bạn lưu trạng thái
 	}
 }
