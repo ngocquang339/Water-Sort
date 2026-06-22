@@ -264,6 +264,6 @@ public class DailyRewardManager : MonoBehaviour
 		}
 
 		// 5. Đánh dấu đã nhận rương
-		// isClaimed = true; // Cần lưu ý logic này phụ thuộc vào cách bạn lưu trạng thái
+		isClaimed = true; // Cần lưu ý logic này phụ thuộc vào cách bạn lưu trạng thái
 	}
 }

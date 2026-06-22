@@ -5,5 +5,6 @@ public class RewardItem
 {
 	public string rewardType;
 	public int amount;
+    public Sprite icon;
     public Sprite image;
 }

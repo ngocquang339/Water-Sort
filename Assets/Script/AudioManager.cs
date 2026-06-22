@@ -14,6 +14,10 @@ public class AudioManager : MonoBehaviour
 	public AudioClip bottleDown;
 	public AudioClip gameOver;
 	public AudioClip doneBottle;
+	public AudioClip chestDrop;
+	public AudioClip chestOpen;
+	public AudioClip itemPop;
+	public AudioClip itemCollect;
 
 	[Header("Nguồn âm thanh")]
 	public AudioSource musicSource;
@@ -53,6 +57,37 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
+	public void PlayChestDrop()
+	{
+		if (sfxSource != null && chestDrop != null)
+		{
+			sfxSource.PlayOneShot(chestDrop);
+		}
+	}
+
+	public void PlayChestOpen()
+	{
+		if (sfxSource != null && chestOpen != null)
+		{
+			sfxSource.PlayOneShot(chestOpen);
+		}
+	}
+
+	public void PlayItemPop()
+	{
+		if (sfxSource != null && itemPop != null)
+		{
+			sfxSource.PlayOneShot(itemPop);
+		}
+	}
+
+	public void PlayItemCollect()
+	{
+		if (sfxSource != null && itemCollect != null)
+		{
+			sfxSource.PlayOneShot(itemCollect);
+		}
+	}
 	public void PlayBottleDown()
 	{
 		if (sfxSource != null && bottleDown != null)
