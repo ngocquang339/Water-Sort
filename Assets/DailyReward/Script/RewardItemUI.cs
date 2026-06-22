@@ -4,13 +4,15 @@ using TMPro;
 
 public class RewardItemUI : MonoBehaviour
 {
-	public Image iconImage;
+	public Image rewardImage;
+	public Sprite iconImage;
 	public TextMeshProUGUI amountText;
 
 	// Hàm nhận data để đắp vào UI
-	public void SetupReward(Sprite icon, int amount)
+	public void SetupReward(Sprite image, Sprite icon, int amount)
 	{
-		if (iconImage != null) iconImage.sprite = icon;
+		if (rewardImage != null) rewardImage.sprite = image;
+		if (iconImage != null) iconImage = icon;
 		if (amountText != null) amountText.text = "x" + amount;
 	}
 }
