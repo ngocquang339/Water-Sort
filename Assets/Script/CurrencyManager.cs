@@ -33,9 +33,9 @@ public class CurrencyManager : MonoBehaviour
 
 	private void LoadCurrency()
 	{
-		currentCoin = PlayerPrefs.GetFloat("Player_Coin", 0);
+		currentCoin = PlayerPrefs.GetFloat("Player_Coin", 1000);
 		Debug.Log("Current Coin Loaded: " + currentCoin);
-		currentDiamond = PlayerPrefs.GetFloat("Player_Diamond", 0);
+		currentDiamond = PlayerPrefs.GetFloat("Player_Diamond", 10000);
 	}
 
 	public void AddCoin(float amount)
@@ -80,24 +80,72 @@ public class CurrencyManager : MonoBehaviour
 		OnDiamondChanged?.Invoke(currentDiamond);
 	}
 
-	// Hàm kiểm tra xem có đủ tiền không
-	public bool CanAfford(int cost)
+	public void AddCurrency(float amount, RewardItemType rewardItem)
 	{
-		Debug.Log("Current Coin: " + currentCoin);
-		Debug.Log("Cost: " + cost);
-		return currentCoin >= cost;
+		switch (rewardItem)
+		{
+			case RewardItemType.Coin:
+				AddCoin(amount);
+				break;
+			case RewardItemType.Diamond:
+				AddDiamond(amount);
+				break;
+			case RewardItemType.Undo:
+				AddUndo(amount);
+				break;
+			case RewardItemType.Hint:
+				AddHint(amount);
+				break;
+			case RewardItemType.AddBottle:
+				AddBonusBottle(amount);
+				break;
+		}
+	}
+
+	// Hàm kiểm tra xem có đủ tiền không
+	public bool CanAfford(float cost, CurrencyType currencyType)
+	{
+		switch (currencyType)
+		{
+			case CurrencyType.Coin:
+				Debug.Log("Current Coin: " + currentCoin);
+				Debug.Log("Cost: " + cost);
+				return currentCoin >= cost;
+			case CurrencyType.Diamond:
+				Debug.Log("Current Diamond: " + currentDiamond);
+				Debug.Log("Cost: " + cost);
+				return currentDiamond >= cost;
+			default:
+				return false;
+		}
 	}
 
 	// Hàm trừ vàng (Chỉ gọi khi CanAfford = true)
-	public void SpendCoins(float amount)
+	public void SpendCurrency(float amount, CurrencyType currencyType)
 	{
-		currentCoin -= amount;
-		PlayerPrefs.SetFloat(COIN_KEY, currentCoin);
+		switch (currencyType)
+		{
+			case CurrencyType.Coin:
+				currentCoin -= amount;
+				PlayerPrefs.SetFloat(COIN_KEY, currentCoin);
+				PlayerPrefs.Save();
+				OnCoinChanged?.Invoke(currentCoin);
+				break;
+			case CurrencyType.Diamond:
+				currentDiamond -= amount;
+				PlayerPrefs.SetFloat(DIAMOND_KEY, currentDiamond);
+				PlayerPrefs.Save();
+				OnDiamondChanged?.Invoke(currentDiamond);
+				break;
+		}
+	}	
+
+	public void SpendDiamond(float amount)
+	{
+		currentDiamond -= amount;
+		PlayerPrefs.SetFloat(DIAMOND_KEY, currentDiamond);
 		PlayerPrefs.Save();
-
-		OnCoinChanged?.Invoke(currentCoin);
-
-		Debug.Log("Đã trừ vàng. Còn lại: " + currentCoin);
+		OnDiamondChanged?.Invoke(currentDiamond);
 	}
 
 	// Hàm để các hệ thống khác xem số dư

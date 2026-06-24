@@ -77,10 +77,10 @@ public class PopupManager : MonoBehaviour
 		int currentPrice = GetPriceForType(currentHelpType);
 
 		// 1. Kiểm tra ví tiền với giá tiền động
-		if (CurrencyManager.Instance != null && CurrencyManager.Instance.CanAfford(currentPrice))
+		if (CurrencyManager.Instance != null && CurrencyManager.Instance.CanAfford(currentPrice, CurrencyType.Coin))
 		{
 			// ĐỦ TIỀN -> Trừ tiền
-			CurrencyManager.Instance.SpendCoins(currentPrice);
+			CurrencyManager.Instance.SpendCurrency(currentPrice, CurrencyType.Coin);
 
 			// Gọi sang GameManager để cộng đúng loại vật phẩm đã mua
 			if (GameManager.instance != null)

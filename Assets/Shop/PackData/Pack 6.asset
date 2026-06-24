@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474ffca1c470bce42bb2e84774e2a973, type: 3}
+  m_Name: Pack 6
+  m_EditorClassIdentifier: 
+  category: 0
+  price: 100
+  priceIcon: {fileID: 9159214688172730083, guid: 442627a230a192241aa3280b13200b68, type: 3}
+  currencyType: 0
+  mainReward:
+    itemType: 2
+    amount: 50
+    itemIcon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
