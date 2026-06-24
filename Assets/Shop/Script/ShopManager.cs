@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
-	public ShopPackData[] allShopPacks; // Kéo thả 5 cái file ScriptableObject bạn tạo ở Bước 1 vào đây
+	public ShopPackData[] allShopPacks;
 
-	public GameObject shopPackPrefab;   // Kéo ShopPack_Prefab tổng vào đây
-	public Transform shopContent;  // Kéo cái khay Vertical Layout vào đây
+	[Header("Prefabs")]
+	public GameObject shopPackPrefab;
+
+	[Header("Grids Của Các Danh Mục")]
+	public Transform resourceGrid;      // Kéo object "Resource_Grid" vào đây
+	public Transform coinGrid;          // Kéo object "Coin_Grid" vào đây
+
 	[Header("UI Reference")]
-	// Chỉ cần kéo script PanelSlider của ShopPanel vào đây
 	public PanelSlider shopPanelSlider;
 
 	void Start()
@@ -19,12 +23,27 @@ public class ShopManager : MonoBehaviour
 	{
 		foreach (ShopPackData packData in allShopPacks)
 		{
-			// Sinh ra 1 thẻ Pack
-			GameObject packGO = Instantiate(shopPackPrefab, shopContent);
-			// THÊM DÒNG NÀY VÀO: Ép thẻ Pack về đúng tỷ lệ 1:1, không bị dãn chữ
+			// 1. Phân luồng: Xác định xem ném vào Grid nào
+			Transform targetGrid = null;
+
+			switch (packData.category)
+			{
+				case ShopCategory.ResourcePack:
+					targetGrid = resourceGrid;
+					break;
+				case ShopCategory.CoinPack:
+					targetGrid = coinGrid;
+					break;
+			}
+
+			// Nếu không tìm thấy khay phù hợp thì bỏ qua
+			if (targetGrid == null) continue;
+
+			// 2. Sinh ra thẻ Pack chui đúng vào nhà của nó
+			GameObject packGO = Instantiate(shopPackPrefab, targetGrid);
 			packGO.transform.localScale = Vector3.one;
 
-			// Tìm script ShopPackUI trên thẻ đó và truyền Data vào
+			// 3. Truyền data
 			ShopPackUI uiScript = packGO.GetComponent<ShopPackUI>();
 			if (uiScript != null)
 			{
@@ -35,15 +54,11 @@ public class ShopManager : MonoBehaviour
 
 	public void ClickOpenShop()
 	{
-		// Gọi động cơ trượt mở ra
 		shopPanelSlider.OpenPanel();
-		
 	}
 
 	public void ClickCloseShop()
 	{
-		// Gọi động cơ trượt cất đi
 		shopPanelSlider.ClosePanel();
-		
 	}
 }

@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
 					selectedBottle = null;
 				}
 				// 2. CHƯA CHỌN CHAI NÀO -> NHẤC LÊN
-				else if (selectedBottle == null)
+				else if (selectedBottle == null && !clickBottle.isCompleted())
 				{
 					if (AudioManager.instance != null) AudioManager.instance.PlayBottleLift();
 					if (clickBottle.getTopColor() == null) return;
@@ -142,14 +142,16 @@ public class GameManager : MonoBehaviour
 				}
 				// 3. ĐÃ CHỌN CHAI A, BẤM VÀO CHAI B -> ĐỔ NƯỚC
 				else
-				{
-					Vector3 sourceGroundPos = selectedBottle.transform.position - new Vector3(0f, liftOffset, 0f);
+				{	
+					if(selectedBottle != null){
+						Vector3 sourceGroundPos = selectedBottle.transform.position - new Vector3(0f, liftOffset, 0f);
 
-					// Chạy Coroutine rót nước đã được gộp chung tia nước
-					StartCoroutine(PourWaterRoutine(selectedBottle, clickBottle, sourceGroundPos));
+						// Chạy Coroutine rót nước đã được gộp chung tia nước
+						StartCoroutine(PourWaterRoutine(selectedBottle, clickBottle, sourceGroundPos));
 
-					// Giải phóng để chọn cặp khác
-					selectedBottle = null;
+						// Giải phóng để chọn cặp khác
+						selectedBottle = null;
+					}
 				}
 			}
 		}

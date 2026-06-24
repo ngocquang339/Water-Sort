@@ -5,19 +5,10 @@ using TMPro;
 public class ShopPackUI : MonoBehaviour
 {
 	[Header("UI Elements")]
-	public TextMeshProUGUI packNameText;
-	public Image backgroundImage;
-	public TextMeshProUGUI priceText;
-	public GameObject ribbon;
-	public Image boxItem;
-
-	[Header("Main Reward UI (Cục to bên trái)")]
-	public Image mainRewardIcon;           // Sẽ kéo MainReward_Image vào đây
-	public TextMeshProUGUI mainRewardAmount; // Sẽ kéo Amount_Text của nó vào đây
-
-	[Header("Reward Spawning (Khay vật phẩm phụ)")]
-	public Transform rewardContainer;
-	public GameObject rewardItemPrefab;
+	public TextMeshProUGUI amountText;    // Chữ số lượng ở trên cùng (VD: 20)
+	public Image centerIcon;              // Cái ảnh ở giữa (VD: Nút Undo)
+	public TextMeshProUGUI priceText;     // Chữ giá tiền ở dưới nút (VD: 100)
+	public Image priceIcon;
 
 	private ShopPackData myPackData;
 
@@ -25,56 +16,40 @@ public class ShopPackUI : MonoBehaviour
 	{
 		myPackData = data;
 
-		// 1. Đổi hình nền
-		if (backgroundImage != null && data.packBackground != null)
+		// 1. Cập nhật Số lượng (Lấy từ mainReward)
+		if (amountText != null)
 		{
-			backgroundImage.sprite = data.packBackground;
+			amountText.text = data.mainReward.amount.ToString();
 		}
 
-		if(ribbon != null && !data.isPopular){
-			ribbon.SetActive(false);
-		}
-
-		if (boxItem != null && !data.isPopular) {
-			boxItem.color = new Color32(255, 238, 169, 255);
-		}
-		else{
-			boxItem.color = new Color32(204, 69, 255, 255);
-		}
-
-		// 2. Cập nhật Text cơ bản
-		packNameText.text = data.packName;
-		priceText.text = data.priceString;
-
-		// 3. SET UP PHẦN THƯỞNG CHÍNH (Bên trái)
-		if (mainRewardIcon != null && data.mainReward.itemIcon != null)
+		// 2. Cập nhật Ảnh Item
+		if (centerIcon != null && data.mainReward.itemIcon != null)
 		{
-			mainRewardIcon.sprite = data.mainReward.itemIcon;
-		}
-		if (mainRewardAmount != null)
-		{
-			mainRewardAmount.text = data.mainReward.amount.ToString();
+			centerIcon.sprite = data.mainReward.itemIcon;
+			
 		}
 
-		// 4. SINH RA PHẦN THƯỞNG PHỤ (Bên phải)
-		foreach (PackReward reward in data.rewards)
+		// 3. Cập nhật Giá tiền
+		if (priceText != null)
 		{
-			GameObject itemGO = Instantiate(rewardItemPrefab, rewardContainer);
-			itemGO.transform.localScale = Vector3.one;
+			priceText.text = data.price.ToString();
+		}
 
-			// 1. Cái khuôn (itemGO) bây giờ chính là Icon, nên ta lấy thẳng Image từ nó
-			Image iconImg = itemGO.GetComponent<Image>();
-
-			// 2. Tìm object con chứa chữ có dấu gạch dưới như thiết kế của bạn
-			TextMeshProUGUI amountTxt = itemGO.transform.Find("Amount_Text").GetComponent<TextMeshProUGUI>();
-
-			iconImg.sprite = reward.itemIcon;
-			amountTxt.text = reward.amount.ToString(); // Thêm "x" vào trước nếu muốn: "x" + reward.amount
+		if (priceIcon != null) {
+			priceIcon.sprite = data.priceIcon;
 		}
 	}
 
 	public void OnBuyButtonClicked()
 	{
-		Debug.Log("Người chơi bấm mua gói: " + myPackData.packName);
+		if(CurrencyManager.Instance.CanAfford(myPackData.price, myPackData.currencyType))
+		{
+			CurrencyManager.Instance.SpendCurrency(myPackData.price, myPackData.currencyType);
+			CurrencyManager.Instance.AddCurrency(myPackData.mainReward.amount, myPackData.mainReward.itemType);
+		}
+		else
+		{
+			Debug.Log("Không đủ tiền để mua gói này!");
+		}
 	}
 }
