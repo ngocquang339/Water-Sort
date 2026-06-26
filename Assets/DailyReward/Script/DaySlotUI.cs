@@ -64,7 +64,7 @@ public class DaySlotUI : MonoBehaviour
 				break;
 			case DaySlotState.Claimed:
 				checkmarkIcon.SetActive(true);
-				headerBanner.color = new Color32(154, 78, 200, 255);
+				//headerBanner.color = new Color32(154, 78, 200, 255);
 				slotButton.interactable = false;
 				break;
 		}

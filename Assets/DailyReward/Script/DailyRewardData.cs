@@ -26,6 +26,13 @@ public class MilestoneChestConfig
 	[Header("Hình ảnh rương (Tùy chọn để tráo ảnh)")]
 	public Sprite chestClosedIcon;
 	public Sprite chestOpenedIcon;
+
+	private bool isClaimed = false;
+	public bool IsClaimed
+	{
+		get { return isClaimed; }
+		set { isClaimed = value; }
+	}
 }
 
 [CreateAssetMenu(fileName = "DailyRewardData", menuName = "Scriptable Objects/DailyRewardData")]

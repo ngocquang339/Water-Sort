@@ -44,10 +44,10 @@ MonoBehaviour:
       icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
       image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
   - items:
-    - rewardType: Diamond
+    - rewardType: Undo
       amount: 10
-      icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
-      image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+      icon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
+      image: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
     - rewardType: Coin
       amount: 50
       icon: {fileID: 0}
@@ -63,49 +63,69 @@ MonoBehaviour:
     - rewardType: Coin
       amount: 20
       icon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
-      image: {fileID: -2652133911391862278, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+      image: {fileID: 5848064539680731454, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
     - rewardType: Diamond
-      amount: 20
+      amount: 10
       icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
-      image: {fileID: 876656032707445072, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+      image: {fileID: 6303254944451092210, guid: 89d262194f975de40b87a75571216eb5, type: 3}
     - rewardType: Undo
       amount: 5
       icon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
       image: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
     chestClosedIcon: {fileID: 6271800901740906358, guid: b4f8b725c8ef8ec45afe0f7117f7b83d, type: 3}
     chestOpenedIcon: {fileID: 1034192116211153702, guid: 087f3b06937fb8741a542146029e09e0, type: 3}
+    isClaimed: 1
   - visualAnchor: 0.4433848
     requiredDays: 15
     rewards:
     - rewardType: Coin
       amount: 50
-      icon: {fileID: 0}
+      icon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
       image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
+    - rewardType: Diamond
+      amount: 20
+      icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
+      image: {fileID: 876656032707445072, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    - rewardType: Hint
+      amount: 10
+      icon: {fileID: -2472076170658201133, guid: 113d07d48a572f94aa60fef17f3224fd, type: 3}
+      image: {fileID: -2472076170658201133, guid: 113d07d48a572f94aa60fef17f3224fd, type: 3}
     chestClosedIcon: {fileID: -858055838422489017, guid: 3f6f8348366b32449a62831682346849, type: 3}
     chestOpenedIcon: {fileID: -5677315570016275922, guid: 0caf0127c83f72a4595b7d190e8473d6, type: 3}
+    isClaimed: 0
   - visualAnchor: 0.7120386
     requiredDays: 21
     rewards:
     - rewardType: Coin
-      amount: 50
-      icon: {fileID: 0}
+      amount: 100
+      icon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
       image: {fileID: 5522397121026081838, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
     - rewardType: Diamond
-      amount: 10
-      icon: {fileID: 0}
-      image: {fileID: 876656032707445072, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+      amount: 50
+      icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
+      image: {fileID: 6269729389252753059, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    - rewardType: Undo
+      amount: 20
+      icon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
+      image: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
     chestClosedIcon: {fileID: 1541303099146559613, guid: 7a2a29c56f5115f4c87a1d5891c36edb, type: 3}
     chestOpenedIcon: {fileID: 0}
+    isClaimed: 0
   - visualAnchor: 1
     requiredDays: 30
     rewards:
     - rewardType: Coin
-      amount: 100
-      icon: {fileID: 0}
+      amount: 200
+      icon: {fileID: 6626051464634953487, guid: f2cf7693ad6831d42ba0a110fc3af5e6, type: 3}
       image: {fileID: 4786861022352539597, guid: da9e2838fe8ff5846a46294662c975e1, type: 3}
     - rewardType: Diamond
+      amount: 100
+      icon: {fileID: 3244622203517571467, guid: f3d61aadee78e99498fb01eed484c329, type: 3}
+      image: {fileID: 9008342108924249181, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+    - rewardType: AddBottle
       amount: 20
-      icon: {fileID: 0}
-      image: {fileID: 6269729389252753059, guid: 89d262194f975de40b87a75571216eb5, type: 3}
+      icon: {fileID: -4584739765052203562, guid: 2e1c71fca7e496843b07a30c7cfa3e64, type: 3}
+      image: {fileID: -4584739765052203562, guid: 2e1c71fca7e496843b07a30c7cfa3e64, type: 3}
     chestClosedIcon: {fileID: 5276425516723954312, guid: e241ecba59884e44c820256ae6d24861, type: 3}
     chestOpenedIcon: {fileID: 0}
+    isClaimed: 0

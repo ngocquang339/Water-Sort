@@ -19,12 +19,12 @@ public class DailyRewardManager : MonoBehaviour
 	public GameObject blockInputPanel;
 	public GameObject darkBackground;
 	public Button chestButton;
-	private bool isClaimed = false;
+	public bool isClaimed = false;
 
 	private static bool showDailyPopup = false;
 
 	// Các biến trạng thái nội bộ
-	private int currentStreak = 6;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
+	private int currentStreak = 0;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
 	private DateTime lastClaimTime;     // Lần cuối cùng bấm nhận quà là lúc nào?
 
 	private const string STREAK_KEY = "DailyReward_Streak";
@@ -51,6 +51,7 @@ public class DailyRewardManager : MonoBehaviour
 		{
 			StartCoroutine(ShowDailyRewardDelay());
 		}
+		
 	}
 
 	IEnumerator ShowDailyRewardDelay()
@@ -201,7 +202,7 @@ public class DailyRewardManager : MonoBehaviour
 	public bool IsChestClaimed(int chestIndex)
 	{
 		if (chestIndex < 0 || chestIndex >= rewardData.milestoneChests.Length) return false;
-		return isClaimed;
+		return rewardData.milestoneChests[chestIndex].IsClaimed;
 	}
 
 	public void ClaimMilestoneChest(int chestIndex)
@@ -209,8 +210,6 @@ public class DailyRewardManager : MonoBehaviour
 		// 1. Kiểm tra tính hợp lệ
 		if (chestIndex < 0 || chestIndex >= rewardData.milestoneChests.Length) return;
 
-		// Chặn ngay nếu rương đã được nhận (Sử dụng IsChestClaimed)
-		// Giả sử isClaimed là biến để check cho rương hiện tại, nên check IsChestClaimed(chestIndex) thì đúng hơn
 		if (IsChestClaimed(chestIndex))
 		{
 			Debug.Log("Rương này đã được nhận rồi!");
@@ -264,6 +263,6 @@ public class DailyRewardManager : MonoBehaviour
 		}
 
 		// 5. Đánh dấu đã nhận rương
-		isClaimed = true; // Cần lưu ý logic này phụ thuộc vào cách bạn lưu trạng thái
+		rewardData.milestoneChests[chestIndex].IsClaimed = true;
 	}
 }

@@ -18,5 +18,5 @@ MonoBehaviour:
   currencyType: 0
   mainReward:
     itemType: 2
-    amount: 15
+    amount: 7
     itemIcon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
