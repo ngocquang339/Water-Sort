@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Pack 5
   m_EditorClassIdentifier: 
   category: 0
-  price: 100
+  price: 200
   priceIcon: {fileID: 9159214688172730083, guid: 442627a230a192241aa3280b13200b68, type: 3}
   currencyType: 0
   mainReward:
-    itemType: 2
+    itemType: 3
     amount: 15
-    itemIcon: {fileID: 3671895746799383739, guid: 3a929a01ed9fc1347aa1c2f60aacf82b, type: 3}
+    itemIcon: {fileID: -2472076170658201133, guid: 113d07d48a572f94aa60fef17f3224fd, type: 3}

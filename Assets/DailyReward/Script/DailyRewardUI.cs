@@ -63,7 +63,7 @@ public class DailyRewardUI : MonoBehaviour
 			// Nếu lỡ mảng UI dài hơn mảng Data thì dừng lại để tránh lỗi bục game
 			if (i >= data.days.Length) break;
 
-			// Hỏi ông Não xem ô số [i] này đang ở trạng thái gì
+			// Hỏi manager xem ô số [i] này đang ở trạng thái gì
 			DaySlotState slotState = manager.GetStateForDay(i);
 
 			// Ra lệnh cho thằng thợ sơn (DaySlotUI) bắt đầu vẽ
@@ -157,7 +157,6 @@ public class DailyRewardUI : MonoBehaviour
 	{
 		Debug.Log("Người chơi bấm vào rương mốc số: " + chestIndex);
 
-		ImplementAnimation();
 		DailyRewardManager.Instance.ClaimMilestoneChest(chestIndex);
 		// 3. Nhận xong load lại UI để rương đổi sang ảnh Mở Nắp và tắt Chấm Đỏ/Glow
 		RefreshUI();

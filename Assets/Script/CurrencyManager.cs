@@ -33,9 +33,16 @@ public class CurrencyManager : MonoBehaviour
 
 	private void LoadCurrency()
 	{
-		currentCoin = PlayerPrefs.GetFloat("Player_Coin", 1000);
+		currentCoin = PlayerPrefs.GetFloat(COIN_KEY, 1000);
 		Debug.Log("Current Coin Loaded: " + currentCoin);
-		currentDiamond = PlayerPrefs.GetFloat("Player_Diamond", 10000);
+		currentDiamond = PlayerPrefs.GetFloat(DIAMOND_KEY, 10000);
+		Debug.Log("Current Diamond Loaded: " + currentDiamond);
+		currentUndo = PlayerPrefs.GetFloat(UNDO_KEY, 2);
+		Debug.Log("Current Undo Loaded: " + currentUndo);
+		currentHint = PlayerPrefs.GetFloat(HINT_KEY, 2);
+		Debug.Log("Current Hint Loaded: " + currentHint);
+		currentAddBottle = PlayerPrefs.GetFloat(ADDBOTTLE_KEY, 2);
+		Debug.Log("Current Add Bottle Loaded: " + currentAddBottle);
 	}
 
 	public void AddCoin(float amount)
@@ -50,6 +57,7 @@ public class CurrencyManager : MonoBehaviour
 	}
 
 	public void AddUndo(float amount){
+		Debug.Log("Adding Undo: " + amount);
 		currentUndo += amount;
 		PlayerPrefs.SetFloat(UNDO_KEY, currentUndo);
 		PlayerPrefs.Save();
@@ -57,6 +65,7 @@ public class CurrencyManager : MonoBehaviour
 	}
 
 	public void AddHint(float amount){
+		Debug.Log("Adding Hint: " + amount);
 		currentHint += amount;
 		PlayerPrefs.SetFloat(HINT_KEY, currentHint);
 		PlayerPrefs.Save();
@@ -65,6 +74,7 @@ public class CurrencyManager : MonoBehaviour
 
 	public void AddBonusBottle(float amount)
 	{
+		Debug.Log("Adding Bonus Bottle: " + amount);
 		currentAddBottle += amount;
 		PlayerPrefs.SetFloat(ADDBOTTLE_KEY, currentAddBottle);
 		PlayerPrefs.Save();
@@ -74,7 +84,7 @@ public class CurrencyManager : MonoBehaviour
 	public void AddDiamond(float amount)
 	{
 		currentDiamond += amount;
-		PlayerPrefs.SetFloat("Player_Diamond", currentDiamond);
+		PlayerPrefs.SetFloat(DIAMOND_KEY, currentDiamond);
 		PlayerPrefs.Save();
 
 		OnDiamondChanged?.Invoke(currentDiamond);
@@ -139,14 +149,6 @@ public class CurrencyManager : MonoBehaviour
 				break;
 		}
 	}	
-
-	public void SpendDiamond(float amount)
-	{
-		currentDiamond -= amount;
-		PlayerPrefs.SetFloat(DIAMOND_KEY, currentDiamond);
-		PlayerPrefs.Save();
-		OnDiamondChanged?.Invoke(currentDiamond);
-	}
 
 	// Hàm để các hệ thống khác xem số dư
 	public float GetCoin() => currentCoin;

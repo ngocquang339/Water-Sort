@@ -9,7 +9,6 @@ public class MilestoneChestUI : MonoBehaviour
 	public GameObject glowEffect; 
 	public GameObject sun_Burst;
 	public Button chestButton;     
-	public bool isClicked = false;
 
 	private int chestIndex;
 	private System.Action<int> onClaimAction;
@@ -58,7 +57,7 @@ public class MilestoneChestUI : MonoBehaviour
 			redDot.SetActive(false);
 			glowEffect.SetActive(false);
 			sun_Burst.SetActive(false);
-			if (chestButton != null) chestButton.interactable = false; // Chưa đủ ngày thì không cho bấm bậy
+			if (chestButton != null) chestButton.interactable = false; // Chưa đủ ngày thì không cho bấm
 		}
 	}
 }

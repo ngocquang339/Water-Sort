@@ -83,9 +83,9 @@ public class GameManager : MonoBehaviour
 	public GameObject shopPopup;
 	public GameObject backButton;
 	// Các biến để quản lý số lượng trong Code
-	private int remainingUndo;
-	private int remainingHint;
-	private int remainingAddBottle;
+	private float remainingUndo;
+	private float remainingHint;
+	private float remainingAddBottle;
 
 	// Đặt tên các Key lưu trữ thành hằng số để tránh gõ sai chính tả
 	private const string KEY_UNDO = "Help_Undo";
@@ -455,7 +455,7 @@ public class GameManager : MonoBehaviour
 
 			// LƯU Ý 2: Sau khi đã lùi bước thành công -> Thực hiện trừ lượt và đổi số UI luôn!
 			remainingUndo--;
-			PlayerPrefs.SetInt(KEY_UNDO, remainingUndo);
+			PlayerPrefs.SetFloat(KEY_UNDO, remainingUndo);
 			PlayerPrefs.Save();
 			UpdateHelpUI(); // <--- ĐỂ Ô SỐ UI CẬP NHẬT NGAY LẬP TỨC
 		}
@@ -626,9 +626,9 @@ public class GameManager : MonoBehaviour
 	private void LoadHelpQuantities()
 	{
 		// Bí quyết ở đây: Số 2 ở cuối chính là giá trị mặc định nếu Key chưa tồn tại!
-		remainingUndo = PlayerPrefs.GetInt(KEY_UNDO, 2);
-		remainingHint = PlayerPrefs.GetInt(KEY_HINT, 2);
-		remainingAddBottle = PlayerPrefs.GetInt(KEY_ADD_BOTTLE, 2);
+		remainingUndo = PlayerPrefs.GetFloat(KEY_UNDO, 2);
+		remainingHint = PlayerPrefs.GetFloat(KEY_HINT, 2);
+		remainingAddBottle = PlayerPrefs.GetFloat(KEY_ADD_BOTTLE, 2);
 
 		UpdateHelpUI();
 	}
@@ -692,7 +692,7 @@ public class GameManager : MonoBehaviour
 
 				// TRỪ LƯỢT VÀ UPDATE UI (Chỉ trừ lượt khi đã tìm ra và rót thành công)
 				remainingHint--;
-				PlayerPrefs.SetInt(KEY_HINT, remainingHint);
+				PlayerPrefs.SetFloat(KEY_HINT, remainingHint);
 				PlayerPrefs.Save();
 				UpdateHelpUI();
 			}
@@ -764,7 +764,7 @@ public class GameManager : MonoBehaviour
 
 		// 4. TRỪ LƯỢT VÀ UPDATE UI
 		remainingAddBottle--;
-		PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+		PlayerPrefs.SetFloat(KEY_ADD_BOTTLE, remainingAddBottle);
 		PlayerPrefs.Save();
 		UpdateHelpUI();
 	}
@@ -823,17 +823,17 @@ public class GameManager : MonoBehaviour
 		{
 			case HelpType.Undo:
 				remainingUndo += amount;
-				PlayerPrefs.SetInt(KEY_UNDO, remainingUndo);
+				PlayerPrefs.SetFloat(KEY_UNDO, remainingUndo);
 				break;
 
 			case HelpType.Hint:
 				remainingHint += amount;
-				PlayerPrefs.SetInt(KEY_HINT, remainingHint);
+				PlayerPrefs.SetFloat(KEY_HINT, remainingHint);
 				break;
 
 			case HelpType.AddBottle:
 				remainingAddBottle += amount;
-				PlayerPrefs.SetInt(KEY_ADD_BOTTLE, remainingAddBottle);
+				PlayerPrefs.SetFloat(KEY_ADD_BOTTLE, remainingAddBottle);
 				break;
 		}
 

@@ -39,9 +39,12 @@ public class ChestOpeningController : MonoBehaviour
 	[SerializeField] private Sprite coin;
 	[SerializeField] private Sprite diamond;
 
+	
+
 	public void PlayChestAnimation(Sprite closedSprite, Sprite openSprite, RewardItem[] rewardsData)
 	{
 		isClaiming = true;
+		DailyRewardManager.Instance.blockInputPanel.SetActive(true);
 		DailyRewardManager.Instance.darkBackground.SetActive(false);
 		DailyRewardManager.Instance.dailyRewardPanel.SetActive(false);
 		// 1. Xóa sạch quà cũ (nếu có lỗi kẹt lại)
@@ -174,6 +177,7 @@ public class ChestOpeningController : MonoBehaviour
 
 		// Bật cờ cho phép người chơi bấm vào màn hình
 		canTapToClaim = true;
+		DailyRewardManager.Instance.blockInputPanel.SetActive(false);
 	}
 
 	private IEnumerator FlyTrailAnimation(RectTransform sourceItem, RectTransform targetUI, Sprite iconSprite)
