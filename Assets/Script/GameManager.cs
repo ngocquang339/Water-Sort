@@ -82,6 +82,8 @@ public class GameManager : MonoBehaviour
 	[Header("Cài đặt Shop")]
 	public GameObject shopPopup;
 	public GameObject backButton;
+	public GameObject gotoShop;
+
 	// Các biến để quản lý số lượng trong Code
 	private float remainingUndo;
 	private float remainingHint;
@@ -853,6 +855,9 @@ public class GameManager : MonoBehaviour
 		{
 			darkPanel.SetActive(true);
 		}
+		if (gotoShop != null && shopPopup.activeSelf) {
+			gotoShop.SetActive(false);
+		}
 		// 1. Bật object lên và ép kích thước về 0
 		popup.SetActive(true);
 		RectTransform popupRect = popup.GetComponent<RectTransform>();
@@ -864,18 +869,26 @@ public class GameManager : MonoBehaviour
 		float duration = 0.5f;
 		float elapsed = 0f;
 		bool check = HasAnyValidMove();
-		if (SceneManager.GetActiveScene().name == "MainScene")
-		{
-			AudioManager.instance.PlayPopupSound();
-		}
-		else if(!check)
+		//if (SceneManager.GetActiveScene().name == "MainScene")
+		//{
+		//	AudioManager.instance.PlayPopupSound();
+		//}
+		//else if(!check)
+		//{
+		//	AudioManager.instance.PlayGameOver();
+		//}
+		//else
+		//{
+		//	AudioManager.instance.PlayPopupSound();
+		//}
+		if (!check && SceneManager.GetActiveScene().name == "MainPlayScene")
 		{
 			AudioManager.instance.PlayGameOver();
 		}
-		else
-		{
+		else{
 			AudioManager.instance.PlayPopupSound();
 		}
+
 		// 3. Vòng lặp Animation
 		while (elapsed < duration)
 		{
@@ -921,6 +934,7 @@ public class GameManager : MonoBehaviour
 		// Tùy chọn: Thêm âm thanh tắt popup ở đây nếu bạn có (Ví dụ: AudioManager.instance.PlayClosePopupSound();)
 
 		// 2. Vòng lặp Animation thu nhỏ
+		AudioManager.instance.PlayPopupSound();
 		while (elapsed < duration)
 		{
 			elapsed += Time.deltaTime;

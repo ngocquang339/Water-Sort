@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour
@@ -13,6 +14,9 @@ public class ShopManager : MonoBehaviour
 
 	[Header("UI Reference")]
 	public PanelSlider shopPanelSlider;
+
+	public TextMeshProUGUI outOfCurrnecyText;
+	public GameObject outOfCurrency_Panel;
 
 	void Start()
 	{

@@ -138,7 +138,7 @@ public class PopupManager : MonoBehaviour
 		TextMeshProUGUI tmp = go.GetComponent<TextMeshProUGUI>();
 		if (rt == null || tmp == null) { Destroy(go); return; }
 
-		rt.anchoredPosition = new Vector2(0, 100f);
+		rt.anchoredPosition = new Vector2(0, 400f);
 		tmp.color = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1f);
 
 		float duration = 2.0f;

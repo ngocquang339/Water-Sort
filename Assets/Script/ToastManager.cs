@@ -6,94 +6,66 @@ public class ToastManager : MonoBehaviour
 {
 	public static ToastManager instance;
 
-	[Header("UI Elements")]
-	public GameObject toastPanel;      
-	public TextMeshProUGUI toastText;   
-	public CanvasGroup canvasGroup;     
-	public RectTransform rectTransform; 
-
 	[Header("Animation Settings")]
-	public float moveDistance = 150f;  
-	public float duration = 1.5f;      
-
-	private Vector2 startPosition;    
-	private Coroutine currentAnim;
+	public float moveDistance = 150f;
+	public float duration = 1.5f;
 
 	void Awake()
 	{
-		if (instance == null)
-		{
-			instance = this;
-			DontDestroyOnLoad(gameObject);
-		}
-		else
-		{
-			Destroy(gameObject);
-			return;
-		}
-
-		// Lưu lại vị trí xuất phát mặc định trên màn hình
-		if (rectTransform != null)
-		{
-			startPosition = rectTransform.anchoredPosition;
-		}
-
-		if (toastPanel != null) toastPanel.SetActive(false);
+		if (instance == null) instance = this;
+		else Destroy(gameObject);
 	}
 
-	public void ShowToast(string message)
+	// 🌟 HÀM MỚI: Nhận vào ĐÚNG cái Panel bạn muốn và Câu chữ bạn muốn
+	public void ShowToast(GameObject targetPanel, string message)
 	{
-		// Nếu đang có 1 thông báo khác đang trôi, dừng nó lại ngay để chạy thông báo mới
-		if (currentAnim != null)
-		{
-			StopCoroutine(currentAnim);
-		}
-
-		currentAnim = StartCoroutine(AnimateToast(message));
+		// Tắt mọi animation đang chạy (chống lỗi bấm liên tục bị bay tít lên trời)
+		StopAllCoroutines();
+		StartCoroutine(AnimateToast(targetPanel, message));
 	}
 
-	private IEnumerator AnimateToast(string message)
+	private IEnumerator AnimateToast(GameObject targetPanel, string message)
 	{
-		Debug.Log("Chạy animation");
-		// 1. Chuẩn bị dữ liệu và hiện ngay lập tức
+		// Tự động lấy các "linh kiện" từ Panel bạn truyền vào
+		CanvasGroup canvasGroup = targetPanel.GetComponent<CanvasGroup>();
+		RectTransform rectTransform = targetPanel.GetComponent<RectTransform>();
+		TextMeshProUGUI toastText = targetPanel.GetComponentInChildren<TextMeshProUGUI>();
+
+		// Nếu Panel bị thiếu CanvasGroup thì code tự động thêm vào để không bị lỗi
+		if (canvasGroup == null) canvasGroup = targetPanel.AddComponent<CanvasGroup>();
+
+		// 1. Chuẩn bị dữ liệu
 		toastText.text = message;
-		toastPanel.SetActive(true);
-		canvasGroup.alpha = 1f; // Sáng rõ 100%
-		rectTransform.anchoredPosition = startPosition; // Nằm im tại điểm xuất phát
+		targetPanel.SetActive(true);
+		canvasGroup.alpha = 1f;
 
-		Vector2 endPosition = startPosition + new Vector2(0, moveDistance); // Điểm đến khi trôi lên
+		// Ghi nhớ vị trí gốc của chính cái Panel đó
+		Vector2 startPosition = rectTransform.anchoredPosition;
+		Vector2 endPosition = startPosition + new Vector2(0, moveDistance);
 
-		// --- CÀI ĐẶT THỜI GIAN ---
-		float stayTime = 1.2f;  // Thời gian đứng im chình ình trên màn hình để đọc
-		float animTime = 0.5f;  // Thời gian diễn ra hiệu ứng "bay đi" (Vừa trôi lên vừa mờ)
+		float stayTime = 1.2f;
+		float animTime = 0.5f;
 
-		// ==========================================
-		// GIAI ĐOẠN 1: ĐỨNG IM CHỜ NGƯỜI CHƠI ĐỌC
-		// ==========================================
+		// GIAI ĐOẠN 1: CHỜ NGƯỜI CHƠI ĐỌC
 		yield return new WaitForSeconds(stayTime);
 
-		// ==========================================
-		// GIAI ĐOẠN 2: VỪA TRÔI LÊN VỪA MỜ DẦN VÀ BIẾN MẤT
-		// ==========================================
+		// GIAI ĐOẠN 2: TRÔI LÊN VÀ MỜ DẦN
 		float elapsed = 0f;
 		while (elapsed < animTime)
 		{
 			elapsed += Time.deltaTime;
 			float t = elapsed / animTime;
-
-			// Công thức Ease-In: Trôi lên từ từ, sau đó tăng tốc độ bay đi
 			float easeT = t * t * t;
 
-			// Gộp cả 2 hiệu ứng vào chung 1 vòng lặp
 			rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easeT);
-			canvasGroup.alpha = Mathf.Lerp(1f, 0f, easeT); // Alpha giảm từ 1 về 0
+			canvasGroup.alpha = Mathf.Lerp(1f, 0f, easeT);
 
 			yield return null;
 		}
 
-		// 3. Kết thúc: Dọn dẹp để chuẩn bị cho lần gọi tiếp theo
-		rectTransform.anchoredPosition = startPosition; // Trả về chỗ cũ
+		// 3. Dọn dẹp
+		rectTransform.anchoredPosition = startPosition;
 		canvasGroup.alpha = 0f;
-		toastPanel.SetActive(false);
+		targetPanel.SetActive(false);
 	}
 }
