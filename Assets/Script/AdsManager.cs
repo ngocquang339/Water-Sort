@@ -11,7 +11,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 	[SerializeField] bool _testMode = true;
 
 	[Header("UI Cảnh Báo")]
-	public GameObject notAvailablePopup;
+
+	public GameObject notAvailable_Panel;
 
 	public TextMeshProUGUI notAvailableAds;
 	private string _gameId;
@@ -92,19 +93,19 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 		else
 		{
 			// DÙNG 1 DÒNG CODE DUY NHẤT:
-			ToastManager.instance.ShowToast(notAvailableAds.text);
+			ToastManager.instance.ShowToast(notAvailable_Panel, notAvailableAds.text);
 		}
 	}
 
-	private IEnumerator ShowToastMessage()
-	{
-		if (notAvailablePopup != null)
-		{
-			notAvailablePopup.SetActive(true);
-			yield return new WaitForSeconds(2f);
-			notAvailablePopup.SetActive(false);
-		}
-	}
+	//private IEnumerator ShowToastMessage()
+	//{
+	//	if (notAvailablePopup != null)
+	//	{
+	//		notAvailablePopup.SetActive(true);
+	//		yield return new WaitForSeconds(2f);
+	//		notAvailablePopup.SetActive(false);
+	//	}
+	//}
 
 	public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
 	{
