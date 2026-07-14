@@ -18,6 +18,9 @@ public class ShopManager : MonoBehaviour
 	public TextMeshProUGUI outOfCurrnecyText;
 	public GameObject outOfCurrency_Panel;
 
+	public GameObject diamondNotAvailable_Panel;
+	public TextMeshProUGUI diamondNotAvailable_Text;
+
 	void Start()
 	{
 		GenerateShop();

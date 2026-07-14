@@ -94,7 +94,8 @@ public class GameManager : MonoBehaviour
 	private const string KEY_HINT = "Help_Hint";
 	private const string KEY_ADD_BOTTLE = "Help_AddBottle";
 
-	public PopupManager popupManager;
+	[SerializeField] private PopupManager popupManager;
+	[SerializeField] private ShopManager shopManager;
 	private void Awake()
 	{
 		if (instance == null) instance = this;
@@ -855,6 +856,7 @@ public class GameManager : MonoBehaviour
 		{
 			darkPanel.SetActive(true);
 		}
+		Debug.Log(shopPopup.activeSelf);
 		if (gotoShop != null && shopPopup.activeSelf) {
 			gotoShop.SetActive(false);
 		}
@@ -1010,5 +1012,10 @@ public class GameManager : MonoBehaviour
 			// ...Thì mới được phép kéo điểm về!
 			LeaderboardManager.Instance.FetchLeaderboard();
 		}
+	}
+
+	public void DiamondNotAvailableToast(){
+		Debug.Log("Đang hiển thị thông báo Diamond không đủ!");
+		ToastManager.instance.ShowToast(shopManager.diamondNotAvailable_Panel, shopManager.diamondNotAvailable_Text.text);
 	}
 }

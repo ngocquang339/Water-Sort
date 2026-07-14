@@ -17,9 +17,9 @@ MonoBehaviour:
   customBottlePrefab: {fileID: 8829921817319407611, guid: e71f65e9e61c222449ba03d12fa29c9f, type: 3}
   bottleInLevel:
   - initialColors: 0100000005000000
-  - initialColors: 0300000002000000
-  - initialColors: 0400000005000000
-  - initialColors: 0100000003000000
-  - initialColors: 0200000006000000
+  - initialColors: 0200000003000000
+  - initialColors: 0500000004000000
+  - initialColors: 0300000001000000
+  - initialColors: 0600000002000000
   - initialColors: 0600000004000000
   - initialColors: 0000000000000000

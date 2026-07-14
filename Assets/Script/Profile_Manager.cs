@@ -53,7 +53,7 @@ public class Profile_Manager : MonoBehaviour
             Debug.Log("No coin found, setting default value to 0.");
 		}
 		coinAmount.text = coin.ToString();
-        int level = PlayerPrefs.GetInt("CurrentLevel", 0);
+        int level = PlayerPrefs.GetInt("CurrentLevel", 1);
         levelNumber.text = level.ToString();
         player_Name.text = PlayerPrefs.GetString("Player_Username", "Player");
 	}
