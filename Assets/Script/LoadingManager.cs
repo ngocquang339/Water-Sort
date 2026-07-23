@@ -24,6 +24,8 @@ public class LoadingManager : MonoBehaviour
 	public Image fadeImage;
 	public float fadeDuration = 0.5f;
 
+	private string playerName;
+
 	void Awake()
 	{
 		if (Instance == null)
@@ -43,6 +45,7 @@ public class LoadingManager : MonoBehaviour
 		if(loading_Container != null){
 			loading_Container.SetActive(false);
 		}
+		playerName = PlayerPrefs.GetString("Player_Username", "");
 		StartCoroutine(LoadSceneWithPause());
 	}
 
@@ -53,8 +56,13 @@ public class LoadingManager : MonoBehaviour
 		{
 			loading_Container.SetActive(true);
 		}
-
-		AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
+		AsyncOperation operation;
+		if (playerName == ""){
+			operation = SceneManager.LoadSceneAsync(sceneToLoad);
+		}
+		else{
+			operation = SceneManager.LoadSceneAsync("MainScene");
+		}
 		operation.allowSceneActivation = false; // Tạm khóa không cho qua bài
 
 		float currentFill = 0f;

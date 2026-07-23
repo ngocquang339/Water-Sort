@@ -30,8 +30,6 @@ public class GameManager : MonoBehaviour
 	[Header("Cài đặt Animation")]
 	[SerializeField] private float moveSpeed = 0.1f;
 	[SerializeField] private float pourAngle = 90f;
-	[SerializeField] private float pourOffsetX = 0.8f;
-	[SerializeField] private float pourOffsetY = 1.0f;
 
 	[Header("Danh sách chai nước")]
 	public List<Bottle> allBottles;
@@ -39,6 +37,7 @@ public class GameManager : MonoBehaviour
 	[Header("UI Bế Tắc")]
 	public GameObject outOfMovesPopup; // Kéo bảng UI thông báo hết bước đi vào đây
 	public GameObject dark_Panel;
+	public TextMeshProUGUI currentLevel;
 
 	[Header("Hiệu ứng pháo hoa")]
 	public ParticleSystem bottleDonePrefab;
@@ -63,6 +62,13 @@ public class GameManager : MonoBehaviour
 	[Header("Reload Popup")]
 	public GameObject reloadPopup;
 	public GameObject reloadDarkPanel;
+
+	[Header("Coming Soon Popup")]
+	public GameObject comingSoonPopup;
+	public GameObject comingSoonDarkPanel;
+
+	[Header("Next Level Popup")]
+	public GameObject nextLevelPopup;
 
 	[Header("UI Hiển Thị Số Lượt Trợ Giúp")]
 	public TextMeshProUGUI undoText;       // Kéo Text số của nút Undo vào đây
@@ -171,10 +177,11 @@ public class GameManager : MonoBehaviour
 		busyBottles.Add(source);
 		busyBottles.Add(target);
 
+
 		// 2. BAY ĐẾN VỊ TRÍ RÓT
 		float direction = Mathf.Sign(target.transform.position.x - source.transform.position.x);
 		float targetAngle = direction > 0 ? -pourAngle : pourAngle;
-		Vector3 pourPosition = target.transform.position + new Vector3(-direction * pourOffsetX, pourOffsetY, 0f);
+		Vector3 pourPosition = target.transform.position + new Vector3(-direction * source.pourOffsetX, source.pourOffsetY, 0f);
 		yield return StartCoroutine(AnimateBottle(source.transform, pourPosition, targetAngle, moveSpeed));
 
 		// 3. TÍNH TOÁN "TRƯỚC" XEM SẼ RÓT ĐƯỢC BAO NHIÊU KHỐI NƯỚC
@@ -415,6 +422,7 @@ public class GameManager : MonoBehaviour
 		{
 			StartCoroutine(popupCoroutine(dark_Panel, outOfMovesPopup));
 		}
+		currentLevel.text = PlayerPrefs.GetInt("CurrentLevel", 1).ToString();
 	}
 
 	// 3. Hàm kích hoạt kiểm tra (Sẽ gọi sau khi người chơi rót xong)
@@ -623,6 +631,12 @@ public class GameManager : MonoBehaviour
 
 	public void onClickNextLevel()
 	{
+		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+		if (currentLevel == 2) {
+			StartCoroutine(ClosePopupCoroutine(blackOverlay, nextLevelPopup));
+			StartCoroutine(popupCoroutine(comingSoonDarkPanel, comingSoonPopup));
+			return;
+		}
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
@@ -664,7 +678,6 @@ public class GameManager : MonoBehaviour
 	public void UseHint()
 	{
 		if (isLocked) return;
-		// 1. KIỂM TRA QUYỀN LỰC: CÒN LƯỢT KHÔNG?
 		if (remainingHint <= 0)
 		{
 			Debug.Log("Hết lượt dùng Gợi ý rồi!");
@@ -871,18 +884,7 @@ public class GameManager : MonoBehaviour
 		float duration = 0.5f;
 		float elapsed = 0f;
 		bool check = HasAnyValidMove();
-		//if (SceneManager.GetActiveScene().name == "MainScene")
-		//{
-		//	AudioManager.instance.PlayPopupSound();
-		//}
-		//else if(!check)
-		//{
-		//	AudioManager.instance.PlayGameOver();
-		//}
-		//else
-		//{
-		//	AudioManager.instance.PlayPopupSound();
-		//}
+
 		if (!check && SceneManager.GetActiveScene().name == "MainPlayScene")
 		{
 			AudioManager.instance.PlayGameOver();
@@ -996,6 +998,10 @@ public class GameManager : MonoBehaviour
 	public void closeReloadPopup()
 	{
 		if (reloadPopup != null) StartCoroutine(ClosePopupCoroutine(reloadDarkPanel, reloadPopup));
+	}
+
+	public void CloseComingSoonPopup(){
+		if(comingSoonPopup != null) StartCoroutine(ClosePopupCoroutine(comingSoonDarkPanel, comingSoonPopup));
 	}
 
 	// Gắn hàm này vào nút Test Rank

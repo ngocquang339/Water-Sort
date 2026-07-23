@@ -20,6 +20,25 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90f28ac9020a4174f95f89fcf900d13f
+    m_Address: LilitaOne-Regular SDF
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-vi-VN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec62a9ec0f4715e439d800e24cc75b8e
+    m_Address: LilitaOne-Regular SDF 1
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-vi-VN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcdfc3d15211090469da134753283e6f
+    m_Address: Assets/Font/Font_Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 03c17604e0af0d94faafe6df70bf4379, type: 2}
   m_SchemaSet:

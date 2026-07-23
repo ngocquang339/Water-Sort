@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 164689036084962543}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0549, z: 0}
-  m_LocalScale: {x: 0.9275824, y: 1.236893, z: 1}
+  m_LocalPosition: {x: 0, y: 0.0445, z: 0}
+  m_LocalScale: {x: 0.9275824, y: 1.24283, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4406852609589771235}
@@ -388,8 +388,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4406852609589771235}
-  - component: {fileID: -3203439991150598201}
   - component: {fileID: 3254723541214713909}
+  - component: {fileID: -3923758802298550267}
   m_Layer: 0
   m_Name: Bottle_Long
   m_TagString: Untagged
@@ -407,7 +407,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4373067, y: 0.424133, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6705903467912420550}
@@ -423,55 +423,6 @@ Transform:
   - {fileID: 2820441586982343060}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3203439991150598201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5932263622724730615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b67cac7518696c4895b34e8b4d1ab77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorDatabase:
-  - colorEnum: 1
-    colorValue: {r: 1, g: 0.21960784, b: 0.30980393, a: 1}
-  - colorEnum: 2
-    colorValue: {r: 0.07450981, g: 0.4392157, b: 0.99607843, a: 1}
-  - colorEnum: 7
-    colorValue: {r: 1, g: 0.17254902, b: 0.63529414, a: 1}
-  - colorEnum: 3
-    colorValue: {r: 0.13333334, g: 0.9529412, b: 0.1764706, a: 1}
-  - colorEnum: 4
-    colorValue: {r: 1, g: 0.7529412, b: 0, a: 1}
-  - colorEnum: 5
-    colorValue: {r: 0.6431373, g: 0.11764706, b: 0.99215686, a: 1}
-  - colorEnum: 6
-    colorValue: {r: 1, g: 0.49411765, b: 0.21568628, a: 1}
-  waterLayerRenderers:
-  - {fileID: 6383585289419046726}
-  - {fileID: 3616210330015928122}
-  - {fileID: 1976301155016719648}
-  - {fileID: 4259860667286307834}
-  - {fileID: 327927122959160553}
-  - {fileID: 781431342890343744}
-  surfaceYPositions:
-  - -2.38
-  - -1.984
-  - -1.479
-  - -0.892
-  - -0.348
-  - 0.16
-  ovalInsideRenderer: {fileID: 6314675127779450353}
-  ovalBorderRenderer: {fileID: 9192246684003207034}
-  capacity: 6
-  mouthPoint: {fileID: 7752335689166353379}
-  corkObject: {fileID: 8527673294565299372}
-  corkDropHeight: 1
-  corkDropDuration: 0.3
-  playerID: 0
 --- !u!61 &3254723541214713909
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -518,6 +469,56 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.0942979, y: 4.6014853}
   m_EdgeRadius: 0
+--- !u!114 &-3923758802298550267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5932263622724730615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f46e3931921844f8c0a295bd32f4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorDatabase:
+  - colorEnum: 1
+    colorValue: {r: 1, g: 0.21960784, b: 0.30980393, a: 1}
+  - colorEnum: 2
+    colorValue: {r: 0.07450981, g: 0.4392157, b: 0.99607843, a: 1}
+  - colorEnum: 7
+    colorValue: {r: 1, g: 0.17254902, b: 0.63529414, a: 1}
+  - colorEnum: 3
+    colorValue: {r: 0.13333334, g: 0.9529412, b: 0.1764706, a: 1}
+  - colorEnum: 4
+    colorValue: {r: 1, g: 0.7529412, b: 0, a: 1}
+  - colorEnum: 5
+    colorValue: {r: 0.6431373, g: 0.11764706, b: 0.99215686, a: 1}
+  - colorEnum: 6
+    colorValue: {r: 1, g: 0.49411765, b: 0.21568628, a: 1}
+  waterLayerRenderers:
+  - {fileID: 6383585289419046726}
+  - {fileID: 3616210330015928122}
+  - {fileID: 1976301155016719648}
+  - {fileID: 4259860667286307834}
+  - {fileID: 327927122959160553}
+  - {fileID: 781431342890343744}
+  surfaceYPositions:
+  - -2.38
+  - -1.984
+  - -1.479
+  - -0.892
+  - -0.348
+  - 0.16
+  ovalInsideRenderer: {fileID: 6314675127779450353}
+  ovalBorderRenderer: {fileID: 9192246684003207034}
+  capacity: 6
+  mouthPoint: {fileID: 7752335689166353379}
+  corkObject: {fileID: 8527673294565299372}
+  corkDropHeight: 1
+  corkDropDuration: 0.3
+  pourOffsetY: 1.5
+  pourOffsetX: 0.95
 --- !u!1 &6042970597261148549
 GameObject:
   m_ObjectHideFlags: 0

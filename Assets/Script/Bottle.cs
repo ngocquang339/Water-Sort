@@ -24,6 +24,10 @@ public class Bottle : MonoBehaviour
 	public float corkDropHeight = 1.0f; // Khoảng cách nắp đậy rơi xuống (từ trên cao)
 	public float corkDropDuration = 0.3f; // Thời gian rơi (0.3 giây là vừa đủ nhanh và dứt khoát)
 
+	[Header("Chỉ số animation")]
+	public float pourOffsetY = 1.3f; 
+	public float pourOffsetX = 0.6f;
+
 	public bool isFull()
 	{
 		return waterLayers.Count == capacity;

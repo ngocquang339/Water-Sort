@@ -58,12 +58,8 @@ MonoBehaviour:
     m_Localized: Day
     m_Metadata:
       m_Items: []
-  - m_Id: 5095668682752
-    m_Localized: Starter Pack
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5274857738240
-    m_Localized: Medium Pack
+  - m_Id: 20371197968920576
+    m_Localized: Diamond packs are not available now
     m_Metadata:
       m_Items: []
   - m_Id: 107411302354944
@@ -92,6 +88,54 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7293123122532352
     m_Localized: Advertisements are unavailable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20339491928944640
+    m_Localized: SEE YOU AGAIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20361335822233600
+    m_Localized: SHOP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371188510765056
+    m_Localized: RESOURCE PACK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371194743500800
+    m_Localized: COIN PACK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371199910883328
+    m_Localized: Lv.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20666559467196416
+    m_Localized: OUT OF MOVES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21044863365910528
+    m_Localized: GAME OVER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21067952103460864
+    m_Localized: NOT ENOUGH TURN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21068742410997760
+    m_Localized: Do you want to buy more to perform the operation?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21081672565231616
+    m_Localized: Enter new name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21089706314141696
+    m_Localized: The name cannot be empty!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21090588481130496
+    m_Localized: LEADERBOARD
     m_Metadata:
       m_Items: []
   references:

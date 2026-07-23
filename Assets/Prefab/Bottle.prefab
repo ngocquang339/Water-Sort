@@ -1068,6 +1068,8 @@ MonoBehaviour:
   corkObject: {fileID: 8059299085439518256}
   corkDropHeight: 1
   corkDropDuration: 0.3
+  pourOffsetY: 1.3
+  pourOffsetX: 0.48
 --- !u!61 &-4550868493445828394
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1102,7 +1104,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.13828678, y: -0.48293924}
+  m_Offset: {x: -0.13828677, y: -0.79000443}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1112,5 +1114,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.2549464, y: 3.5595145}
+  m_Size: {x: 1.2549464, y: 4.173645}
   m_EdgeRadius: 0
