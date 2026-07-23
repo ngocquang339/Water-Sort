@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization;
 public class Profile_Manager : MonoBehaviour
 {
     public static Profile_Manager instance;
@@ -11,7 +12,8 @@ public class Profile_Manager : MonoBehaviour
     public TextMeshProUGUI player_Name;
     public GameObject rename_Area;
     public GameObject confirmButton;
-	public RectTransform nameGroupRect;
+	public RectTransform nameGroupRect; 
+    public LocalizedString emptyNameWarningString;
 	[SerializeField] private TMP_InputField usernameInputField;
 	private const string USERNAME_KEY = "Player_Username";
 	void Awake(){
@@ -62,7 +64,7 @@ public class Profile_Manager : MonoBehaviour
 		TMP_Text placeholder = usernameInputField.placeholder as TMP_Text;
 		string newUsername = usernameInputField.text.Trim();
         if (string.IsNullOrEmpty(newUsername)) {
-			placeholder.text = "Tên không được để trống!";
+			placeholder.text = emptyNameWarningString.GetLocalizedString();
 			return;
         }
 		PlayerPrefs.SetString(USERNAME_KEY, newUsername);

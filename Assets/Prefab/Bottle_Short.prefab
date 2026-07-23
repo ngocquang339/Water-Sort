@@ -883,7 +883,7 @@ MonoBehaviour:
   - 0.735
   ovalInsideRenderer: {fileID: 6190517523479860379}
   ovalBorderRenderer: {fileID: 5605769575469692339}
-  capacity: 4
+  capacity: 2
   mouthPoint: {fileID: 8604390107069107135}
   corkObject: {fileID: 4524044869757378289}
   corkDropHeight: 1

@@ -13,6 +13,7 @@ public class PopupManager : MonoBehaviour
 	public GameObject outOfHelpPopup;
 	public RectTransform popupRect;
 	public Button buyButton;
+	public GameObject darkPanel;
 
 	[Header("Cài đặt Giá tiền cho từng loại")]
 	[SerializeField] private int undoPrice = 20;
@@ -54,6 +55,7 @@ public class PopupManager : MonoBehaviour
 		if (currentAnimCoroutine != null) StopCoroutine(currentAnimCoroutine);
 
 		outOfHelpPopup.SetActive(true);
+		darkPanel.SetActive(true);
 		AudioManager.instance.PlayPopupSound();
 		popupRect.localScale = Vector3.zero;
 		currentAnimCoroutine = StartCoroutine(JuicyAnimationRoutine(Vector3.zero, Vector3.one));
@@ -109,6 +111,7 @@ public class PopupManager : MonoBehaviour
 
 		currentAnimCoroutine = StartCoroutine(JuicyAnimationRoutine(Vector3.one, Vector3.zero, () => {
 			outOfHelpPopup.SetActive(false);
+			darkPanel.SetActive(false);
 		}));
 	}
 

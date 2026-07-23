@@ -55,14 +55,6 @@ MonoBehaviour:
     m_Key: txt_DayText
     m_Metadata:
       m_Items: []
-  - m_Id: 5095668682752
-    m_Key: txt_PackName1
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5274857738240
-    m_Key: txt_PackName2
-    m_Metadata:
-      m_Items: []
   - m_Id: 107411302354944
     m_Key: txt_ConfirmText
     m_Metadata:
@@ -89,6 +81,58 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7293123122532352
     m_Key: txt_AdsInvalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20339491928944640
+    m_Key: txt_SeeYouAgain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20361335822233600
+    m_Key: txt_Shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371188510765056
+    m_Key: txt_ResourcePack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371194743500800
+    m_Key: txt_CoinPack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371197968920576
+    m_Key: txt_DiamondNotAvailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20371199910883328
+    m_Key: txt_Lv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20666559467196416
+    m_Key: txt_OutOfMoves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21044863365910528
+    m_Key: txt_GameOver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21067952103460864
+    m_Key: txt_NotEnoughTurn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21068742410997760
+    m_Key: txt_QuestionBuyResource
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21081672565231616
+    m_Key: txt_EnterNewName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21089706314141696
+    m_Key: txt_CannotEmptyName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21090588481130496
+    m_Key: txt_Leaderboard
     m_Metadata:
       m_Items: []
   m_Metadata:
