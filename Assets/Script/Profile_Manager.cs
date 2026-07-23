@@ -77,4 +77,10 @@ public class Profile_Manager : MonoBehaviour
         rename_Area.SetActive(true);
         confirmButton.SetActive(true);
 	}
+
+    public void OnClickCloseButton()
+	{
+		CloseProfilePopup();
+		UpdateUI();
+	}
 }
