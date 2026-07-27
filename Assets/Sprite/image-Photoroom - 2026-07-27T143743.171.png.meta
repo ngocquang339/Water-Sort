@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: cbdd7ed94fb6c8a4da8313ea729eac9b
+guid: 7de8e6f413137fb4aaece181d90cf406
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3841289201917144518
-    second: f9775817-b8a2-4fa2-a536-4b4d5e63e45d 1_0
+      213: 1228885886831697014
+    second: image-Photoroom - 2026-07-27T143743.171_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: f9775817-b8a2-4fa2-a536-4b4d5e63e45d 1_0
+      name: image-Photoroom - 2026-07-27T143743.171_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 948
+        x: 9
+        y: 117
+        width: 1003
+        height: 265
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a325f28a2dff0bac0800000000000000
-      internalID: -3841289201917144518
+      spriteID: 67c18120431ed0110800000000000000
+      internalID: 1228885886831697014
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      f9775817-b8a2-4fa2-a536-4b4d5e63e45d 1_0: -3841289201917144518
+      image-Photoroom - 2026-07-27T143743.171_0: 1228885886831697014
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

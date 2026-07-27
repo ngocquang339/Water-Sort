@@ -632,7 +632,7 @@ public class GameManager : MonoBehaviour
 	public void onClickNextLevel()
 	{
 		int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
-		if (currentLevel == 2) {
+		if (currentLevel == 15) {
 			StartCoroutine(ClosePopupCoroutine(blackOverlay, nextLevelPopup));
 			StartCoroutine(popupCoroutine(comingSoonDarkPanel, comingSoonPopup));
 			return;

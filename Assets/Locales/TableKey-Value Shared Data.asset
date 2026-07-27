@@ -135,6 +135,10 @@ MonoBehaviour:
     m_Key: txt_Leaderboard
     m_Metadata:
       m_Items: []
+  - m_Id: 22478659562868736
+    m_Key: txt_OutofCurrency
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.Localization.Settings;
 public class LoadingManager : MonoBehaviour
 {
 	public static LoadingManager Instance;
@@ -39,13 +39,25 @@ public class LoadingManager : MonoBehaviour
 		}
 	}
 
-	void Start()
+	IEnumerator Start()
 	{
 		fillColor.fillAmount = 0f;
 		if(loading_Container != null){
 			loading_Container.SetActive(false);
 		}
 		playerName = PlayerPrefs.GetString("Player_Username", "");
+
+		// Tải và áp dụng ngôn ngữ đã lưu
+		if (PlayerPrefs.HasKey("SavedLocale"))
+		{
+			yield return LocalizationSettings.InitializationOperation;
+			int savedLocale = PlayerPrefs.GetInt("SavedLocale");
+			if (savedLocale >= 0 && savedLocale < LocalizationSettings.AvailableLocales.Locales.Count)
+			{
+				LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[savedLocale];
+			}
+		}
+
 		StartCoroutine(LoadSceneWithPause());
 	}
 

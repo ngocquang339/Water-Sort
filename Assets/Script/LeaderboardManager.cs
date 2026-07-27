@@ -18,14 +18,8 @@ public class LeaderboardManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if (Instance == null)
-		{
-			Instance = this;
-		}
-		else if (Instance != this)
-		{
-			Destroy(gameObject);
-		}
+		// Khi load scene mới, Instance sẽ nhận giá trị của LeaderboardManager ở scene mới này
+		Instance = this;
 	}
 
 	// THÊM HÀM NÀY VÀO: Khi Scene bị đóng và Object bị hủy, phải xóa trí nhớ của Instance!
@@ -118,9 +112,17 @@ public class LeaderboardManager : MonoBehaviour
 			var scoresResponse = await LeaderboardsService.Instance.GetScoresAsync(LEADERBOARD_ID, new GetScoresOptions { Limit = 10 });
 
 			// 1. Dọn dẹp bảng cũ trước khi tải bảng mới (để tránh bị nhân bản khi bấm nút nhiều lần)
-			foreach (Transform child in contentTransform)
+			if (contentTransform != null)
 			{
-				Destroy(child.gameObject);
+				foreach (Transform child in contentTransform)
+				{
+					Destroy(child.gameObject);
+				}
+			}
+			else
+			{
+				Debug.LogWarning("Không có contentTransform, bỏ qua việc tạo UI Leaderboard.");
+				return;
 			}
 
 			// 2. Duyệt qua từng người chơi và tạo khung

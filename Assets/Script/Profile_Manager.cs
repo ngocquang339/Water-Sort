@@ -8,6 +8,7 @@ public class Profile_Manager : MonoBehaviour
     public GameObject darkPanel;
     public GameObject profile_Panel;
     public TextMeshProUGUI coinAmount;
+    public TextMeshProUGUI diamondAmount;
     public TextMeshProUGUI levelNumber;
     public TextMeshProUGUI player_Name;
     public GameObject rename_Area;
@@ -51,11 +52,13 @@ public class Profile_Manager : MonoBehaviour
 
     private void UpdateUI(){
         float coin = PlayerPrefs.GetFloat("Player_Coin", 0);
-        if (coin == 0) { 
+        float diamond = PlayerPrefs.GetFloat("Player_Diamond", 0);
+		if (coin == 0) { 
             Debug.Log("No coin found, setting default value to 0.");
 		}
 		coinAmount.text = coin.ToString();
-        int level = PlayerPrefs.GetInt("CurrentLevel", 1);
+        diamondAmount.text = diamond.ToString();
+		int level = PlayerPrefs.GetInt("CurrentLevel", 1);
         levelNumber.text = level.ToString();
         player_Name.text = PlayerPrefs.GetString("Player_Username", "Player");
 	}
@@ -76,11 +79,5 @@ public class Profile_Manager : MonoBehaviour
         player_Name.text = "";
         rename_Area.SetActive(true);
         confirmButton.SetActive(true);
-	}
-
-    public void OnClickCloseButton()
-	{
-		CloseProfilePopup();
-		UpdateUI();
 	}
 }

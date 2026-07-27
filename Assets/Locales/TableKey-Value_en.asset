@@ -138,6 +138,10 @@ MonoBehaviour:
     m_Localized: LEADERBOARD
     m_Metadata:
       m_Items: []
+  - m_Id: 22478659562868736
+    m_Localized: You don't have enough money to buy this pack
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
