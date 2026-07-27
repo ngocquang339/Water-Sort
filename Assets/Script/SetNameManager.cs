@@ -14,7 +14,7 @@ public class SetNameManager : MonoBehaviour
 	public Image fadeImage;
 	public float fadeDuration = 0.5f;
 
-	public void SetName(){
+	public async void SetName(){
         string newName = userName.text.Trim();
 		if (!string.IsNullOrEmpty(newName))
 		{
@@ -26,8 +26,10 @@ public class SetNameManager : MonoBehaviour
 		{
 			Debug.LogWarning("Username cannot be empty.");
 		}
-		// Đợi game lưu tên lên mạng xong mới cho chuyển màn (hoặc gọi chuyển màn luôn cũng được)
-		LeaderboardManager.Instance.SubmitPlayerName(newName);
+		
+		// Đợi game lưu tên lên mạng xong mới cho chuyển màn
+		await LeaderboardManager.Instance.SubmitPlayerName(newName);
+		
 		// Sửa toàn bộ các lệnh gọi fade ở mọi nơi trong game thành dạng này:
 		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("MainScene"));
 	}

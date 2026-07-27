@@ -114,6 +114,10 @@ public class LanguageSelectorUI : MonoBehaviour
 		yield return LocalizationSettings.InitializationOperation;
 		LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeIndex];
 
+		// Lưu lại ngôn ngữ đã chọn
+		PlayerPrefs.SetInt("SavedLocale", localeIndex);
+		PlayerPrefs.Save();
+
 		currentActiveIndex = currentIndex;
 		confirmButton.SetActive(false);
 	}

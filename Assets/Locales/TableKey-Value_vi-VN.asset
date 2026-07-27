@@ -140,6 +140,11 @@ MonoBehaviour:
     m_Localized: "B\u1EA2NG X\u1EBEP H\u1EA0NG"
     m_Metadata:
       m_Items: []
+  - m_Id: 22478659562868736
+    m_Localized: "B\u1EA1n kh\xF4ng \u0111\u1EE7 ti\u1EC1n \u0111\u1EC3 mua g\xF3i
+      n\xE0y"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
