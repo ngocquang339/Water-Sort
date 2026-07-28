@@ -874,7 +874,8 @@ MonoBehaviour:
   rewardIcons:
   - {fileID: 1394987143310485879}
   checkmarkIcon: {fileID: 2307693492356464812}
-  lockIcon: {fileID: 1749860851979790543}
+  lockIcon:
+  - {fileID: 1749860851979790543}
 --- !u!114 &7188861776937471324
 MonoBehaviour:
   m_ObjectHideFlags: 0

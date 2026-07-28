@@ -33,9 +33,9 @@ public class CurrencyManager : MonoBehaviour
 
 	private void LoadCurrency()
 	{
-		currentCoin = PlayerPrefs.GetFloat(COIN_KEY, 400);
+		currentCoin = PlayerPrefs.GetFloat(COIN_KEY, 0);
 		Debug.Log("Current Coin Loaded: " + currentCoin);
-		currentDiamond = PlayerPrefs.GetFloat(DIAMOND_KEY, 10000);
+		currentDiamond = PlayerPrefs.GetFloat(DIAMOND_KEY, 0);
 		Debug.Log("Current Diamond Loaded: " + currentDiamond);
 		currentUndo = PlayerPrefs.GetFloat(UNDO_KEY, 2);
 		Debug.Log("Current Undo Loaded: " + currentUndo);

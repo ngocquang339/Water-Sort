@@ -139,6 +139,18 @@ MonoBehaviour:
     m_Key: txt_OutofCurrency
     m_Metadata:
       m_Items: []
+  - m_Id: 22883156348997632
+    m_Key: txt_GoodJob
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22883444367659008
+    m_Key: txt_LevelComplete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22884579786723328
+    m_Key: txt_Reward
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

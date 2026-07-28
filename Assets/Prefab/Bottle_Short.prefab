@@ -421,8 +421,8 @@ Transform:
   m_GameObject: {fileID: 3422089217475861838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0986, y: -0.2179, z: 0}
-  m_LocalScale: {x: 1.0092479, y: 1.104562, z: 1}
+  m_LocalPosition: {x: 0.1013, y: -0.2435, z: 0}
+  m_LocalScale: {x: 1.0540597, y: 1.1122534, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 386410323516341468}
@@ -471,7 +471,7 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4638329386816598540, guid: 79cc9b67cc06e424ab6f3c93e4e38def, type: 3}
+  m_Sprite: {fileID: 1959607623191193418, guid: d3f673ea15ac59b4a9bfb6072606fc86, type: 3}
   m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -888,6 +888,8 @@ MonoBehaviour:
   corkObject: {fileID: 4524044869757378289}
   corkDropHeight: 1
   corkDropDuration: 0.3
+  pourOffsetY: 1.3
+  pourOffsetX: 0.6
 --- !u!61 &7234217300614449038
 BoxCollider2D:
   m_ObjectHideFlags: 0
