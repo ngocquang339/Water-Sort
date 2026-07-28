@@ -63,7 +63,7 @@ public class Profile_Manager : MonoBehaviour
         player_Name.text = PlayerPrefs.GetString("Player_Username", "Player");
 	}
 
-    public void SaveNewName(){
+    public async void SaveNewName(){
 		TMP_Text placeholder = usernameInputField.placeholder as TMP_Text;
 		string newUsername = usernameInputField.text.Trim();
         if (string.IsNullOrEmpty(newUsername)) {
@@ -71,8 +71,14 @@ public class Profile_Manager : MonoBehaviour
 			return;
         }
 		PlayerPrefs.SetString(USERNAME_KEY, newUsername);
+		PlayerPrefs.Save();
         CloseProfilePopup();
         UpdateUI();
+        
+        if (LeaderboardManager.Instance != null)
+        {
+            await LeaderboardManager.Instance.SubmitPlayerName(newUsername);
+        }
 	}
 
     public void ClickReNameButton(){
