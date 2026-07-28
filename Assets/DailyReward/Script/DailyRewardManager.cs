@@ -85,8 +85,8 @@ public class DailyRewardManager : MonoBehaviour
 	// Lôi dữ liệu từ RAM điện thoại lên khi vừa mở game
 	private void LoadData()
 	{
-		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 6);
-		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 6);
+		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
+		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 0);
 
 		string timeStr = PlayerPrefs.GetString(TIME_KEY, string.Empty);
 		if (string.IsNullOrEmpty(timeStr))

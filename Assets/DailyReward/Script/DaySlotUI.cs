@@ -20,7 +20,7 @@ public class DaySlotUI : MonoBehaviour
 
 	[Header("Trạng thái Overlay")]
 	public GameObject checkmarkIcon;
-	public GameObject lockIcon;
+	public GameObject[] lockIcon;
 
 	public void updateSlotUI(int dayNumber, DayRewardConfig config, DaySlotState state)
 	{
@@ -53,18 +53,28 @@ public class DaySlotUI : MonoBehaviour
 		{
 			case DaySlotState.Locked:
 				checkmarkIcon.SetActive(false);
-				lockIcon.SetActive(true);
+				foreach (GameObject item in lockIcon){
+					item.SetActive(true);
+				}
+				headerBanner.color = new Color32(154, 78, 200, 255);
 				slotButton.interactable = false;
 				break;
 			case DaySlotState.Available:
 				checkmarkIcon.SetActive(false);
-				lockIcon.SetActive(false);
+				foreach (GameObject item in lockIcon)
+				{
+					item.SetActive(false);
+				}
 				headerBanner.color = new Color32(60, 200, 100, 255);
 				slotButton.interactable = true;
 				break;
 			case DaySlotState.Claimed:
 				checkmarkIcon.SetActive(true);
-				//headerBanner.color = new Color32(154, 78, 200, 255);
+				foreach (GameObject item in lockIcon)
+				{
+					item.SetActive(false);
+				}
+				headerBanner.color = new Color32(60, 200, 100, 255);
 				slotButton.interactable = false;
 				break;
 		}

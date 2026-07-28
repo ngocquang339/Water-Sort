@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: fb86b1ba08097f1468cf643450d164dd
+guid: 5ae55cabd39afb34ea74d61d3ab402ae
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4854080263083761072
-    second: image-Photoroom (7)_0
+      213: 7448155107488715330
+    second: image-Photoroom - 2026-07-28T135632.318_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,27 +96,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image-Photoroom (7)_0
+      name: image-Photoroom - 2026-07-28T135632.318_0
       rect:
         serializedVersion: 2
-        x: 163
-        y: 131
-        width: 1584
-        height: 469
+        x: 37
+        y: 569
+        width: 678
+        height: 238
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0bd975008482d5340800000000000000
-      internalID: 4854080263083761072
+      spriteID: 24250e5bb992d5760800000000000000
+      internalID: 7448155107488715330
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 12424aa2d5e813549a878bb7e36f40d0
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image-Photoroom (7)_0: 4854080263083761072
+      image-Photoroom - 2026-07-28T135632.318_0: 7448155107488715330
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

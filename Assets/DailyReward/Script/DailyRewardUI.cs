@@ -63,10 +63,11 @@ public class DailyRewardUI : MonoBehaviour
 			// Nếu lỡ mảng UI dài hơn mảng Data thì dừng lại để tránh lỗi bục game
 			if (i >= data.days.Length) break;
 
-			// Hỏi manager xem ô số [i] này đang ở trạng thái gì
+			// Hỏi manager xem ô số [i] này đang ở trạng thái gì 
 			DaySlotState slotState = manager.GetStateForDay(i);
 
 			// Ra lệnh cho thằng thợ sơn (DaySlotUI) bắt đầu vẽ
+			Debug.Log($"Ngày {i + 1} đang ở trạng thái: {slotState}");
 			daySlots[i].updateSlotUI(i + 1, data.days[i], slotState);
 		}
 
@@ -100,7 +101,8 @@ public class DailyRewardUI : MonoBehaviour
 	{
 		// Báo cho ông Não thực hiện thuật toán trao quà và lưu ngày tháng
 		DailyRewardManager.Instance.ClaimTodayReward();
-
+		//DaySlotState state = DailyRewardManager.Instance.GetStateForDay(DailyRewardManager.Instance.currentStreak);
+		//state = DaySlotState.Claimed;
 		// Nhận xong thì load lại giao diện để cái ổ khóa biến thành dấu tích xanh
 		RefreshUI();
 	}
