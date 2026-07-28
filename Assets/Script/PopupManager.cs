@@ -137,6 +137,7 @@ public class PopupManager : MonoBehaviour
 	{
 		if (floatingTextPrefab == null || canvasRect == null) return;
 		GameObject go = Instantiate(floatingTextPrefab, canvasRect);
+		go.SetActive(true); // Đảm bảo prefab được bật lên khi xuất hiện
 		RectTransform rt = go.GetComponent<RectTransform>();
 		TextMeshProUGUI tmp = go.GetComponent<TextMeshProUGUI>();
 		if (rt == null || tmp == null) { Destroy(go); return; }
