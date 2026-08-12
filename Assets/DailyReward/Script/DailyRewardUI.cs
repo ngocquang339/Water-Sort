@@ -38,15 +38,12 @@ public class DailyRewardUI : MonoBehaviour
 
 	void OnEnable()
 	{
-		// Kiểm tra xem ông "Não" đã tỉnh dậy và khởi tạo xong Instance chưa
 		if (DailyRewardManager.Instance == null)
 		{
-			// Nếu chưa, hẹn 0.1 giây sau mới chạy hàm vẽ giao diện
 			Invoke("RefreshUI", 0.1f);
 		}
 		else
 		{
-			// Nếu Não đã sẵn sàng rồi thì vẽ luôn
 			RefreshUI();
 		}
 	}
@@ -101,9 +98,6 @@ public class DailyRewardUI : MonoBehaviour
 	{
 		// Báo cho ông Não thực hiện thuật toán trao quà và lưu ngày tháng
 		DailyRewardManager.Instance.ClaimTodayReward();
-		//DaySlotState state = DailyRewardManager.Instance.GetStateForDay(DailyRewardManager.Instance.currentStreak);
-		//state = DaySlotState.Claimed;
-		// Nhận xong thì load lại giao diện để cái ổ khóa biến thành dấu tích xanh
 		RefreshUI();
 	}
 

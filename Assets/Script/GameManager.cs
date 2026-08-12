@@ -375,38 +375,26 @@ public class GameManager : MonoBehaviour
 		LoadingSceneSmooth.Instance.StartCoroutine(LoadingSceneSmooth.Instance.LoadSceneSmooth("SpecialScene"));
 	}
 
-	// 1. Hàm siêu nhẹ để kiểm tra xem CÒN BƯỚC ĐI KHÔNG
 	public bool HasAnyValidMove()
 	{
 		for (int i = 0; i < allBottles.Count; i++)
 		{
 			Bottle fromBottle = allBottles[i];
-
-			// Nếu chai rỗng hoặc đã hoàn thiện rồi -> Không rót đi nữa
 			if (fromBottle.isEmpty() || fromBottle.isCompleted()) continue;
-
-			// Lấy màu trên cùng của chai nguồn
-			// (Do hàm getTopColor của bạn trả về Stack, ta dùng Peek() để lấy màu thật)
 			WaterColor colorToPour = fromBottle.getTopColor().Peek();
 
 			for (int j = 0; j < allBottles.Count; j++)
 			{
-				if (i == j) continue; // Không tự kiểm tra với chính mình
+				if (i == j) continue;
 
 				Bottle toBottle = allBottles[j];
-
-				// Nếu chai đích đầy -> Không nhận được
 				if (toBottle.isFull()) continue;
-
-				// Nếu chai đích RỖNG hoặc có MÀU TRÊN CÙNG GIỐNG NHAU -> Có thể rót!
 				if (toBottle.isEmpty() || toBottle.getTopColor().Peek() == colorToPour)
 				{
-					return true; // Chỉ cần tìm thấy 1 đường đi là trả về True ngay
+					return true; 
 				}
 			}
 		}
-
-		// Nếu chạy hết vòng lặp mà không return true, nghĩa là HẾT ĐƯỜNG
 		return false;
 	}
 
@@ -444,7 +432,7 @@ public class GameManager : MonoBehaviour
 		// LƯU Ý 1: Kiểm tra xem người chơi còn lượt không, hết rồi thì nghỉ khỏe
 		if (remainingUndo <= 0)
 		{
-			Debug.Log("Hết lượt Undo rồi Hy ơi!");
+			Debug.Log("Hết lượt Undo!");
 			return;
 		}
 
@@ -462,13 +450,19 @@ public class GameManager : MonoBehaviour
 			b.removeTopColor(lastStep.waterLayers);
 			a.updateBottleVisuals();
 			b.updateBottleVisuals();
+			if(!b.isCompleted()){
+				b.corkObject.SetActive(false);
+			}
+			if(!a.isCompleted()){
+				a.corkObject.SetActive(false);
+			}
 			saveStepInfor.Pop();
 
-			// LƯU Ý 2: Sau khi đã lùi bước thành công -> Thực hiện trừ lượt và đổi số UI luôn!
+			//Thực hiện trừ lượt và đổi số UI
 			remainingUndo--;
 			PlayerPrefs.SetFloat(KEY_UNDO, remainingUndo);
 			PlayerPrefs.Save();
-			UpdateHelpUI(); // <--- ĐỂ Ô SỐ UI CẬP NHẬT NGAY LẬP TỨC
+			UpdateHelpUI(); 
 		}
 		else return;
 	}
@@ -489,7 +483,6 @@ public class GameManager : MonoBehaviour
 		return infor;
 	}
 
-	// --- THÊM HÀM NÀY VÀO GAMEMANAGER.CS ---
 	public void ExecuteHintPour(Bottle source, Bottle target)
 	{
 		// 1. Nếu các chai này đang bận chạy animation thì bỏ qua để tránh lỗi spam nút
@@ -743,14 +736,12 @@ public class GameManager : MonoBehaviour
 		if (busyBottles.Count > 0) return;
 
 		// 3. THỰC HIỆN LOGIC THÊM CHAI
-		// Sinh chai mới ở tít trên cao (Y = 10)
 		Vector3 spawnPos = new Vector3(0, 10f, 0);
 		int currentLevel = PlayerPrefs.GetInt("CurrentLevel");
 		emptyBottlePrefab = levelManager.currentLevelData.customBottlePrefab;
 		GameObject newBottleObj = Instantiate(emptyBottlePrefab, spawnPos, Quaternion.identity);
 		Bottle newBottle = newBottleObj.GetComponent<Bottle>();
 
-		// -- PHẦN CODE MỚI THÊM VÀO ĐÂY --
 		if (newBottle != null)
 		{
 			// Bắt buộc phải gán sức chứa cho chai mới (Thường là bằng với sức chứa của màn hiện tại)

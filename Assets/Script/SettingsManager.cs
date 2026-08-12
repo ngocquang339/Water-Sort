@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class SettingsManager : MonoBehaviour
 {
 	[Header("---- Cấu Hình Sliders UI ----")]
-	public Slider musicSlider; // Kéo object MusicSlider vào đây
-	public Slider sfxSlider;   // Kéo object SFXSlider vào đây
+	public Slider musicSlider; 
+	public Slider sfxSlider;  
 
 	void Start()
 	{

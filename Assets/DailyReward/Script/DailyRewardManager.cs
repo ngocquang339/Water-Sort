@@ -24,8 +24,8 @@ public class DailyRewardManager : MonoBehaviour
 	private static bool showDailyPopup = false;
 
 	// Các biến trạng thái nội bộ
-	private int currentStreak = 0;      // Đang ở chuỗi ngày thứ mấy (0 đến 6)
-	private DateTime lastClaimTime;     // Lần cuối cùng bấm nhận quà là lúc nào?
+	private int currentStreak = 0;  
+	private DateTime lastClaimTime;   
 
 	private const string STREAK_KEY = "DailyReward_Streak";
 	private const string TIME_KEY = "DailyReward_LastClaimTime";
@@ -85,8 +85,8 @@ public class DailyRewardManager : MonoBehaviour
 	// Lôi dữ liệu từ RAM điện thoại lên khi vừa mở game
 	private void LoadData()
 	{
-		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
-		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 0);
+		currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 6);
+		totalClaimedDays = PlayerPrefs.GetInt(TOTAL_TIME_KEY, 6);
 
 		string timeStr = PlayerPrefs.GetString(TIME_KEY, string.Empty);
 		if (string.IsNullOrEmpty(timeStr))
@@ -108,7 +108,6 @@ public class DailyRewardManager : MonoBehaviour
 			TimeSpan timePassed = DateTime.Now.Date - lastClaimTime.Date;
 
 			// Nếu bỏ lỡ lớn hơn 1 ngày (ví dụ qua 2 ngày mới vào lại) -> Phạt reset về Ngày 1
-			// (Nếu game của bạn thuộc dạng Casual thân thiện, bạn có thể xóa cụm if này đi)
 			if (timePassed.Days > 1)
 			{
 				currentStreak = 0;
@@ -117,7 +116,6 @@ public class DailyRewardManager : MonoBehaviour
 		}
 	}
 
-	// Hàm dùng để UI hỏi: "Hôm nay đã được nhận quà chưa sếp?"
 	public bool CanClaimToday()
 	{
 		if (lastClaimTime == DateTime.MinValue) return true; // Nick mới, cho nhận luôn
@@ -148,7 +146,6 @@ public class DailyRewardManager : MonoBehaviour
 		// Lấy toàn bộ Hộp Quà của ngày hôm nay
 		DayRewardConfig todayConfig = rewardData.days[currentStreak];
 
-		// Dùng vòng lặp để nhét toàn bộ đồ trong hộp vào ví
 		foreach (RewardItem item in todayConfig.items)
 		{
 			if (item.rewardType == "Coin")

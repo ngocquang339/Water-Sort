@@ -13,8 +13,8 @@ public class LeaderboardManager : MonoBehaviour
 	private const string LEADERBOARD_ID = "top_level";
 
 	[Header("Giao diện Bảng xếp hạng")]
-	public GameObject rankSlotPrefab; // Kéo Prefab RankSlot vào đây
-	public Transform contentTransform; // Kéo object Content của Scroll View vào đây
+	public GameObject rankSlotPrefab; 
+	public Transform contentTransform; 
 
 	private void Awake()
 	{
