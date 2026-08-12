@@ -204,10 +204,6 @@ public class Bottle : MonoBehaviour
 		return surfaceYPositions[waterCount - 1];
 	}
 
-	// ========================================================================
-	// --- THÊM CÁC HÀM NÀY VÀO DƯỚI CÙNG CỦA CLASS BOTTLE.CS ĐỂ HỖ TRỢ HINT ---
-	// ========================================================================
-
 	// 1. Cấu trúc dữ liệu phụ (Struct) để lưu trữ CHỈ LOGIC của 1 chai.
 	// Giống như một tấm bản đồ, không phải là cái chai thật.
 	[System.Serializable]
@@ -239,10 +235,6 @@ public class Bottle : MonoBehaviour
 			layers = this.waterLayers.ToArray()
 		};
 	}
-
-	// 3. HÀM KIỂM TRA HOÀN THIỆN (True/False):
-	// Thường dùng để GameManager kiểm tra điều kiện Win màn.
-	// Yêu cầu: Chai phải đầy (capacity) VÀ tất cả các tầng màu phải giống hệt nhau.
 	public bool isCompleted()
 	{
 		if (isEmpty()) return true; // Chai rỗng được coi là hoàn thiện

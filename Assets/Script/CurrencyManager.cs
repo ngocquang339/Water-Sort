@@ -51,8 +51,6 @@ public class CurrencyManager : MonoBehaviour
 		PlayerPrefs.SetFloat(COIN_KEY, currentCoin);
 		PlayerPrefs.Save();
 
-		// 2. PHÁT LOA THÔNG BÁO! 
-		// Dấu ? để kiểm tra xem có ai đang nghe không (nếu không có ai nghe thì không phát để tránh lỗi)
 		OnCoinChanged?.Invoke(currentCoin);
 	}
 

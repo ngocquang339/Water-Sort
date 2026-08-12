@@ -7,8 +7,6 @@ public struct PourStep { public int fromIndex; public int toIndex; }
 
 public class GameHintManager : MonoBehaviour
 {
-	// HÀM NÀY BÂY GIỜ LÀ PUBLIC ĐỂ GAMEMANAGER GỌI
-	// Chuyền thẳng danh sách chai từ GameManager sang đây cho nhẹ não
 	public PourStep? FindHint(List<Bottle> allBottles)
 	{
 		if (allBottles == null || allBottles.Count == 0) return null;
