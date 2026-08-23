@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-	// Tạo Singleton để có thể gọi ở bất cứ đâu bằng cú pháp AudioManager.instance
 	public static AudioManager instance;
 
 	[Header("Kho Âm Thanh (Audio Clips)")]
@@ -24,21 +23,17 @@ public class AudioManager : MonoBehaviour
 	public AudioSource sfxSource;
 	private void Awake()
 	{
-		// Bí quyết chống tắt tiếng: Giữ cho AudioManager sống sót khi chuyển màn chơi
 		if (instance == null)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject); // Không phá hủy object này khi LoadScene
+			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
-			Destroy(gameObject); // Tránh bị nhân đôi khi load lại scene
+			Destroy(gameObject);
 		}
 	}
 
-	// --- CÁC HÀM PHÁT ÂM THANH ---
-
-	// 1. Tiếng nút bấm UI
 	public void PlayButtonClick()
 	{
 		if (sfxSource != null && buttonClickClip != null)
@@ -47,12 +42,10 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	// 2. Tiếng chạm vào chai nước
 	public void PlayBottleLift()
 	{
 		if (sfxSource != null && bottleLift != null)
 		{
-			// PlayOneShot giúp các âm thanh đè lên nhau mà không bị ngắt quãng
 			sfxSource.PlayOneShot(bottleLift);
 		}
 	}
@@ -80,7 +73,6 @@ public class AudioManager : MonoBehaviour
 			sfxSource.PlayOneShot(itemPop);
 		}
 	}
-
 	public void PlayItemCollect()
 	{
 		if (sfxSource != null && itemCollect != null)
@@ -92,12 +84,10 @@ public class AudioManager : MonoBehaviour
 	{
 		if (sfxSource != null && bottleDown != null)
 		{
-			// PlayOneShot giúp các âm thanh đè lên nhau mà không bị ngắt quãng
 			sfxSource.PlayOneShot(bottleDown);
 		}
 	}
 
-	// 3. Tiếng chiến thắng
 	public void PlayWinSound()
 	{
 		if (sfxSource != null && winGameClip != null)
@@ -143,7 +133,6 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	// Hàm chỉnh volume cho Nhạc nền (Nhận giá trị từ 0 đến 1)
 	public void SetMusicVolume(float volume)
 	{
 		if (musicSource != null)
@@ -152,14 +141,11 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	// Hàm chỉnh volume cho Tiếng động hiệu ứng (Nhận giá trị từ 0 đến 1)
 	public void SetSFXVolume(float volume)
 	{
 		if (sfxSource != null)
 		{
 			sfxSource.volume = volume;
 		}
-		// Lưu ý: Nếu bạn dùng lệnh AudioSource.PlayOneShot(clip) thông qua sfxSource này,
-		// thì khi thay đổi sfxSource.volume, tất cả âm thanh phát ra đều sẽ to nhỏ theo chuẩn xác!
 	}
 }

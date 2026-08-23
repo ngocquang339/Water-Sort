@@ -20,9 +20,9 @@ public class Bottle : MonoBehaviour
 	public Transform mouthPoint;
 
 	[Header("Cài đặt Nút Bần")]
-	public GameObject corkObject; // Kéo thả cái nút bần vào đây
-	public float corkDropHeight = 1.0f; // Khoảng cách nắp đậy rơi xuống (từ trên cao)
-	public float corkDropDuration = 0.3f; // Thời gian rơi (0.3 giây là vừa đủ nhanh và dứt khoát)
+	public GameObject corkObject; 
+	public float corkDropHeight = 1.0f;
+	public float corkDropDuration = 0.3f; 
 
 	[Header("Chỉ số animation")]
 	public float pourOffsetY = 1.3f; 
@@ -190,15 +190,13 @@ public class Bottle : MonoBehaviour
 		waterLayers.Push(color);
 	}
 
-	// --- THÊM 2 HÀM NÀY VÀO BOTTLE.CS ---
-	// Lấy số lượng tầng nước hiện tại
 	public int currentWaterCount => waterLayers.Count;
 
 	// Tính toán tọa độ Y cho mặt Oval một cách an toàn
 	public float GetOvalYPosition(int waterCount)
 	{
 		if (waterCount <= 0)
-			return surfaceYPositions[0] - 0.4f; // Nếu cạn sạch, cho Oval chìm xuống dưới đáy
+			return surfaceYPositions[0] - 0.4f; 
 		if (waterCount > surfaceYPositions.Length)
 			return surfaceYPositions[surfaceYPositions.Length - 1];
 		return surfaceYPositions[waterCount - 1];

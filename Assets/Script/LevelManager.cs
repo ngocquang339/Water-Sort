@@ -6,7 +6,7 @@ public class LevelManager : MonoBehaviour
 {
 	public GameObject bottlePrefab;
 	public LevelData currentLevelData;
-	public GameManager gameManager;
+	public PourController pourController;
 	public TextMeshProUGUI levelText;
 
 	[Header("Cài đặt Lưới (Grid Settings)")]
@@ -85,12 +85,9 @@ public class LevelManager : MonoBehaviour
 
 					// 4. Nạp màu
 					bottleScript.initializeColors(levelData.bottleInLevel[bottleIndex].initialColors);
-					// ========================================================
-					// 2. NHÉT CHAI VỪA ĐẺ VÀO DANH SÁCH CỦA GAMEMANAGER
-					// ========================================================
-					if (gameManager != null)
+					if (pourController != null)
 					{
-						gameManager.allBottles.Add(bottleScript);
+						pourController.allBottles.Add(bottleScript);
 					}
 				}
 
