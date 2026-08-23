@@ -605,37 +605,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111467213}
   m_CullTransparentMesh: 1
---- !u!1 &153675841
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 153675842}
-  m_Layer: 0
-  m_Name: Plane Transform 1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &153675842
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153675841}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &156280691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,11 +1062,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDistance: 150
   duration: 1.5
---- !u!1 &193900711 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2122366303489762514, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
-  m_PrefabInstance: {fileID: 475897570}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &193900712 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6487268217870367276, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
@@ -1456,6 +1420,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263739537}
   m_CullTransparentMesh: 1
+--- !u!1 &275305185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2122366303489762514, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
+  m_PrefabInstance: {fileID: 475897570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &306443926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,6 +1684,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
+--- !u!1 &319006599 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2672540204843782590, guid: 5015ce7435e8ed14889784095869038f, type: 3}
+  m_PrefabInstance: {fileID: 1392109334}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &341441787
 GameObject:
   m_ObjectHideFlags: 0
@@ -2016,6 +1990,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!1 &368378087 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 131489764184241287, guid: 988905e257d67d94cb2a0f1649db1d25, type: 3}
+  m_PrefabInstance: {fileID: 6023158139897174174}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &368915443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2099,8 +2078,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 768846375}
+        m_TargetAssemblyTypeName: HelpManager, Assembly-CSharp
         m_MethodName: UseAddBottle
         m_Mode: 1
         m_Arguments:
@@ -2431,6 +2410,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422889303}
   m_CullTransparentMesh: 1
+--- !u!1 &427071151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427071152}
+  - component: {fileID: 427071153}
+  m_Layer: 0
+  m_Name: UndoManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &427071152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427071151}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600340648}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &427071153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427071151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9baa61588b2fef34883e55865e624769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &435777937 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1189027863713432929, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
@@ -2442,11 +2465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &437657638 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2672540204843782590, guid: 5015ce7435e8ed14889784095869038f, type: 3}
-  m_PrefabInstance: {fileID: 1392109334}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &437657639 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7579833970911820897, guid: 5015ce7435e8ed14889784095869038f, type: 3}
@@ -2457,7 +2475,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7803356979132515034, guid: 5015ce7435e8ed14889784095869038f, type: 3}
   m_PrefabInstance: {fileID: 1392109334}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437657638}
+  m_GameObject: {fileID: 319006599}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05ba0d03349b3664eb776d59d6d73a31, type: 3}
@@ -2545,9 +2563,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: onClickHome
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: OnClickHome
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2887,10 +2905,14 @@ PrefabInstance:
     - target: {fileID: 2194982078571513804, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1654726204}
+      objectReference: {fileID: 1762125825}
     - target: {fileID: 2194982078571513804, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: closeWatchPopup
+      value: CloseWatchPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 2194982078571513804, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3098296943210510160, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
       propertyPath: m_Color.a
@@ -4033,9 +4055,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: clickWatchAds
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: ClickWatchAds
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4117,10 +4139,15 @@ Transform:
   - {fileID: 542183780}
   - {fileID: 412445983}
   - {fileID: 1654726205}
+  - {fileID: 1762125824}
+  - {fileID: 768846376}
   - {fileID: 1029917108}
   - {fileID: 2013946523}
+  - {fileID: 1714635016}
+  - {fileID: 1605584080}
   - {fileID: 725300415}
   - {fileID: 1341435304}
+  - {fileID: 427071152}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &600706070
@@ -4366,11 +4393,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!198 &633293101 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7678211841519933230, guid: a29fad3cc2410c140befc9b9e7a88eaa, type: 3}
-  m_PrefabInstance: {fileID: 8237829200239044464}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &655403061
 GameObject:
   m_ObjectHideFlags: 0
@@ -5598,6 +5620,54 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!1 &768846374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 768846376}
+  - component: {fileID: 768846375}
+  m_Layer: 0
+  m_Name: HelpManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &768846375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768846374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28e7ed3f1ccbea345ac4f28cba62b7a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxExtraBottlesPerLevel: 1
+  addBottleButton: {fileID: 368915445}
+  gameHintManager: {fileID: 412445982}
+  levelManager: {fileID: 2013946522}
+--- !u!4 &768846376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768846374}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600340648}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &811633902
 GameObject:
   m_ObjectHideFlags: 0
@@ -5670,7 +5740,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00048828125, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0.00048828125, y: 0}
   m_SizeDelta: {x: -0.0011, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &814739855
@@ -7040,6 +7110,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!1 &1013409545 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3011999771963932542, guid: e0d60d23559b1bb4484915e1ea70106c, type: 3}
+  m_PrefabInstance: {fileID: 475897570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1014675685
 GameObject:
   m_ObjectHideFlags: 0
@@ -7451,7 +7526,7 @@ GameObject:
   - component: {fileID: 1058485414}
   - component: {fileID: 1058485413}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ==========MainUI=========
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8046,8 +8121,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 768846375}
+        m_TargetAssemblyTypeName: HelpManager, Assembly-CSharp
         m_MethodName: OnClickUndoButton
         m_Mode: 1
         m_Arguments:
@@ -9227,9 +9302,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: openSettingPopup
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: OpenSettingPopup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10941,9 +11016,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: onClickHome
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: OnClickHome
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11530,6 +11605,57 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!1 &1605584079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1605584080}
+  - component: {fileID: 1605584081}
+  m_Layer: 0
+  m_Name: PourController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1605584080
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605584079}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600340648}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1605584081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605584079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a59e153e8a0bc44b94217d05326401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  liftOffset: 0.5
+  moveSpeed: 0.1
+  pourAngle: 90
+  waterStream: {fileID: 966611762}
+  waterSplashPrefab: {fileID: 4241557569610360290, guid: 86b0a831d512d744fa0752fdbbbc21d3, type: 3}
+  bottleDonePrefab: {fileID: 5304582810434291609, guid: 2e8746416e4e78b4d85ab92ad894cc4b, type: 3}
+  allBottles: []
 --- !u!1 &1633836497
 GameObject:
   m_ObjectHideFlags: 0
@@ -11741,44 +11867,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1390f0d746405f344b2136fc78ccfa85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  liftOffset: 0.5
-  levelManager: {fileID: 2013946522}
-  gameHintManager: {fileID: 412445982}
-  waterStream: {fileID: 966611762}
-  waterSplashPrefab: {fileID: 4241557569610360290, guid: 86b0a831d512d744fa0752fdbbbc21d3, type: 3}
-  moveSpeed: 0.1
-  pourAngle: 90
-  allBottles: []
-  outOfMovesPopup: {fileID: 550312979}
-  dark_Panel: {fileID: 1263563799}
-  currentLevel: {fileID: 1553450150}
-  bottleDonePrefab: {fileID: 5304582810434291609, guid: 2e8746416e4e78b4d85ab92ad894cc4b, type: 3}
-  leftConfetti: {fileID: 2067294237}
-  rightConfetti: {fileID: 633293101}
-  blackOverlay: {fileID: 235880138}
-  confettiRainPrefab: {fileID: 8068899386813511290, guid: 2e8746416e4e78b4d85ab92ad894cc4b, type: 3}
-  winPanelRect: {fileID: 814739856}
-  winUIPanel: {fileID: 814739855}
-  nextLevelPopupRect: {fileID: 32811777}
-  settingPopup: {fileID: 71287305}
-  settingDarkPanel: {fileID: 811633902}
-  reloadPopup: {fileID: 1824480220}
-  reloadDarkPanel: {fileID: 1162111404}
-  comingSoonPopup: {fileID: 1452484542}
-  comingSoonDarkPanel: {fileID: 1204341397}
-  nextLevelPopup: {fileID: 32811773}
-  undoText: {fileID: 1201513440}
-  hintText: {fileID: 1854375595}
-  addBottleText: {fileID: 509035279}
-  maxExtraBottlesPerLevel: 1
-  addBottleButton: {fileID: 368915445}
-  watchAdsPopup: {fileID: 193900711}
-  darkPanel: {fileID: 461975899}
-  shopPopup: {fileID: 437657638}
-  backButton: {fileID: 156280691}
-  gotoShop: {fileID: 0}
+  isLocked: 0
   popupManager: {fileID: 725300414}
-  shopManager: {fileID: 0}
+  shopManager: {fileID: 1341435305}
 --- !u!4 &1654726205
 Transform:
   m_ObjectHideFlags: 0
@@ -12009,8 +12100,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 768846375}
+        m_TargetAssemblyTypeName: HelpManager, Assembly-CSharp
         m_MethodName: UseHint
         m_Mode: 1
         m_Arguments:
@@ -12395,9 +12486,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: closeReloadPopup
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: CloseReloadPopup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12740,6 +12831,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713435580}
   m_CullTransparentMesh: 1
+--- !u!1 &1714635015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1714635016}
+  - component: {fileID: 1714635017}
+  m_Layer: 0
+  m_Name: PlayerInputController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1714635016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714635015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600340648}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1714635017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714635015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2380f1c91657484b99256f5747e7074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1722697900
 GameObject:
   m_ObjectHideFlags: 0
@@ -12843,6 +12978,76 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1762125823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1762125824}
+  - component: {fileID: 1762125825}
+  m_Layer: 0
+  m_Name: GameUiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1762125824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762125823}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600340648}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1762125825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762125823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575c09267acc50c419a91af1294c2d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outOfMovesPopup: {fileID: 550312979}
+  dark_Panel: {fileID: 1263563799}
+  currentLevelText: {fileID: 1553450150}
+  bottleDonePrefab: {fileID: 5304582810434291609, guid: 2e8746416e4e78b4d85ab92ad894cc4b, type: 3}
+  leftConfetti: {fileID: 4854588276553584182}
+  rightConfetti: {fileID: 8237829200239044467}
+  blackOverlay: {fileID: 235880138}
+  confettiRainPrefab: {fileID: 368378087}
+  winPanelRect: {fileID: 814739856}
+  winUIPanel: {fileID: 814739855}
+  nextLevelPopupRect: {fileID: 32811777}
+  nextLevelPopup: {fileID: 32811773}
+  settingPopup: {fileID: 71287305}
+  settingDarkPanel: {fileID: 811633902}
+  reloadPopup: {fileID: 1824480220}
+  reloadDarkPanel: {fileID: 1162111404}
+  comingSoonPopup: {fileID: 2020072755}
+  comingSoonDarkPanel: {fileID: 1204341397}
+  watchAdsPopup: {fileID: 275305185}
+  darkPanel: {fileID: 461975899}
+  shopPopup: {fileID: 319006599}
+  backButton: {fileID: 2038857977}
+  gotoShop: {fileID: 1013409545}
+  undoText: {fileID: 1201513440}
+  hintText: {fileID: 1854375595}
+  addBottleText: {fileID: 509035279}
 --- !u!1 &1772584719
 GameObject:
   m_ObjectHideFlags: 0
@@ -13112,9 +13317,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: openReloadPopup
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: OpenReloadPopup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14420,7 +14625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottlePrefab: {fileID: 8829921817319407611, guid: 9c2c74678df2c2a47b060b8a6bd4df0b, type: 3}
   currentLevelData: {fileID: 11400000, guid: 4041dbe57dfc35542b82786cd8ab2d4a, type: 2}
-  gameManager: {fileID: 1654726204}
+  pourController: {fileID: 1605584081}
   levelText: {fileID: 1931097872}
   spacingX: 1.1
   spacingY: 2.2
@@ -14887,11 +15092,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059338659}
   m_CullTransparentMesh: 1
---- !u!198 &2067294237 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6742226267238711911, guid: e41c88e7b2080f7478a0ac69efe7d78b, type: 3}
-  m_PrefabInstance: {fileID: 4854588276553584179}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2069166300
 GameObject:
   m_ObjectHideFlags: 0
@@ -15152,9 +15352,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654726204}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: onClickNextLevel
+      - m_Target: {fileID: 1762125825}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
+        m_MethodName: OnClickNextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15549,6 +15749,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8963546162284675351, guid: e41c88e7b2080f7478a0ac69efe7d78b, type: 3}
   m_PrefabInstance: {fileID: 4854588276553584179}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &4854588276553584182 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6742226267238711911, guid: e41c88e7b2080f7478a0ac69efe7d78b, type: 3}
+  m_PrefabInstance: {fileID: 4854588276553584179}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6023158139897174174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15805,6 +16010,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7731662557891847455, guid: a29fad3cc2410c140befc9b9e7a88eaa, type: 3}
   m_PrefabInstance: {fileID: 8237829200239044464}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &8237829200239044467 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7678211841519933230, guid: a29fad3cc2410c140befc9b9e7a88eaa, type: 3}
+  m_PrefabInstance: {fileID: 8237829200239044464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -15817,5 +16027,4 @@ SceneRoots:
   - {fileID: 1058485416}
   - {fileID: 341441789}
   - {fileID: 966611763}
-  - {fileID: 153675842}
   - {fileID: 2037688877}

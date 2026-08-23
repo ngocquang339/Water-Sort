@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PopupManager : MonoBehaviour
 {
-	public static PopupManager instance; // Tạo Singleton để gọi từ GameManager cho dễ
+	public static PopupManager instance; 
 
 	[Header("Popup Out Of Help Settings")]
 	public GameObject outOfHelpPopup;

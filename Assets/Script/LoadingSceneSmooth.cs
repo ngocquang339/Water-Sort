@@ -37,9 +37,7 @@ public class LoadingSceneSmooth : MonoBehaviour
 				Screen.SetResolution(540, 960, FullScreenMode.Windowed);
 		#endif
 
-		// ... (các đoạn code cũ của bạn ở dưới giữ nguyên)
 	}
-	// HÀM 1: DÙNG CHO CÁC NÚT BẤM (TỰ LOAD NGẦM, TỰ CHUYỂN)
 	public IEnumerator LoadSceneSmooth(string sceneName)
 	{
 		yield return StartCoroutine(FadeOut());
@@ -66,10 +64,7 @@ public class LoadingSceneSmooth : MonoBehaviour
 
 		yield return StartCoroutine(FadeIn());
 	}
-
-	// ========================================================
-	// CÁC HÀM PHỤ TRỢ FADE ĐỂ DÙNG CHUNG CHO GỌN CODE
-	// ========================================================
+	
 	private IEnumerator FadeOut()
 	{
 		if (fadeImage != null)

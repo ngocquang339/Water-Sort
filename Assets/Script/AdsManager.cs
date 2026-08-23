@@ -61,28 +61,24 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 		Advertisement.Load(_adUnitId, this);
 	}
 
-	// ==========================================================
-	// HÀM BẮT SỰ KIỆN: KHI QUẢNG CÁO TẢI XONG THÌ BẬT BIẾN LÊN TRUE
-	// ==========================================================
+	//KHI QUẢNG CÁO TẢI XONG THÌ BẬT BIẾN LÊN TRUE
 	public void OnUnityAdsAdLoaded(string adUnitId)
 	{
 		if (adUnitId.Equals(_adUnitId))
 		{
 			Debug.Log("Video đã tải xong vào bộ nhớ tạm!");
-			_isAdReady = true; // Đánh dấu là đã sẵn sàng
+			_isAdReady = true;
 		}
 	}
 
 	public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
 	{
 		Debug.Log($"Lỗi tải quảng cáo ({error}): {message}. Đang tự động thử lại sau 3 giây...");
-		_isAdReady = false; // Tải lỗi thì chắc chắn là chưa sẵn sàng
+		_isAdReady = false;
 		Invoke(nameof(LoadAd), 3f);
 	}
 
-	// ==========================================================
 	// HÀM SHOW QUẢNG CÁO SỬ DỤNG BIẾN TỰ VIẾT
-	// ==========================================================
 	public void ShowAd()
 	{
 		if (_isAdReady)
@@ -118,13 +114,12 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 				currencyManager.AddCoin(20);
 			}
 
-			LoadAd(); // Tải video mới
+			LoadAd();
 		}
 	}
 
 	public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
 	{
-		// Xem lỗi thì cũng phải load lại video mới
 		LoadAd();
 	}
 

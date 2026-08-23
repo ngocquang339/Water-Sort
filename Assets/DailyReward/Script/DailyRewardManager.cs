@@ -22,8 +22,6 @@ public class DailyRewardManager : MonoBehaviour
 	public bool isClaimed = false;
 
 	private static bool showDailyPopup = false;
-
-	// Các biến trạng thái nội bộ
 	private int currentStreak = 0;  
 	private DateTime lastClaimTime;   
 
@@ -46,7 +44,6 @@ public class DailyRewardManager : MonoBehaviour
 
 	void Start()
 	{
-		// Vừa vào game là chạy luôn đếm ngược
 		if (!showDailyPopup)
 		{
 			StartCoroutine(ShowDailyRewardDelay());
